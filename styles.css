@@ -648,8 +648,8 @@ footer a:hover { color: white; }
     .detail-card, .special-card, .registry-card { padding: 30px 25px; }
     .iframe-wrapper { height: 1250px; } /* Slightly reduced for mobile */
     .special-card { padding: 30px 25px; }
-    .pink-title { font-size: 2rem; } 
-    .blue-title { font-size: 2rem; }
+    .pink-title { font-size: 2.5rem; } 
+    .blue-title { font-size: 2.5rem; }
 }
 
 @media (max-width: 576px) {
