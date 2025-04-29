@@ -237,3 +237,101 @@ document.addEventListener('DOMContentLoaded', function() {
         elementoNombre.textContent = 'No especificado';
     }
 });
+
+// Agrega esto al final del archivo JS
+document.querySelector('.scroll-indicator').addEventListener('click', () => {
+    window.scrollTo({
+        top: window.innerHeight - document.querySelector('nav').offsetHeight,
+        behavior: 'smooth'
+    });
+});
+
+
+function createFloatingIcons() {
+    const container = document.getElementById('floating-icons');
+    const iconNames = ['icon-1', 'icon-2', 'icon-3', 'icon-4', 'icon-5', 'icon-6', 'icon-7', 'icon-8', 'icon-9'];
+    const numberOfIcons = 15;
+    const basePath = 'Images/'; // Ruta base donde están tus imágenes
+
+    // Limpiar contenedor primero
+    container.innerHTML = '';
+
+    for (let i = 0; i < numberOfIcons; i++) {
+        const icon = document.createElement('img');
+        
+        // Configurar atributos de la imagen
+        icon.className = 'floating-icon';
+        icon.src = `${basePath}${iconNames[Math.floor(Math.random() * iconNames.length)]}.png`;
+        icon.alt = 'Icono decorativo';
+        
+        // Estilos dinámicos
+        const size = 20 + Math.random() * 20;
+        icon.style.cssText = `
+            width: ${size}px;
+            left: ${Math.random() * 100}%;
+            top: ${-30 + Math.random() * 130}%;
+            opacity: ${0.3 + Math.random() * 0.4};
+            animation-delay: ${Math.random() * 15}s;
+            animation-duration: ${15 + Math.random() * 20}s;
+            transform: rotate(${Math.random() * 360}deg);
+        `;
+
+        container.appendChild(icon);
+    }
+}
+
+// Inicializar y configurar eventos
+document.addEventListener('DOMContentLoaded', () => {
+    createFloatingIcons();
+    
+    // Regenerar iconos cada 30 segundos y al redimensionar
+    setInterval(createFloatingIcons, 30000);
+    window.addEventListener('resize', createFloatingIcons);
+});
+
+
+// Control de música
+const musicPlayer = document.getElementById('backgroundMusic');
+const musicToggle = document.getElementById('musicToggle');
+
+function handleAutoplay() {
+    const playPromise = musicPlayer.play();
+    
+    if (playPromise !== undefined) {
+        playPromise.then(() => {
+            musicToggle.classList.add('playing');
+        }).catch(error => {
+            console.log('Autoplay bloqueado:', error);
+            musicToggle.classList.remove('playing');
+        });
+    }
+}
+
+// Configuración inicial
+document.addEventListener('DOMContentLoaded', function() {
+    // Establecer volumen (requerido por algunos navegadores)
+    musicPlayer.volume = 0.5;
+    
+    // Intentar autoplay después de la primera interacción del usuario
+    const handleUserInteraction = () => {
+        handleAutoplay();
+        window.removeEventListener('click', handleUserInteraction);
+        window.removeEventListener('touchstart', handleUserInteraction);
+    };
+    
+    window.addEventListener('click', handleUserInteraction);
+    window.addEventListener('touchstart', handleUserInteraction);
+});
+
+// Control del botón
+musicToggle.addEventListener('click', function(e) {
+    e.stopPropagation();
+    
+    if (musicPlayer.paused) {
+        musicPlayer.play();
+        this.classList.add('playing');
+    } else {
+        musicPlayer.pause();
+        this.classList.remove('playing');
+    }
+});

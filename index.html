@@ -3,26 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LiLo Event</title>
+    <title>LiLo Baby Showe | Revelación | Social</title>
     <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
     <meta name="description" content="Únete a nuestro Baby Shower + Gender Reveal + Social">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-    <!-- Meta para WhatsApp / Social Media -->
     <meta property="og:title" content="¡Baby Shower + Revelación de Género + Social!" />
     <meta property="og:description" content="Únete a nuestro Baby Shower + Gender Reveal + Social. ¡Celebra con nosotros este momento especial!" />
-    <meta property="og:image" content="https://lilofamily.github.io/Images/babyracer-baby.gif" />
+    <meta property="og:image" content="https://lilofamily.github.io/Images/nat-sombra.jpg" />
     <meta property="og:url" content="https://lilofamily.github.io/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="LiLo | Baby Shower + Gender Reveal + Social" />
 
-    <!-- Para compatibilidad con Twitter Cards (opcional) -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="¡Baby Shower + Revelación de Género + Social!">
     <meta name="twitter:description" content="Únete a nuestro Baby Shower + Gender Reveal + Social. ¡Celebra con nosotros este momento especial!">
 </head>
 <body>
+    <div id="floating-icons"></div>
+
+    <div class="music-player">
+        <button id="musicToggle" class="music-btn">
+            <i class="fas fa-play"></i>
+            <i class="fas fa-pause"></i>
+        </button>
+        <audio id="backgroundMusic" loop>
+            <source src="./Audio/bachata.mp3" type="audio/mpeg">
+        </audio>
+    </div>
     <header>
         <div class="header-text">
             <div class="pink-blue-container">
@@ -96,6 +105,10 @@
                 </div>
             </div>
         </div>
+
+        <div class="scroll-indicator">
+            <i class="fas fa-chevron-down"></i>
+        </div>
     </header>
 
     <nav>
@@ -115,7 +128,7 @@
                 <h2>¡Hola <span id="valor-nombre"></span>!</h2>
             </div>
             <div class="image-container">
-                <img src="./Images/nat-sombra.jpg" alt="Descripción de la imagen" class="zoom-image">
+                <img src="./Images/photos00.jpg" alt="Primera Ecografía" class="zoom-image">
             </div>
             <div class="registry-links">
                 <a class="registry-card">
@@ -132,7 +145,7 @@
     <section id="bg-rosa" class="section">
         <div class="container">
             <div class="image-container">
-                <img src="./Images/nat-sombra.jpg" alt="Descripción de la imagen" class="zoom-image">
+                <img src="./Images/photos01.jpg" alt="Descripción de la imagen" class="zoom-image">
             </div>
             <div style="width: 80%; margin: 0 auto;">
                 <p>Mi mamá Nataly, mi papá Gustavo y yo queremos que nos acompañes este día para celebrar dos actividades:</p>
@@ -267,12 +280,16 @@
             <section class="carousel-3d-section">                
                 <div class="carousel-container">
                     <div class="carousel-track">
-                        <div class="carousel-item"><img src="./Images/nat-sombra.jpg" alt="Foto 1"></div>
+                        <div class="carousel-item"><img src="./Images/photos01.jpg" alt="Foto 1"></div>
                         <div class="carousel-item"><img src="./Images/nat-sombra.jpg" alt="Foto 2"></div>
-                        <div class="carousel-item"><img src="./Images/nat-sombra.jpg" alt="Foto 3"></div>
-                        <div class="carousel-item"><img src="./Images/nat-sombra.jpg" alt="Foto 4"></div>
-                        <div class="carousel-item"><img src="./Images/nat-sombra.jpg" alt="Foto 5"></div>
-                        <div class="carousel-item"><img src="./Images/nat-sombra.jpg" alt="Foto 6"></div>
+                        <div class="carousel-item"><img src="./Images/photos03.jpg" alt="Foto 3"></div>
+                        <div class="carousel-item"><img src="./Images/photos04.jpg" alt="Foto 4"></div>
+                        <div class="carousel-item"><img src="./Images/photos05.jpg" alt="Foto 5"></div>
+                        <div class="carousel-item"><img src="./Images/photos06.jpg" alt="Foto 6"></div>
+                        <div class="carousel-item"><img src="./Images/photos07.jpg" alt="Foto 7"></div>
+                        <div class="carousel-item"><img src="./Images/photos08.jpg" alt="Foto 8"></div>
+                        <div class="carousel-item"><img src="./Images/photos09.jpg" alt="Foto 9"></div>
+                        <div class="carousel-item"><img src="./Images/photos10.jpg" alt="Foto 10"></div>
                     </div>
             
                     <!-- Botones de navegación -->
