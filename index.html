@@ -14,7 +14,7 @@
         <div class="header-text">
             <div class="pink-blue-container">
                 <h1 class="pink-title">PINK</h1>
-                <svg class="heart-svg" viewBox="0 0 200 200" width="150" style="max-width: 100%; height: auto;">
+                <svg class="heart-svg" viewBox="0 0 200 200">
                     <defs>
                         <linearGradient id="heart-gradient" x1="0" x2="100%" y1="0" y2="0">
                             <stop offset="50%" stop-color="#FFB2C7" />
@@ -57,9 +57,10 @@
                 <div class="blue-text"> + </div> 
                 <div class="actividades-text">Social de Bachata y Salsa</div>
             </div>
+            <p id="nombre">Nombre: <span id="valor-nombre"></span></p>
             <div class="pink-blue-container">
                 <div class="pink-text">Nataly</div>  
-                <h2 style="padding-left: 10px; padding-right: 10px;"> & </h2>   
+                &nbsp; & &nbsp;
                 <div class="blue-text">Gustavo</div>
             </div>
             <p class="date">Sábado 10 de Mayo de 2025 • 16:00 PM - 12:30 AM</p>
@@ -100,13 +101,16 @@
             <div class="section-heading">
                 <h2>¡Hola Familia y Amig@s!</h2>
             </div>
+            <div class="image-container">
+                <img src="./Images/nat-sombra.jpg" alt="Descripción de la imagen" class="zoom-image">
+            </div>
             <div class="registry-links">
                 <a class="registry-card">
                     <span>La dulce espera está por terminar 👶🏻</span>
                 </a>
             </div>
             
-            <div style="padding-top: 50px; width: 50%; margin: 0 auto;">
+            <div style="padding-top: 50px; width: 80%; margin: 0 auto;">
                 <p>Pronto estaré con ustedes para conocerlos, pero en este momento estoy creciendo en el vientre de mi mamá.</p>
             </div>
         </div>
@@ -114,116 +118,172 @@
 
     <section id="bg-rosa" class="section">
         <div class="container">
+            <div class="image-container">
+                <img src="./Images/nat-sombra.jpg" alt="Descripción de la imagen" class="zoom-image">
+            </div>
+            <div style="width: 80%; margin: 0 auto;">
+                <p>Mi mamá Nataly, mi papá Gustavo y yo queremos que nos acompañes este día para celebrar dos actividades:</p>
+            </div>
+
+            <div class="registry-links">
+                <a class="registry-card">
+                    <span>Baby Shower y Revelación de Género 👶🏻</span>
+                </a>
+            </div>
+            
+            <div style="padding-top: 30px; width: 80%; margin: 0 auto;">
+                <p>Para que mis papis puedan presentarme a mi familia y amig@s con mi nombre completo.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="detalle"></section>
+    <section id="bg-celeste" class="section">
+        <div class="container">
             <div class="section-heading">
-                <h2>Detalles</h2>
+                <h2>Detalle</h2>
             </div>
             <div class="details-grid">
                 <div class="detail-card">
                     <i class="fas fa-calendar-alt"></i>
-                    <h3>When</h3>
-                    <p>Saturday, May 17, 2025</p>
-                    <p>11:30 AM - 2:00 PM</p>
+                    <h3>¿Cuándo?</h3>
+                    <p>Sábado, 10 de Mayo de 2025</p>
+                    <i class="fas fa-clock" style="padding-top: 3rem;"></i>
+                    <h3>¿A qué hora?</h3>
+                    <p>16:00 PM a 12:30 AM</p>
                 </div>
                 <div class="detail-card">
                     <i class="fas fa-map-marker-alt"></i>
-                    <h3>Where</h3>
-                    <p>Crispy's Springfield Gallery</p>
-                    <p>Upstairs Event Space</p>
-                    <p>1735 N Main St</p>
-                    <p>Jacksonville, FL 32206</p>
+                    <h3>¿Dónde?</h3>
+                    <p>Cafetería Munay (Ex Foro)</p>
+                    <p>Av. 20 de Octubre</p>
+                    <p>y Aspiazu (Lado Selina)</p>
+                
+                    <!-- Contenedor del mapa y el pin -->
                     <div class="address-actions">
-                        <a href="#" class="action-btn maps-btn">
-                            <i class="fas fa-map-marked-alt"></i> Open in Maps
-                        </a>
+                        <div class="map-container">
+                            <!-- Mapa incrustado -->
+                            <iframe 
+                                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d277.8291554676067!2d-68.13004072636836!3d-16.506879370962714!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x915f21007cb7b421%3A0x5434641df7a504b3!2sCafeteria%20Munay!5e0!3m2!1ses!2sbo!4v1745936600539!5m2!1ses!2sbo"
+                                width="100%" 
+                                height="150" 
+                                style="border:0;" 
+                                allowfullscreen="" 
+                                loading="lazy" 
+                                referrerpolicy="no-referrer-when-downgrade"
+                                title="Ubicación del evento"
+                            ></iframe>
+                            <div class="custom-pin"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="detail-card">
-                    <i class="fas fa-info-circle"></i>
-                    <h3>Details</h3>
-                    <p>Join us for sweet treats, fun games, and celebrating our little boy's upcoming arrival!</p>
-                    <p>We can't wait to share this special day with you!</p>
+                    <i class="fas fa-music"></i>
+                    <h3>¿Te gusta bailar?</h3>
+                    <p>Si te gusta bailar y quieres bailar conmigo y con mis papis, sigue más abajo y te comento más detalles.</p>
+                    <p>(Recuerda sacarte tiempo hasta tarde 🤭)</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="special-requests" class="section">
+    <section id="social"></section>
+    <section id="bg-rosa" class="section">
         <div class="container">
             <div class="section-heading">
-                <h2>Special Requests</h2>
+                <h2>Fiesta Social</h2>
             </div>
-            <div class="special-requests">
-                <div class="special-card">
-                    <div class="card-icon">
-                        <i class="fas fa-baby"></i>
-                    </div>
-                    <h3>Diaper Raffle</h3>
-                    <p>Bring a pack of diapers in any size for your chance to win a special prize.</p>
-                    <p class="diaper-note note-bubble">Don't forget to add your name for the raffle</p>
-                </div>
-                <div class="special-card">
-                    <div class="card-icon">
-                        <i class="fas fa-book-open"></i>
-                    </div>
-                    <h3>Books for Baby</h3>
-                    <p>One little request, we hope it's not hard. Please bring a book instead of a card.</p>
-                    <p class="books-note note-bubble">Please sign the book so we know who it's from</p>
-                </div>
+            <div class="image-container">
+                <img src="./Images/babyracer-baby.gif" alt="Descripción de la imagen" class="zoom-image">
             </div>
-        </div>
-    </section>
-
-    <section id="rsvp" class="section">
-        <div class="container">
-            <div class="section-heading">
-                <h2>RSVP</h2>
+            <div style="width: 80%; margin: 0 auto;">
+                <p>Luego de compartir juegos, comida y diversión entre familia y amig@s, te invitamos a quedarte hasta pasada la media noche para bailar con nosotros en nuestra fiesta social de Bachata y Salsa.
+                </p>
             </div>
-            <p>Please let us know if you can join our celebration by May 7th.</p>
-            <div class="form-container">
-                <div class="iframe-wrapper">
-                    <iframe 
-                        src="https://docs.google.com/forms/d/e/1FAIpQLSe9G8zb7h7WHqVO4SR6QRH-2X_KUpnIuWjqHmJoW86GJDDZzw/viewform?embedded=true" 
-                        frameborder="0" 
-                        marginheight="0" 
-                        marginwidth="0"
-                        title="RSVP Form for Cait & Jayden's Baby Shower"
-                        class="rsvp-iframe"
-                    >Loading…</iframe>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="registry" class="section">
-        <div class="container">
-            <div class="section-heading">
-                <h2>Gift Registry</h2>
-            </div>
-            <p>Your presence is present enough, but if you'd like to help prepare our nursery, we've registered at:</p>
             <div class="registry-links">
-                <a href="https://my.babylist.com/caitlin-saxton" target="_blank" class="registry-card">
-                    <span>View Our Babylist Registry</span>
+                <a class="registry-card">
+                    <span>Recuerda que la entrada al Social no tiene costo para ti cómo invitado de Dreamers Academy. (A partir de las 19:30 la entrada para los demás es de Bs. 15)</span>
                 </a>
             </div>
         </div>
     </section>
 
-    <section id="gallery" class="section">
+    <section id="sugerencia"></section>
+    <section id="bg-celeste" class="section">
         <div class="container">
             <div class="section-heading">
-                <h2>Gallery</h2>
+                <h2>¡Hagámoslo divertido!</h2>
             </div>
-            <p>Check back after the event to see photos of our special day!</p>
-            <div class="gallery-placeholder">
-                <p>Photos coming soon</p>
+            <div class="special-requests">
+                <div class="special-card2" >
+                    <div class="card-icon">
+                        <i class="fas fa-female" style="color: #f4bdca;"></i>
+                    </div>
+                    <h3>Si crees que soy Niña</h3>
+                    <p class="button-pink">Sería divertido que vengas vestido con una prenda del color rosa</p>
+                    <!--<p>Sería divertido que vengas con una prenda del color rosa</p>-->
+                </div>
+                </br>
+                <div class="special-card">
+                    <div class="card-icon">
+                        <i class="fas fa-male" style="color: #7ed8ee;"></i>
+                    </div>
+                    <h3>Si crees que soy Niño</h3>
+                    <p class="button-celeste">Sería divertido que vengas vestido con una prenda del color celeste</p>
+                    <!--<p>Sería divertido que vengas con una prenda del color celeste</p>-->
+                </div>
+
+                <div class="registry-links">
+                    <a class="registry-card">
+                        <span>⚠️ En caso que quieras traerme un presente y como aún no sabemos si soy niño o niña, estaría genial si pudieses traerme pañales, toallitas o algún otro regalo de un color neutro ⚠️
+                        </br>Pero, esto en caso que desees traerme un presente, ya que lo más importante es que estés tu ahí.
+                        </span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="galeria"></section>
+    <section id="bg-rosa" class="section">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Galería</h2>
+            </div>
+            <p>Mis papis y yo durante estos casi 9 meses.</p>
+            <section class="carousel-3d-section">                
+                <div class="carousel-container">
+                    <div class="carousel-track">
+                        <div class="carousel-item"><img src="./Images/nat-sombra.jpg" alt="Foto 1"></div>
+                        <div class="carousel-item"><img src="./Images/nat-sombra.jpg" alt="Foto 2"></div>
+                        <div class="carousel-item"><img src="./Images/nat-sombra.jpg" alt="Foto 3"></div>
+                        <div class="carousel-item"><img src="./Images/nat-sombra.jpg" alt="Foto 4"></div>
+                        <div class="carousel-item"><img src="./Images/nat-sombra.jpg" alt="Foto 5"></div>
+                        <div class="carousel-item"><img src="./Images/nat-sombra.jpg" alt="Foto 6"></div>
+                    </div>
+            
+                    <!-- Botones de navegación -->
+                    <button class="carousel-nav left-btn">&#8592;</button>
+                    <button class="carousel-nav right-btn">&#8594;</button>
+                    
+                    <!-- Puntos indicadores -->
+                    <div class="carousel-indicators"></div>
+                </div>
+            </section>
+
+            <div class="registry-links" style="padding-top: 5rem;">
+                <a class="registry-card">
+                    <span>
+                        🥳 ¡Te esperamos, no faltes!🥳
+                    </span>
+                </a>
             </div>
         </div>
     </section>
 
     <footer>
         <div class="container">
-            <p>With love, Cait & Jayden</p>
-            <p class="contact">Questions? Contact us at <a href="mailto:jaydensaxton.c@outlook.com">jaydensaxton.c@outlook.com</a></p>
+            <p>Con amor Gus 🩵 & Nat 💛</p>
         </div>
     </footer>
 

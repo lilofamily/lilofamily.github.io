@@ -161,3 +161,79 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 });
+
+
+const totalItems = document.querySelectorAll('.carousel-item').length;
+let currentIndex = 0;
+
+function updateCarousel() {
+    const track = document.querySelector('.carousel-track');
+    const angleOffset = 360 / totalItems;
+
+    // Rotación 3D
+    track.style.transform = `rotateY(${currentIndex * -angleOffset}deg)`;
+
+    // Actualizar indicadores
+    const indicators = document.querySelectorAll('.carousel-indicators span');
+    indicators.forEach((dot, i) => {
+        dot.classList.toggle('active', i === currentIndex);
+    });
+}
+
+// Generar puntos indicadores
+function createIndicators() {
+    const container = document.querySelector('.carousel-indicators');
+    for (let i = 0; i < totalItems; i++) {
+        const dot = document.createElement('span');
+        dot.addEventListener('click', () => {
+            currentIndex = i;
+            updateCarousel();
+        });
+        container.appendChild(dot);
+    }
+    updateCarousel(); // Inicializar activo
+}
+
+// Navegación manual
+document.querySelector('.left-btn').addEventListener('click', () => {
+    currentIndex = (currentIndex - 1 + totalItems) % totalItems;
+    updateCarousel();
+});
+
+document.querySelector('.right-btn').addEventListener('click', () => {
+    currentIndex = (currentIndex + 1) % totalItems;
+    updateCarousel();
+});
+
+// Posicionar cada item en el círculo 3D
+window.addEventListener('DOMContentLoaded', () => {
+    createIndicators();
+
+    const items = document.querySelectorAll('.carousel-item');
+    const angleStep = 360 / items.length;
+
+    items.forEach((item, i) => {
+        const angle = i * angleStep;
+        item.style.transform = `
+            rotateY(${angle}deg)
+            translateZ(400px)
+        `;
+    });
+
+    updateCarousel();
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const nombre = urlParams.get('name');
+
+    const elementoNombre = document.getElementById('valor-nombre');
+    
+    if (nombre) {
+        // Opcional: decodifica caracteres especiales
+        elementoNombre.textContent = decodeURIComponent(nombre.replace(/\+/g, ' '));
+    } else {
+        elementoNombre.textContent = 'No especificado';
+    }
+});
