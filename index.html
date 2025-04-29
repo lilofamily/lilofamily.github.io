@@ -1,131 +1,236 @@
----
-layout: index
-title: LiLo Family
-tagline: Pink or Blue | Baby Shower + Gender Reveal + Social
-img : 1.jpg
-img-mobile : 1-mobile.jpg
-css: index.css
-js: test.js
-keywords: fullpage, html, css, landing page, jekyll, ruby, web marketing, advertising
-canonical: https://lilofamily.github.io
----
-{% include JB/setup %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiLo Event</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <meta name="description" content="Join us for a sweet celebration for Cait & Jayden's little one!">
+</head>
+<body>
+    <header>
+        <div class="header-text">
+            <div class="pink-blue-container">
+                <h1 class="pink-title">PINK</h1>
+                <svg class="heart-svg" viewBox="0 0 200 200" width="150">
+                    <defs>
+                        <linearGradient id="heart-gradient" x1="0" x2="100%" y1="0" y2="0">
+                            <stop offset="50%" stop-color="#FFB2C7" />
+                            <stop offset="50%" stop-color="#48CCEB" />
+                        </linearGradient>
+                        <filter id="shadow">
+                            <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000"/>
+                        </filter>
+                    </defs>
+                    <g filter="url(#shadow)">
+                        <path 
+                            d="M100 40
+                               C 70 15, 30 25, 30 60
+                               C 30 90, 70 110, 100 140
+                               C 130 110, 170 90, 170 60
+                               C 170 25, 130 15, 100 40
+                               Z"
+                            fill="url(#heart-gradient)"
+                        />
+                        <text 
+                            x="50%" 
+                            y="40%" 
+                            dy=".1em" 
+                            text-anchor="middle"
+                            fill="white"
+                            font-family="Arial"
+                            font-size="30"
+                            font-weight="bold"
+                        >OR</text>
+                    </g>
+                </svg>
+                <h1 class="blue-title">BLUE</h1>
+            </div>
+        </div>
+        <div class="header-content">
+            <div class="pink-blue-container">
+                <h2>Baby Shower</h2>
+                <div class="pink-text"> + </div> 
+                <h2>Revelación de Género</h2>
+                <div class="blue-text"> + </div> 
+                <h2>Social de Bachata y Salsa</h2>
+            </div>
+            
+            <div class="pink-blue-container">
+                <div class="blue-text">Gustavo</div> 
+                <h2 style="padding-left: 10px; padding-right: 10px;"> & </h2>   
+                <div class="pink-text">Nataly</div> 
+            </div>
+            <p class="date">Sábado 10 de Mayo de 2025 • 16:00 PM - 12:30 AM</p>
+            <p>Av. 20 de Octubre y Aspiazu (Ex Foro)</p>
+            <div class="countdown" id="countdown">
+                <div>
+                    <span id="days">00</span>
+                    <span class="label">Días</span>
+                </div>
+                <div>
+                    <span id="hours">00</span>
+                    <span class="label">Horas</span>
+                </div>
+                <div>
+                    <span id="minutes">00</span>
+                    <span class="label">Minutos</span>
+                </div>
+                <div>
+                    <span id="seconds">00</span>
+                    <span class="label">Segundos</span>
+                </div>
+            </div>
+        </div>
+    </header>
 
-<div id="fullpage">
-	
-	<!-- BLOQUE 1 -->
-	<div data-anchor="0section" class="section" id="section0">
-		<h1 class="heavy">Parte 1<br />your <span class="pink">dreams?</span></h1>
-		<br /><h2 class="large-blur">
-			<span class="highlight-container"><span class="highlight">
-				Put your dreams on first and follow that!
-			</span></span>
-			<br />
-		</h2>
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#hola">¡Hola!</a></li>
+                <li><a href="#invitacion">Invitación</a></li>
+                <li><a href="#detalle">Detalle</a></li>
+                <li><a href="#social">Social</a></li>
+                <li><a href="#sugerencia">Sugerencia</a></li>
+                <li><a href="#galeria">Galería</a></li>
+            </ul>
+        </div>
+    </nav>
 
-		<br /><h3 class="large-blur">
-			<span class="highlight-container"><span class="highlight">
-				Be the firt to know more about <a href="{{ BASE_PATH }}/lessons/2017/01/17/testing-locally">Jekyll FullIt theme!</a>
-			</span></span>
-			<br />
-		</h3>
-		<div class="intro-scroll-down">
-			<a data-menuanchor="1section" href="#1section">
-			  <span class="mouse">
-				<span class="mouse-dot"></span>
-			  </span>
-			</a>
-		</div>
-	</div>
+    <section id="bg-celeste" class="section">
+        <div class="container">
+            <div class="section-heading">
+                <h2>¡Hola Familia y Amig@s!</h2>
+            </div>
+            <div class="registry-links">
+                <a class="registry-card">
+                    <span>La dulce espera está por terminar 👶🏻</span>
+                </a>
+            </div>
+            
+            <div style="padding-top: 50px; width: 50%; margin: 0 auto;">
+                <p>Pronto estaré con ustedes para conocerlos, pero en este momento estoy creciendo en el vientre de mi mamá.</p>
+            </div>
+        </div>
+    </section>
 
+    <section id="bg-rosa" class="section">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Detalles</h2>
+            </div>
+            <div class="details-grid">
+                <div class="detail-card">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>When</h3>
+                    <p>Saturday, May 17, 2025</p>
+                    <p>11:30 AM - 2:00 PM</p>
+                </div>
+                <div class="detail-card">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <h3>Where</h3>
+                    <p>Crispy's Springfield Gallery</p>
+                    <p>Upstairs Event Space</p>
+                    <p>1735 N Main St</p>
+                    <p>Jacksonville, FL 32206</p>
+                    <div class="address-actions">
+                        <a href="#" class="action-btn maps-btn">
+                            <i class="fas fa-map-marked-alt"></i> Open in Maps
+                        </a>
+                    </div>
+                </div>
+                <div class="detail-card">
+                    <i class="fas fa-info-circle"></i>
+                    <h3>Details</h3>
+                    <p>Join us for sweet treats, fun games, and celebrating our little boy's upcoming arrival!</p>
+                    <p>We can't wait to share this special day with you!</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-	<!-- BLOQUE 2 -->
-	<div data-anchor="1section" class="section" id="section1">
-			<h1 class="heavy">Start-up it <br />whit a <span class="pink">Rocket!</span></h1>
-			<br /><h2 class="large-blur">
-				<span class="highlight-container"><span class="highlight">
-					Don't be afraid and start your jurney.
-				</span></span>
-			</h2>
-			<br /><h3 class="large-blur">
-				<span class="highlight-container"><span class="highlight">
-					Check out a <a href="{{ BASE_PATH }}/landing">bootstrap landing page sample</a> to sell your products in Jekyll FullIt theme!
-				</span></span>
-				<br />
-			</h3>
-			<div class="intro-scroll-down">
-				<a data-menuanchor="2section" href="#2section">
-					<span class="mouse">
-						<span class="mouse-dot"></span>
-					</span>
-				</a>
-			</div>
-	</div>
+    <section id="special-requests" class="section">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Special Requests</h2>
+            </div>
+            <div class="special-requests">
+                <div class="special-card">
+                    <div class="card-icon">
+                        <i class="fas fa-baby"></i>
+                    </div>
+                    <h3>Diaper Raffle</h3>
+                    <p>Bring a pack of diapers in any size for your chance to win a special prize.</p>
+                    <p class="diaper-note note-bubble">Don't forget to add your name for the raffle</p>
+                </div>
+                <div class="special-card">
+                    <div class="card-icon">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h3>Books for Baby</h3>
+                    <p>One little request, we hope it's not hard. Please bring a book instead of a card.</p>
+                    <p class="books-note note-bubble">Please sign the book so we know who it's from</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-	<!-- BLOQUE 3 -->
-	<div data-anchor="2section" class="section" id="section2">
-			<h1 class="heavy">Look back and <br />goodbye <span class="pink">your weaknesses!</span></h1>
-			<br /><h2 class="large-blur">
-				<span class="highlight-container"><span class="highlight">
-					Farewell to all that restrained your dream.
-				</span></span>
-			</h2>
+    <section id="rsvp" class="section">
+        <div class="container">
+            <div class="section-heading">
+                <h2>RSVP</h2>
+            </div>
+            <p>Please let us know if you can join our celebration by May 7th.</p>
+            <div class="form-container">
+                <div class="iframe-wrapper">
+                    <iframe 
+                        src="https://docs.google.com/forms/d/e/1FAIpQLSe9G8zb7h7WHqVO4SR6QRH-2X_KUpnIuWjqHmJoW86GJDDZzw/viewform?embedded=true" 
+                        frameborder="0" 
+                        marginheight="0" 
+                        marginwidth="0"
+                        title="RSVP Form for Cait & Jayden's Baby Shower"
+                        class="rsvp-iframe"
+                    >Loading…</iframe>
+                </div>
+            </div>
+        </div>
+    </section>
 
-			<br /><h3 class="large-blur">
-				<span class="highlight-container"><span class="highlight">
-					Know more <a href="{{ BASE_PATH }}/about">about me</a> if you like to collaborate and build new businesses!
-				</span></span>
-				<br />
-			</h3>			
+    <section id="registry" class="section">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Gift Registry</h2>
+            </div>
+            <p>Your presence is present enough, but if you'd like to help prepare our nursery, we've registered at:</p>
+            <div class="registry-links">
+                <a href="https://my.babylist.com/caitlin-saxton" target="_blank" class="registry-card">
+                    <span>View Our Babylist Registry</span>
+                </a>
+            </div>
+        </div>
+    </section>
 
-				<div class="intro-scroll-down">
-					<a data-menuanchor="3section" href="#3section">
-						<span class="mouse">
-							<span class="mouse-dot"></span>
-						</span>
-					</a>
-				</div>
-	</div>
+    <section id="gallery" class="section">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Gallery</h2>
+            </div>
+            <p>Check back after the event to see photos of our special day!</p>
+            <div class="gallery-placeholder">
+                <p>Photos coming soon</p>
+            </div>
+        </div>
+    </section>
 
+    <footer>
+        <div class="container">
+            <p>With love, Cait & Jayden</p>
+            <p class="contact">Questions? Contact us at <a href="mailto:jaydensaxton.c@outlook.com">jaydensaxton.c@outlook.com</a></p>
+        </div>
+    </footer>
 
-	<!-- BLOQUE 4 -->
-	<div data-anchor="3section" class="section" id="section3">
-		<h1 class="heavy">Take a trip <br />around <span class="pink">the Moon</span></h1>
-		<br /><h2>
-			<span class="highlight-container"><span class="highlight">
-				You will not want to stop here, right?
-			</span></span>
-		</h2>
-		<div class="intro-scroll-down">
-			<a data-menuanchor="4section" href="#4section">
-				<span class="mouse">
-					<span class="mouse-dot"></span>
-				</span>
-			</a>
-		</div>
-	</div>
-
-
-	<!-- BLOQUE 5 -->
-	<div data-anchor="4section" class="section" id="section4">
-		<h1 class="heavy">Always look forward <br />without <span class="pink">ever stop</span>
-		</h1><br />
-		<h2 class="large-blur">
-			<span class="highlight-container"><span class="highlight">
-				Your dream as unattainable is nearer and nearer.
-			</span></span>
-		</h2>
-		<br />
-
-		{% include ads-block.html %}
-
-		<div class="intro-scroll-down">
-			<a data-menuanchor="0section" href="#0section">
-				<span class="mouse">
-					<span class="mouse-dot"></span>
-				</span>
-				<span style="color:white; margin-left:-35px;" data-menuanchor="0section" href="#0section">Volver al incio</span>
-			</a>
-		</div>
-	</div>
-</div>
+    <script src="script.js"></script>
+</body>
+</html>
