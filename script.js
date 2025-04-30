@@ -270,7 +270,7 @@ function createFloatingIcons() {
             width: ${size}px;
             left: ${Math.random() * 100}%;
             top: ${-30 + Math.random() * 130}%;
-            opacity: ${0.3 + Math.random() * 0.4};
+            opacity: ${0.4 + Math.random() * 0.4};
             animation-delay: ${Math.random() * 15}s;
             animation-duration: ${15 + Math.random() * 20}s;
             transform: rotate(${Math.random() * 360}deg);

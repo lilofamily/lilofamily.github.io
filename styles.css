@@ -322,7 +322,7 @@ header::after {
 }
 
 .scroll-indicator i {
-    font-size: 3rem;
+    font-size: 5rem;
     color: var(--white);
     opacity: 0.8;
     transition: var(--transition);
@@ -349,10 +349,11 @@ header::after {
 /* Ajuste para móviles */
 @media (max-width: 768px) {
     .scroll-indicator {
-        bottom: 15px;
+        bottom: 50px;
+        left: 45%;
     }
     .scroll-indicator i {
-        font-size: 2rem;
+        font-size: 3.5rem;
     }
 }
 
