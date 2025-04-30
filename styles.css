@@ -349,7 +349,7 @@ header::after {
 /* Ajuste para móviles */
 @media (max-width: 768px) {
     .scroll-indicator {
-        bottom: 50px;
+        bottom: 100px;
         left: 45%;
     }
     .scroll-indicator i {
