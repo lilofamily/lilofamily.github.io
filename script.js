@@ -234,7 +234,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Opcional: decodifica caracteres especiales
         elementoNombre.textContent = decodeURIComponent(nombre.replace(/\+/g, ' '));
     } else {
-        elementoNombre.textContent = 'No especificado';
+        elementoNombre.textContent = 'Dreamers';
     }
 });
 
@@ -250,7 +250,7 @@ document.querySelector('.scroll-indicator').addEventListener('click', () => {
 function createFloatingIcons() {
     const container = document.getElementById('floating-icons');
     const iconNames = ['icon-1', 'icon-2', 'icon-3', 'icon-4', 'icon-5', 'icon-6', 'icon-7', 'icon-8', 'icon-9'];
-    const numberOfIcons = 15;
+    const numberOfIcons = 10;
     const basePath = 'Images/'; // Ruta base donde están tus imágenes
 
     // Limpiar contenedor primero
@@ -265,7 +265,7 @@ function createFloatingIcons() {
         icon.alt = 'Icono decorativo';
         
         // Estilos dinámicos
-        const size = 20 + Math.random() * 20;
+        const size = 20 + Math.random() * 25;
         icon.style.cssText = `
             width: ${size}px;
             left: ${Math.random() * 100}%;
