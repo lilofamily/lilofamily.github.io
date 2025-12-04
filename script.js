@@ -49,6 +49,11 @@ function updateThemeIcon(theme, themeIcon) {
     }
 }
 
+// Google Sheets Configuration
+// IMPORTANTE: Reemplaza esta URL con la URL de tu Google Apps Script Web App
+// Obtén la URL después de desplegar tu script (ver instrucciones en google-apps-script.js)
+const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyt9P776IU_u2BvJFJmcWqpISF2w3_EKFmsvioWHaKvezWPKkjUdKJXpat4bxEA0g/exec'; // Ejemplo: 'https://script.google.com/macros/s/AKfycby.../exec'
+
 // Application State
 const state = {
     currentStep: 0, // Start at welcome screen
@@ -108,36 +113,36 @@ function getJengibrePackagesQuantity() {
 
 // Design Names and Images (30 designs)
 const designs = [
-    { name: 'code: 001', image: 'images/chocos/choco_01.png' },
-    { name: 'code: 002', image: 'images/chocos/choco_02.png' },
-    { name: 'code: 003', image: 'images/chocos/choco_03.png' },
-    { name: 'code: 004', image: 'images/chocos/choco_04.png' },
-    { name: 'code: 005', image: 'images/chocos/choco_05.png' },
-    { name: 'code: 006', image: 'images/chocos/choco_06.png' },
-    { name: 'code: 007', image: 'images/chocos/choco_07.png' },
-    { name: 'code: 008', image: 'images/chocos/choco_08.png' },
-    { name: 'code: 009', image: 'images/chocos/choco_09.png' },
-    { name: 'code: 010', image: 'images/chocos/choco_10.png' },
-    { name: 'code: 011', image: 'images/chocos/choco_11.png' },
-    { name: 'code: 012', image: 'images/chocos/choco_12.png' },
-    { name: 'code: 013', image: 'images/chocos/choco_13.png' },
-    { name: 'code: 014', image: 'images/chocos/choco_14.png' },
-    { name: 'code: 015', image: 'images/chocos/choco_15.png' },
-    { name: 'code: 016', image: 'images/chocos/choco_16.png' },
-    { name: 'code: 017', image: 'images/chocos/choco_17.png' },
-    { name: 'code: 018', image: 'images/chocos/choco_18.png' },
-    { name: 'code: 019', image: 'images/chocos/choco_19.png' },
-    { name: 'code: 020', image: 'images/chocos/choco_20.png' },
-    { name: 'code: 021', image: 'images/chocos/choco_21.png' },
-    { name: 'code: 022', image: 'images/chocos/choco_22.png' },
-    { name: 'code: 023', image: 'images/chocos/choco_23.png' },
-    { name: 'code: 024', image: 'images/chocos/choco_24.png' },
-    { name: 'code: 025', image: 'images/chocos/choco_25.png' },
-    { name: 'code: 026', image: 'images/chocos/choco_26.png' },
-    { name: 'code: 027', image: 'images/chocos/choco_27.png' },
-    { name: 'code: 028', image: 'images/chocos/choco_28.png' },
-    { name: 'code: 029', image: 'images/chocos/choco_29.png' },
-    { name: 'code: 030', image: 'images/chocos/choco_30.png' }
+    { name: 'Muñeco de Nieve 1', image: 'images/chocos/choco_01.webp' },
+    { name: 'Oso Polar', image: 'images/chocos/choco_02.webp' },
+    { name: 'Choco Paceño', image: 'images/chocos/choco_03.webp' },
+    { name: 'Choco Acebo', image: 'images/chocos/choco_04.webp' },
+    { name: 'Choco Chispas', image: 'images/chocos/choco_05.webp' },
+    { name: 'Grinch Enamorado', image: 'images/chocos/choco_06.webp' },
+    { name: 'Papanoel', image: 'images/chocos/choco_07.webp' },
+    { name: 'Nieve Rojiza', image: 'images/chocos/choco_08.webp' },
+    { name: 'Choco Cacao', image: 'images/chocos/choco_09.webp' },
+    { name: 'Blanca Navidad', image: 'images/chocos/choco_10.webp' },
+    { name: 'Copo de Nieve', image: 'images/chocos/choco_11.webp' },
+    { name: 'Árbol de Navidad', image: 'images/chocos/choco_12.webp' },
+    { name: 'Choco Dorado', image: 'images/chocos/choco_13.webp' },
+    { name: 'Choco Estrellado', image: 'images/chocos/choco_14.webp' },
+    { name: 'Chispas Grinch', image: 'images/chocos/choco_15.webp' },
+    { name: 'Muñeco de Nieve 2', image: 'images/chocos/choco_16.webp' },
+    { name: 'Choco Colorado', image: 'images/chocos/choco_17.webp' },
+    { name: 'Choco GitHub', image: 'images/chocos/choco_18.webp' },
+    { name: 'Choco Android', image: 'images/chocos/choco_19.webp' },
+    { name: 'ChoKotlin', image: 'images/chocos/choco_20.webp' },
+    { name: 'Choco Flutter', image: 'images/chocos/choco_21.webp' },
+    { name: 'Choco Swift', image: 'images/chocos/choco_22.webp' },
+    { name: 'Choco Python', image: 'images/chocos/choco_23.webp' },
+    { name: 'Paceño Yaaaa!', image: 'images/chocos/choco_24.webp' },
+    { name: 'Choco Galindo', image: 'images/chocos/choco_25.webp' },
+    { name: 'Choco Vice', image: 'images/chocos/choco_26.webp' },
+    { name: 'Paceño Utha!', image: 'images/chocos/choco_27.webp' },
+    { name: 'Choco Bolivar.', image: 'images/chocos/choco_28.webp' },
+    { name: 'Choco Tigre.', image: 'images/chocos/choco_29.webp' },
+    { name: 'Choco Bolivia.', image: 'images/chocos/choco_30.webp' }
 ];
 
 // WhatsApp Number
@@ -194,12 +199,41 @@ function showStep(stepNumber) {
         // Force a reflow to ensure display change
         currentStepElement.offsetHeight;
         
+        // Reset scroll to top when changing steps
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+        
+        // Also reset scroll on the main container
+        const mainContainer = document.querySelector('.main-container');
+        if (mainContainer) {
+            mainContainer.scrollTop = 0;
+        }
+        
         // Trigger initialization for specific steps
+        if (stepNumber === 1 && state.selectedPackages.length === 0) {
+            // Reset UI if returning to step 1 with no packages
+            setTimeout(() => {
+                if (typeof window.resetStep1UI === 'function') {
+                    window.resetStep1UI();
+                }
+            }, 100);
+        }
         if (stepNumber === 3 && typeof window.initializeDesignsStep3 === 'function') {
             setTimeout(() => window.initializeDesignsStep3(), 100);
         }
         if (stepNumber === 4 && typeof window.updateOrderSummaryStep4 === 'function') {
-            setTimeout(() => window.updateOrderSummaryStep4(), 100);
+            setTimeout(() => {
+                window.updateOrderSummaryStep4();
+                // Ensure scroll is at top after content is updated
+                window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior: 'smooth'
+                });
+            }, 100);
         }
     } else {
         console.error('ERROR: Step element not found for step', stepNumber);
@@ -267,6 +301,23 @@ function initializeDialog() {
 }
 
 // Step 1: Package Selection
+    // Function to reset all selections in step 1
+    function resetStep1UI() {
+        // Uncheck all checkboxes
+        document.querySelectorAll('.package-card input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        
+        // Reset j6 counter to 0
+        state.jengibrePackages['j6'] = 0;
+        updateJengibreCounterDisplay('j6');
+        
+        // Remove selected class from all cards
+        document.querySelectorAll('.package-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+    }
+
 function initializeStep1() {
     const btnNext1 = document.getElementById('btnNext1');
     if (!btnNext1) {
@@ -276,6 +327,9 @@ function initializeStep1() {
     
     // Initialize j6 counter display
     updateJengibreCounterDisplay('j6');
+    
+    // Make reset function available globally
+    window.resetStep1UI = resetStep1UI;
 
     // Function to update button state - always enabled now
     function updateButtonState() {
@@ -697,18 +751,93 @@ function initializeStep4() {
     const orderForm = document.getElementById('orderForm');
     const orderSummary = document.getElementById('orderSummary');
 
+    // Helper function to get package image
+    function getPackageImage(packageId) {
+        const imageMap = {
+            1: 'images/packs/pack-x1.png',
+            4: 'images/packs/pack-x4.png',
+            8: 'images/packs/pack-x8.png',
+            12: 'images/packs/pack-x12.png',
+            j1: 'images/packs/pack-jengibres-x1.png',
+            j2: 'images/packs/pack-jengibres-x2.png',
+            j4: 'images/packs/pack-jengibres-x4.png',
+            j6: 'images/packs/pack-jengibres-x6.png'
+        };
+        return imageMap[packageId] || '';
+    }
+
+    // Function to remove a package from the order
+    function removePackage(packageIndex) {
+        const packageToRemove = state.selectedPackages[packageIndex];
+        if (!packageToRemove) return;
+        
+        // If it's a regular package and we have specific designs, we need to recalculate designs
+        if (!isJengibrePackage(packageToRemove.packageId) && state.selectionMode === 'especifico') {
+            // Calculate the quantity being removed
+            const removedQuantity = packageToRemove.quantity;
+            const currentDesignTotal = Object.values(state.selectedDesigns).reduce((sum, qty) => sum + qty, 0);
+            const totalRegularQuantity = getRegularPackagesQuantity();
+            const newTotalQuantity = totalRegularQuantity - removedQuantity;
+            
+            // If removing this package would make designs exceed available quantity, adjust proportionally
+            if (currentDesignTotal > newTotalQuantity && newTotalQuantity > 0) {
+                // Calculate ratio to adjust designs
+                const ratio = newTotalQuantity / totalRegularQuantity;
+                Object.keys(state.selectedDesigns).forEach(designId => {
+                    const currentQty = state.selectedDesigns[designId];
+                    const newQty = Math.floor(currentQty * ratio);
+                    if (newQty > 0) {
+                        state.selectedDesigns[designId] = newQty;
+                    } else {
+                        delete state.selectedDesigns[designId];
+                    }
+                });
+            } else if (newTotalQuantity === 0) {
+                // No more regular packages, clear all designs
+                state.selectedDesigns = {};
+                state.selectionMode = null;
+            }
+        } else if (!isJengibrePackage(packageToRemove.packageId) && !hasRegularPackages()) {
+            // If this was the last regular package, clear selection mode and designs
+            state.selectionMode = null;
+            state.selectedDesigns = {};
+        }
+        
+        // Remove the package
+        state.selectedPackages.splice(packageIndex, 1);
+        
+        // If no packages left, go back to step 1 and reset everything
+        if (state.selectedPackages.length === 0) {
+            state.selectionMode = null;
+            state.selectedDesigns = {};
+            state.jengibrePackages = {};
+            showStep(1);
+            // Reset UI after a short delay to ensure DOM is ready
+            setTimeout(() => {
+                if (typeof window.resetStep1UI === 'function') {
+                    window.resetStep1UI();
+                }
+            }, 100);
+            return;
+        }
+        
+        // Update the summary
+        updateOrderSummary();
+    }
+
     function updateOrderSummary() {
         let summaryHTML = '';
         let totalPrice = 0;
         let regularPackages = [];
         let jengibrePackages = [];
 
-        // Separate packages by type
-        state.selectedPackages.forEach(pkg => {
+        // Separate packages by type and add index for removal
+        state.selectedPackages.forEach((pkg, index) => {
+            const pkgWithIndex = { ...pkg, originalIndex: index };
             if (isJengibrePackage(pkg.packageId)) {
-                jengibrePackages.push(pkg);
+                jengibrePackages.push(pkgWithIndex);
             } else {
-                regularPackages.push(pkg);
+                regularPackages.push(pkgWithIndex);
             }
             totalPrice += pkg.price;
         });
@@ -717,14 +846,26 @@ function initializeStep4() {
         if (regularPackages.length > 0) {
             summaryHTML += '<div style="margin-bottom: 1.5rem;"><h4 style="color: var(--accent-green); font-size: 1.5rem; font-weight: 700; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;">Chocobombas</h4>';
             regularPackages.forEach(pkg => {
+                const packageImage = getPackageImage(pkg.packageId);
                 summaryHTML += `
-                    <div class="summary-item">
-                        <div>
-                            <h4>${pkg.name}</h4>
-                            <p>${pkg.quantity} chocobombas${pkg.bonus ? ` + ${pkg.bonus}` : ''}</p>
+                    <div class="summary-item summary-item-with-image" data-package-index="${pkg.originalIndex}">
+                        <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
+                            ${packageImage ? `<img src="${packageImage}" alt="${pkg.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 2px solid var(--border-color);">` : ''}
+                            <div>
+                                <h4 style="margin: 0;">${pkg.name}</h4>
+                                <p style="margin: 0;">${pkg.quantity} chocobombas${pkg.bonus ? ` + ${pkg.bonus}` : ''}</p>
+                            </div>
                         </div>
-                        <div>
-                            <p style="font-weight: 600; color: var(--accent-green);">${pkg.price} Bs.</p>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <p style="font-weight: 600; color: var(--accent-green); margin: 0;">${pkg.price} Bs.</p>
+                            <button class="remove-item-btn" onclick="removePackageFromOrder(${pkg.originalIndex})" title="Eliminar producto" aria-label="Eliminar ${pkg.name}">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 6H5H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M10 11V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M14 11V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 `;
@@ -737,12 +878,13 @@ function initializeStep4() {
                     if (quantity > 0) {
                         const design = designs[parseInt(designId)];
                         summaryHTML += `
-                            <div class="summary-item">
-                                <div>
-                                    <p>${design.name}</p>
+                            <div class="summary-item summary-item-with-image">
+                                <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
+                                    <img src="${design.image}" alt="${design.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 2px solid var(--border-color);">
+                                    <p style="margin: 0;">${design.name}</p>
                                 </div>
                                 <div>
-                                    <p style="font-weight: 600;">x${quantity}</p>
+                                    <p style="font-weight: 600; margin: 0;">x${quantity}</p>
                                 </div>
                             </div>
                         `;
@@ -767,6 +909,7 @@ function initializeStep4() {
             jengibrePackages.forEach(pkg => {
                 if (!jengibreGroups[pkg.packageId]) {
                     jengibreGroups[pkg.packageId] = {
+                        packageId: pkg.packageId,
                         name: pkg.name,
                         quantity: 0,
                         price: 0,
@@ -782,14 +925,30 @@ function initializeStep4() {
             Object.values(jengibreGroups).forEach(group => {
                 const count = group.quantity / group.unitQuantity;
                 const countText = count > 1 ? ` x${count}` : '';
+                const packageImage = getPackageImage(group.packageId);
+                // Find all indices of packages with this packageId
+                const packageIndices = state.selectedPackages
+                    .map((pkg, idx) => pkg.packageId === group.packageId ? idx : -1)
+                    .filter(idx => idx !== -1);
                 summaryHTML += `
-                    <div class="summary-item">
-                        <div>
-                            <h4>${group.name}${countText}</h4>
-                            <p>${group.quantity} chocobombas de jengibre</p>
+                    <div class="summary-item summary-item-with-image">
+                        <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
+                            ${packageImage ? `<img src="${packageImage}" alt="${group.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 2px solid var(--border-color);">` : ''}
+                            <div>
+                                <h4 style="margin: 0;">${group.name}${countText}</h4>
+                                <p style="margin: 0;">${group.quantity} chocobombas de jengibre</p>
+                            </div>
                         </div>
-                        <div>
-                            <p style="font-weight: 600; color: var(--accent-green);">${group.price} Bs.</p>
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <p style="font-weight: 600; color: var(--accent-green); margin: 0;">${group.price} Bs.</p>
+                            <button class="remove-item-btn" onclick="removeJengibrePackageFromOrder('${group.packageId}')" title="Eliminar producto" aria-label="Eliminar ${group.name}">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M3 6H5H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M8 6V4C8 3.46957 8.21071 2.96086 8.58579 2.58579C8.96086 2.21071 9.46957 2 10 2H14C14.5304 2 15.0391 2.21071 15.4142 2.58579C15.7893 2.96086 16 3.46957 16 4V6M19 6V20C19 20.5304 18.7893 21.0391 18.4142 21.4142C18.0391 21.7893 17.5304 22 17 22H7C6.46957 22 5.96086 21.7893 5.58579 21.4142C5.21071 21.0391 5 20.5304 5 20V6H19Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M10 11V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    <path d="M14 11V17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
                         </div>
                     </div>
                 `;
@@ -809,6 +968,46 @@ function initializeStep4() {
 
     // Make updateOrderSummary available globally for showStep
     window.updateOrderSummaryStep4 = updateOrderSummary;
+    
+    // Make remove functions available globally
+    window.removePackageFromOrder = function(packageIndex) {
+        removePackage(packageIndex);
+    };
+    
+    window.removeJengibrePackageFromOrder = function(packageId) {
+        // Remove all packages with this packageId
+        const indicesToRemove = [];
+        state.selectedPackages.forEach((pkg, idx) => {
+            if (pkg.packageId === packageId) {
+                indicesToRemove.push(idx);
+            }
+        });
+        // Remove from end to start to maintain correct indices
+        indicesToRemove.reverse().forEach(idx => {
+            state.selectedPackages.splice(idx, 1);
+        });
+        // Update jengibrePackages state
+        if (state.jengibrePackages[packageId]) {
+            delete state.jengibrePackages[packageId];
+        }
+        
+        // If no packages left, go back to step 1 and reset everything
+        if (state.selectedPackages.length === 0) {
+            state.selectionMode = null;
+            state.selectedDesigns = {};
+            state.jengibrePackages = {};
+            showStep(1);
+            // Reset UI after a short delay to ensure DOM is ready
+            setTimeout(() => {
+                if (typeof window.resetStep1UI === 'function') {
+                    window.resetStep1UI();
+                }
+            }, 100);
+            return;
+        }
+        
+        updateOrderSummary();
+    };
 
     btnBack4.addEventListener('click', () => {
         // If only jengibre packages, go back to step 1
@@ -964,9 +1163,112 @@ function generateWhatsAppMessage() {
     return encodeURIComponent(message);
 }
 
+// Function to prepare order data for Google Sheets
+function prepareOrderDataForSheets() {
+    // Separate packages by type
+    let regularPackages = [];
+    let jengibrePackages = [];
+    let totalPrice = 0;
+    
+    state.selectedPackages.forEach(pkg => {
+        if (isJengibrePackage(pkg.packageId)) {
+            jengibrePackages.push(pkg);
+        } else {
+            regularPackages.push(pkg);
+        }
+        totalPrice += pkg.price;
+    });
+    
+    // Format regular packages with line breaks
+    const regularPackagesText = regularPackages.length > 0
+        ? regularPackages.map(pkg => 
+            `• ${pkg.name} (${pkg.quantity} unidades)`
+        ).join('\n')
+        : 'Ninguno';
+    
+    const regularQuantity = regularPackages.reduce((sum, pkg) => sum + pkg.quantity, 0);
+    
+    // Format designs with line breaks
+    let designsText = '';
+    if (state.selectionMode === 'especifico' && Object.keys(state.selectedDesigns).length > 0) {
+        const designList = Object.entries(state.selectedDesigns)
+            .filter(([_, qty]) => qty > 0)
+            .map(([designId, quantity]) => {
+                const design = designs[parseInt(designId)];
+                return `• ${design.name} x${quantity}`;
+            })
+            .join('\n');
+        designsText = designList;
+    } else if (state.selectionMode === 'surtido') {
+        designsText = 'Surtido (diseños variados)';
+    } else {
+        designsText = 'N/A';
+    }
+    
+    // Format jengibre packages with line breaks
+    const jengibrePackagesText = jengibrePackages.length > 0
+        ? jengibrePackages.map(pkg => 
+            `• ${pkg.name} (${pkg.quantity} unidades)`
+        ).join('\n')
+        : 'Ninguno';
+    
+    const jengibreQuantity = jengibrePackages.reduce((sum, pkg) => sum + pkg.quantity, 0);
+    
+    // Calculate remaining amount
+    const depositAmount = state.customerInfo.depositAmount || 0;
+    const remainingAmount = totalPrice - depositAmount;
+    
+    return {
+        fullName: state.customerInfo.fullName,
+        phone: state.customerInfo.phone,
+        regularPackages: regularPackagesText,
+        regularQuantity: regularQuantity,
+        designs: designsText,
+        jengibrePackages: jengibrePackagesText,
+        jengibreQuantity: jengibreQuantity,
+        depositAmount: depositAmount,
+        remainingAmount: remainingAmount,
+        totalPrice: totalPrice,
+        observations: state.customerInfo.observations || ''
+    };
+}
+
+// Function to send order to Google Sheets
+async function sendOrderToGoogleSheets() {
+    // If URL is not configured, skip
+    if (!GOOGLE_SHEETS_WEB_APP_URL || GOOGLE_SHEETS_WEB_APP_URL.trim() === '') {
+        console.log('Google Sheets URL no configurada, omitiendo registro');
+        return;
+    }
+    
+    try {
+        const orderData = prepareOrderDataForSheets();
+        
+        const response = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+            method: 'POST',
+            mode: 'no-cors', // Google Apps Script requiere no-cors
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(orderData)
+        });
+        
+        // Con no-cors no podemos leer la respuesta, pero asumimos éxito
+        console.log('Pedido enviado a Google Sheets');
+    } catch (error) {
+        console.error('Error al enviar pedido a Google Sheets:', error);
+        // No mostramos error al usuario para no interrumpir el flujo
+    }
+}
+
 function sendToWhatsApp() {
     const message = generateWhatsAppMessage();
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
+    
+    // Send to Google Sheets before opening WhatsApp
+    sendOrderToGoogleSheets();
+    
+    // Open WhatsApp
     window.open(whatsappUrl, '_blank');
 }
 

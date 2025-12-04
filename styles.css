@@ -726,6 +726,54 @@ body {
     font-size: 0.9rem;
 }
 
+/* Estilos para items con imagen */
+.summary-item-with-image {
+    align-items: center;
+}
+
+.summary-item-with-image img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 2px solid var(--border-color);
+    flex-shrink: 0;
+}
+
+/* Botón para eliminar items del pedido */
+.remove-item-btn {
+    background: transparent;
+    border: 2px solid var(--accent-red);
+    border-radius: 8px;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    flex-shrink: 0;
+    color: var(--accent-red);
+}
+
+.remove-item-btn:hover {
+    background: var(--accent-red);
+    color: white;
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(196, 30, 58, 0.4);
+}
+
+.remove-item-btn:active {
+    transform: scale(0.95);
+}
+
+.remove-item-btn svg {
+    width: 18px;
+    height: 18px;
+    display: block;
+}
+
 .summary-total {
     margin-top: 1rem;
     padding-top: 1rem;
@@ -1482,6 +1530,11 @@ body {
 
     .summary-item h4 {
         font-size: 1rem;
+    }
+
+    .summary-item-with-image img {
+        width: 50px;
+        height: 50px;
     }
 
     .summary-total h3 {
