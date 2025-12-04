@@ -1,8 +1,15 @@
-# OS Files
+# Dependencies
+node_modules/
+package-lock.json
+
+# Image backups
+images_backup_*/
+
+# OS files
 .DS_Store
 Thumbs.db
 
-# Editor Files
+# Editor files
 .vscode/
 .idea/
 *.swp
@@ -11,4 +18,4 @@ Thumbs.db
 
 # Logs
 *.log
-
+npm-debug.log*
