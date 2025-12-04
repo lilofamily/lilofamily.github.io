@@ -6,16 +6,39 @@ function initializeTheme() {
     const themeIcon = themeToggle.querySelector('.theme-icon');
     const html = document.documentElement;
 
-    // Load saved theme from localStorage
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    html.setAttribute('data-theme', savedTheme);
-    updateThemeIcon(savedTheme, themeIcon);
+    // Detect system preference
+    function getSystemTheme() {
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+        }
+        return 'light';
+    }
+
+    // Load saved theme from localStorage, or use system preference
+    const savedTheme = localStorage.getItem('theme');
+    const initialTheme = savedTheme || getSystemTheme();
+    
+    html.setAttribute('data-theme', initialTheme);
+    updateThemeIcon(initialTheme, themeIcon);
+
+    // Listen for system theme changes
+    if (window.matchMedia) {
+        const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+        mediaQuery.addEventListener('change', (e) => {
+            // Only update if user hasn't manually set a preference
+            if (!localStorage.getItem('theme')) {
+                const newTheme = e.matches ? 'dark' : 'light';
+                html.setAttribute('data-theme', newTheme);
+                updateThemeIcon(newTheme, themeIcon);
+            }
+        });
+    }
 
     themeToggle.addEventListener('click', () => {
         const currentTheme = html.getAttribute('data-theme');
         const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
         html.setAttribute('data-theme', newTheme);
-        localStorage.setItem('theme', newTheme);
+        localStorage.setItem('theme', newTheme); // Save user preference
         updateThemeIcon(newTheme, themeIcon);
     });
 }
@@ -28,14 +51,15 @@ function updateThemeIcon(theme, themeIcon) {
 
 // Application State
 const state = {
-    currentStep: 1,
+    currentStep: 0, // Start at welcome screen
     selectedPackages: [], // Array of {packageId, quantity, price, bonus}
     selectionMode: null, // 'surtido' or 'especifico'
     selectedDesigns: {}, // {designId: quantity}
     customerInfo: {
         firstName: '',
         lastName: '',
-        phone: ''
+        phone: '',
+        observations: ''
     }
 };
 
@@ -83,7 +107,7 @@ function showStep(stepNumber) {
     console.log('Found', allSteps.length, 'steps');
     allSteps.forEach((step, index) => {
         step.classList.remove('active');
-        console.log('Removed active from step', index + 1);
+        console.log('Removed active from step', index);
     });
     
     // Show current step
@@ -99,6 +123,17 @@ function showStep(stepNumber) {
         updateProgressBar();
         console.log('Step', stepNumber, 'is now active, state updated');
         
+        // Show/hide progress bar based on step
+        const progressContainer = document.getElementById('progressContainer');
+        
+        if (stepNumber === 0) {
+            // Welcome screen - hide progress
+            if (progressContainer) progressContainer.classList.remove('show');
+        } else {
+            // Other steps - show progress
+            if (progressContainer) progressContainer.classList.add('show');
+        }
+        
         // Force a reflow to ensure display change
         currentStepElement.offsetHeight;
         
@@ -111,14 +146,67 @@ function showStep(stepNumber) {
         }
     } else {
         console.error('ERROR: Step element not found for step', stepNumber);
-        alert('Error: No se pudo encontrar el paso ' + stepNumber);
+        showDialog('Error', 'No se pudo encontrar el paso ' + stepNumber);
     }
 }
 
 function updateProgressBar() {
-    const totalSteps = 4;
-    const progress = (state.currentStep / totalSteps) * 100;
-    document.getElementById('progressBar').style.width = `${progress}%`;
+    const totalSteps = 4; // Steps 1-4 (step 0 is welcome screen)
+    if (state.currentStep === 0) {
+        document.getElementById('progressBar').style.width = '0%';
+    } else {
+        const progress = (state.currentStep / totalSteps) * 100;
+        document.getElementById('progressBar').style.width = `${progress}%`;
+    }
+}
+
+// Custom Dialog Functions
+function showDialog(title, message) {
+    const overlay = document.getElementById('dialogOverlay');
+    const dialogTitle = document.getElementById('dialogTitle');
+    const dialogMessage = document.getElementById('dialogMessage');
+    
+    if (overlay && dialogTitle && dialogMessage) {
+        dialogTitle.textContent = title;
+        dialogMessage.textContent = message;
+        overlay.classList.add('active');
+        
+        // Prevent body scroll when dialog is open
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function hideDialog() {
+    const overlay = document.getElementById('dialogOverlay');
+    if (overlay) {
+        overlay.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+}
+
+// Initialize dialog
+function initializeDialog() {
+    const overlay = document.getElementById('dialogOverlay');
+    const dialogBtn = document.getElementById('dialogBtn');
+    
+    if (overlay && dialogBtn) {
+        // Close on button click
+        dialogBtn.addEventListener('click', hideDialog);
+        
+        // Close on overlay click (outside dialog)
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) {
+                hideDialog();
+            }
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && overlay.classList.contains('active')) {
+                hideDialog();
+            }
+        });
+    }
 }
 
 // Step 1: Package Selection
@@ -197,7 +285,7 @@ function initializeStep1() {
         if (state.selectedPackages.length > 0) {
             showStep(2);
         } else {
-            alert('Por favor, selecciona al menos un paquete antes de continuar');
+            showDialog('Atención', 'Por favor, selecciona al menos un paquete antes de continuar');
         }
         return false;
     };
@@ -212,7 +300,7 @@ function initializeStep1() {
             console.log('Calling showStep(2)');
             showStep(2);
         } else {
-            alert('Por favor, selecciona al menos un paquete antes de continuar');
+            showDialog('Atención', 'Por favor, selecciona al menos un paquete antes de continuar');
         }
         return false;
     }, false);
@@ -366,7 +454,7 @@ function initializeStep3() {
             showStep(4);
         } else {
             const remaining = total - selected;
-            alert(`Por favor, selecciona ${remaining} diseño${remaining > 1 ? 's' : ''} más antes de continuar`);
+            showDialog('Atención', `Por favor, selecciona ${remaining} diseño${remaining > 1 ? 's' : ''} más antes de continuar`);
         }
     });
 }
@@ -449,6 +537,7 @@ function initializeStep4() {
         state.customerInfo.firstName = document.getElementById('firstName').value.trim();
         state.customerInfo.lastName = document.getElementById('lastName').value.trim();
         state.customerInfo.phone = document.getElementById('phone').value.trim();
+        state.customerInfo.observations = document.getElementById('observations').value.trim();
 
         if (state.customerInfo.firstName && state.customerInfo.lastName && state.customerInfo.phone) {
             sendToWhatsApp();
@@ -459,45 +548,54 @@ function initializeStep4() {
 
 // Generate WhatsApp Message
 function generateWhatsAppMessage() {
-    let message = `¡Hola! Me interesa hacer un pedido de Chocobombas K-boom 🎄\n\n`;
+    let message = `¡Hola! Me interesa hacer un pedido de Chocobombas K-boom\n\n`;
     
     // Customer Info
-    message += `*Datos del Cliente:*\n`;
-    message += `Nombre: ${state.customerInfo.firstName} ${state.customerInfo.lastName}\n`;
-    message += `Teléfono: ${state.customerInfo.phone}\n\n`;
+    message += `*DATOS DEL CLIENTE*\n`;
+    message += `Nombre: *${state.customerInfo.firstName} ${state.customerInfo.lastName}*\n`;
+    message += `Teléfono: *${state.customerInfo.phone}*\n\n`;
     
     // Packages
-    message += `*Pedido:*\n`;
+    message += `*DETALLE DEL PEDIDO*\n`;
     let totalPrice = 0;
     let totalQuantity = 0;
     
     state.selectedPackages.forEach((pkg, index) => {
         totalPrice += pkg.price;
         totalQuantity += pkg.quantity;
-        message += `${index + 1}. ${pkg.name}: ${pkg.quantity} chocobombas`;
+        message += `${index + 1}. *${pkg.name}*\n`;
+        message += `   - Cantidad: *${pkg.quantity} chocobombas*\n`;
         if (pkg.bonus) {
-            message += ` + ${pkg.bonus} 🎁`;
+            message += `   - Regalo: *${pkg.bonus}*\n`;
         }
-        message += ` - ${pkg.price} Bs.\n`;
+        message += `   - Precio: *${pkg.price} Bs.*\n\n`;
     });
     
-    message += `\n*Total de chocobombas:* ${totalQuantity}\n`;
+    message += `*Total de chocobombas: ${totalQuantity}*\n\n`;
     
     // Designs
     if (state.selectionMode === 'especifico' && Object.keys(state.selectedDesigns).length > 0) {
-        message += `\n*Diseños específicos elegidos:*\n`;
+        message += `*DISEÑOS SELECCIONADOS*\n`;
         Object.entries(state.selectedDesigns).forEach(([designId, quantity]) => {
             if (quantity > 0) {
                 const design = designs[parseInt(designId)];
-                message += `• ${design.emoji} ${design.name}: x${quantity}\n`;
+                message += `• ${design.name}: *x${quantity}*\n`;
             }
         });
+        message += `\n`;
     } else {
-        message += `\n*Tipo:* Surtido (diseños variados)\n`;
+        message += `*Tipo:* Surtido (diseños variados)\n\n`;
     }
     
-    message += `\n*Total a pagar:* ${totalPrice} Bs.\n`;
-    message += `\n¿Podrían confirmarme la disponibilidad y el tiempo de entrega? ¡Gracias! 🎅`;
+    message += `*TOTAL A PAGAR: ${totalPrice} Bs.*\n\n`;
+    
+    // Observations
+    if (state.customerInfo.observations) {
+        message += `*OBSERVACIONES*\n`;
+        message += `${state.customerInfo.observations}\n\n`;
+    }
+    
+    message += `¿Podrían confirmarme la disponibilidad y el tiempo de entrega? ¡Gracias!`;
 
     return encodeURIComponent(message);
 }
@@ -508,11 +606,23 @@ function sendToWhatsApp() {
     window.open(whatsappUrl, '_blank');
 }
 
+// Initialize Welcome Screen
+function initializeWelcome() {
+    const btnStart = document.getElementById('btnStart');
+    if (btnStart) {
+        btnStart.addEventListener('click', () => {
+            showStep(1);
+        });
+    }
+}
+
 // Initialize on page load
 function initApp() {
     console.log('=== INITIALIZING APP ===');
     console.log('DOM ready state:', document.readyState);
     initializeTheme();
+    initializeDialog();
+    initializeWelcome();
     initializeStep1();
     initializeStep2();
     initializeStep3();

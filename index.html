@@ -12,7 +12,7 @@
 </head>
 <body>
     <!-- Header -->
-    <header class="header">
+    <header class="header" id="mainHeader">
         <div class="header-content">
             <h1 class="logo">🎄 Chocobombas K-boom</h1>
             <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
@@ -22,14 +22,51 @@
     </header>
 
     <!-- Progress Bar -->
-    <div class="progress-container">
+    <div class="progress-container" id="progressContainer">
         <div class="progress-bar" id="progressBar"></div>
     </div>
 
     <!-- Main Container -->
     <main class="main-container">
+        <!-- Step 0: Welcome Screen -->
+        <div class="step active" id="step0" data-step="0">
+            <div class="step-content welcome-content">
+                <div class="welcome-banner">
+                    <div class="welcome-emoji">🎄🎅🎁</div>
+                    <h1 class="welcome-title">¡Bienvenido a Chocobombas K-boom!</h1>
+                    <p class="welcome-subtitle">Deliciosas chocobombas navideñas que explotan de sabor</p>
+                </div>
+                
+                <div class="welcome-features">
+                    <div class="feature-item">
+                        <span class="feature-icon">🍫</span>
+                        <p>Chocobombas artesanales</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🎨</span>
+                        <p>20 diseños únicos</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">📦</span>
+                        <p>Paquetes especiales</p>
+                    </div>
+                    <div class="feature-item">
+                        <span class="feature-icon">🚀</span>
+                        <p>Pedido rápido por WhatsApp</p>
+                    </div>
+                </div>
+
+                <div class="welcome-cta">
+                    <button class="btn-start" id="btnStart">
+                        <span>✨</span> Iniciar Pedido
+                        <span>→</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <!-- Step 1: Package Selection -->
-        <div class="step active" id="step1" data-step="1">
+        <div class="step" id="step1" data-step="1">
             <div class="step-content">
                 <h2 class="step-title">¿Qué paquetes te gustaría pedir?</h2>
                 <p class="step-subtitle">Puedes seleccionar uno o más paquetes</p>
@@ -161,7 +198,19 @@
                         <label for="phone">Número de Teléfono *</label>
                         <input type="tel" id="phone" name="phone" required placeholder="Ej: 60139013">
                     </div>
+                    <div class="form-group">
+                        <label for="observations">Observaciones o Comentarios (Opcional)</label>
+                        <textarea id="observations" name="observations" rows="4" placeholder="Escribe aquí cualquier comentario, pregunta o observación sobre tu pedido..."></textarea>
+                    </div>
                 </form>
+
+                <div class="warning-message">
+                    <div class="warning-icon">⚠️</div>
+                    <p class="warning-text">
+                        <strong>Importante:</strong> Por favor, no edites el mensaje generado para WhatsApp. 
+                        Contiene toda la información necesaria de tu pedido.
+                    </p>
+                </div>
 
                 <div class="step-actions">
                     <button class="btn-back" id="btnBack4">← Atrás</button>
@@ -172,6 +221,22 @@
             </div>
         </div>
     </main>
+
+    <!-- Custom Dialog -->
+    <div class="dialog-overlay" id="dialogOverlay">
+        <div class="dialog-container">
+            <div class="dialog-header">
+                <span class="dialog-icon">⚠️</span>
+                <h3 class="dialog-title" id="dialogTitle">Atención</h3>
+            </div>
+            <div class="dialog-body">
+                <p class="dialog-message" id="dialogMessage"></p>
+            </div>
+            <div class="dialog-footer">
+                <button class="dialog-btn" id="dialogBtn">Entendido</button>
+            </div>
+        </div>
+    </div>
 
     <script src="script.js"></script>
 </body>
