@@ -121,6 +121,11 @@ body {
     justify-content: center;
 }
 
+/* Expand main container for design selection step */
+.step#step3.active .step-content {
+    max-width: 1200px !important;
+}
+
 /* Steps */
 .step {
     display: none;
@@ -147,9 +152,10 @@ body {
 }
 
 .step-content {
-    max-width: 700px;
+    max-width: 1200px;
     margin: 0 auto;
     width: 100%;
+    padding-bottom: 100px; /* Space for fixed buttons */
 }
 
 /* Welcome Screen */
@@ -269,25 +275,53 @@ body {
     margin-bottom: 3rem;
 }
 
+/* Section Title */
+.section-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--accent-red);
+    text-align: center;
+    margin: 3rem 0 1.5rem 0;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border-color);
+}
+
+.section-title:first-of-type {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+}
+
 /* Packages Grid */
 .packages-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 1.5rem;
     margin-bottom: 3rem;
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Force 2 columns on desktop for packages */
+@media (min-width: 769px) {
+    .packages-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        grid-auto-flow: row !important;
+    }
 }
 
 .package-card {
     background: var(--bg-card);
     border: 3px solid var(--border-color);
     border-radius: 15px;
-    padding: 1.5rem;
+    padding: 0;
     position: relative;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    overflow: hidden;
 }
 
 .package-card:hover {
@@ -319,10 +353,28 @@ body {
     box-shadow: 0 2px 8px var(--shadow);
 }
 
+.package-image {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    border-radius: 15px 15px 0 0;
+}
+
+.package-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+}
+
 .package-checkbox {
     position: absolute;
     top: 15px;
     right: 15px;
+    z-index: 10;
 }
 
 .package-checkbox input[type="checkbox"] {
@@ -333,7 +385,8 @@ body {
 }
 
 .package-info {
-    margin-top: 0.5rem;
+    padding: 1.5rem;
+    margin-top: 0;
 }
 
 .package-info h3 {
@@ -360,6 +413,26 @@ body {
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--accent-green);
+}
+
+.package-price-dynamic {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--accent-green);
+}
+
+/* Jengibre Package Counter */
+.package-counter {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    padding: 0 1rem 1rem 1rem;
+}
+
+.jengibre-package .package-info {
+    padding-bottom: 0.5rem;
 }
 
 /* Mode Selection */
@@ -412,19 +485,54 @@ body {
 /* Designs Grid */
 .designs-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
     margin-bottom: 3rem;
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+/* Force 2 columns on desktop */
+@media (min-width: 769px) {
+    .designs-grid {
+        grid-template-columns: calc(50% - 1rem) calc(50% - 1rem) !important;
+        grid-auto-flow: row !important;
+        max-width: 1000px !important;
+        width: 100% !important;
+        gap: 2rem !important;
+    }
+    
+    .design-card {
+        max-width: 100% !important;
+        width: 100% !important;
+        min-width: 0 !important;
+    }
+    
+    /* Ensure step3 has enough width */
+    #step3 .step-content {
+        max-width: 1200px !important;
+    }
+    
+    /* Expand main container when step3 is active */
+    .main-container {
+        max-width: 1400px;
+    }
 }
 
 .design-card {
     background: var(--bg-card);
     border: 2px solid var(--border-color);
     border-radius: 15px;
-    padding: 1.5rem 1rem;
+    padding: 0;
     text-align: center;
     transition: all 0.3s ease;
     position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
 }
 
 .design-card:hover {
@@ -441,21 +549,30 @@ body {
 
 .design-image {
     width: 100%;
-    height: 120px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 4rem;
-    margin-bottom: 1rem;
-    background: linear-gradient(135deg, var(--accent-red) 0%, var(--accent-green) 100%);
-    border-radius: 10px;
+    height: auto;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    display: block;
+    background: var(--bg-secondary);
+    border-radius: 15px 15px 0 0;
+}
+
+.design-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+    object-fit: contain;
+    object-position: center;
 }
 
 .design-name {
-    font-size: 0.95rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin: 0.75rem 1rem 0.5rem 1rem;
     color: var(--text-primary);
+    padding: 0;
+    letter-spacing: 0.5px;
 }
 
 .design-counter {
@@ -463,22 +580,26 @@ body {
     align-items: center;
     justify-content: center;
     gap: 1rem;
+    margin-bottom: 1rem;
+    padding: 0 1rem;
 }
 
 .counter-btn {
     background: var(--gradient-primary);
     color: white;
     border: none;
-    width: 35px;
-    height: 35px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
-    font-size: 1.2rem;
-    font-weight: 600;
+    font-size: 1.4rem;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    min-width: 44px;
+    flex-shrink: 0;
 }
 
 .counter-btn:hover:not(:disabled) {
@@ -492,11 +613,12 @@ body {
 }
 
 .counter-value {
-    font-size: 1.3rem;
+    font-size: 1.2rem;
     font-weight: 700;
     color: var(--accent-green);
-    min-width: 30px;
+    min-width: 140px;
     text-align: center;
+    white-space: nowrap;
 }
 
 /* Step Actions */
@@ -504,9 +626,16 @@ body {
     display: flex;
     justify-content: space-between;
     gap: 1rem;
-    margin-top: 3rem;
-    padding-top: 2rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--bg-primary);
+    padding: 1rem 2rem;
     border-top: 2px solid var(--border-color);
+    box-shadow: 0 -4px 20px var(--shadow);
+    z-index: 1000;
+    max-width: 100%;
 }
 
 .btn-next, .btn-back, .btn-submit {
@@ -665,6 +794,133 @@ body {
 
 .form-group textarea::placeholder {
     color: var(--text-secondary);
+}
+
+/* Payment Section */
+.payment-section {
+    margin-top: 2rem;
+    padding: 2rem;
+    background: var(--bg-secondary);
+    border-radius: 15px;
+    border: 2px solid var(--border-color);
+}
+
+.payment-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-red);
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.payment-description {
+    font-size: 1rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.qr-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: var(--bg-primary);
+    border-radius: 10px;
+}
+
+.qr-image {
+    max-width: 250px;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px var(--shadow);
+}
+
+/* Delivery Section */
+.delivery-section {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 2px solid var(--border-color);
+}
+
+.delivery-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--accent-red);
+    margin-bottom: 0.75rem;
+    text-align: center;
+}
+
+.delivery-info {
+    font-size: 1rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.delivery-info strong {
+    color: var(--accent-green);
+    font-weight: 600;
+}
+
+.delivery-time {
+    font-size: 1rem;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    padding: 1rem;
+    background: var(--bg-secondary);
+    border-radius: 10px;
+    border-left: 4px solid var(--accent-gold);
+}
+
+.delivery-time strong {
+    color: var(--accent-red);
+    font-weight: 600;
+}
+
+.map-container {
+    margin: 1.5rem 0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px var(--shadow);
+}
+
+.delivery-map {
+    width: 100%;
+    height: 300px;
+    border: none;
+    display: block;
+    border-radius: 10px;
+}
+
+.map-link {
+    text-align: center;
+    margin-top: 1rem;
+    padding: 0.5rem;
+}
+
+.map-button {
+    display: inline-block;
+    background: var(--gradient-primary);
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px var(--shadow);
+}
+
+.map-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px var(--shadow-hover);
 }
 
 /* Warning Message */
@@ -958,13 +1214,27 @@ body {
         margin-bottom: 2rem;
     }
 
+    .section-title {
+        font-size: 1.5rem;
+        margin: 2rem 0 1.25rem 0;
+        padding-top: 1.5rem;
+    }
+
     .packages-grid {
         grid-template-columns: 1fr;
         gap: 1.25rem;
     }
 
     .package-card {
-        padding: 1.5rem;
+        padding: 0;
+    }
+
+    .package-image {
+        height: 180px;
+    }
+
+    .package-info {
+        padding: 1.25rem;
     }
 
     .package-header h3 {
@@ -973,6 +1243,10 @@ body {
 
     .package-price {
         font-size: 1.7rem;
+    }
+
+    .package-price-dynamic {
+        font-size: 1.8rem;
     }
 
     .mode-selection {
@@ -989,18 +1263,33 @@ body {
     }
 
     .designs-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        grid-template-columns: 1fr !important;
         gap: 1rem;
     }
 
     .design-card {
-        padding: 1.25rem 1rem;
+        padding: 0;
+    }
+
+    .design-image {
+        height: auto;
+    }
+
+    .design-image img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
     }
 
     .step-actions {
         flex-direction: column;
         gap: 0.75rem;
-        margin-top: 2rem;
+        margin-top: 0;
+        padding: 1rem;
+    }
+
+    .step-content {
+        padding-bottom: 120px; /* More space for mobile buttons */
     }
 
     .btn-next, .btn-back, .btn-submit {
@@ -1032,6 +1321,7 @@ body {
 
     .step-content {
         padding: 0 0.5rem;
+        padding-bottom: 140px; /* Extra space for mobile buttons */
     }
 
     .step-title {
@@ -1041,6 +1331,12 @@ body {
 
     .step-subtitle {
         font-size: 0.9rem;
+    }
+
+    .section-title {
+        font-size: 1.3rem;
+        margin: 1.5rem 0 1rem 0;
+        padding-top: 1.25rem;
     }
 
     .welcome-title {
@@ -1074,7 +1370,15 @@ body {
     }
 
     .package-card {
-        padding: 1.25rem;
+        padding: 0;
+    }
+
+    .package-image {
+        height: 160px;
+    }
+
+    .package-info {
+        padding: 1rem;
     }
 
     .package-header h3 {
@@ -1083,6 +1387,10 @@ body {
 
     .package-price {
         font-size: 1.5rem;
+    }
+
+    .package-price-dynamic {
+        font-size: 1.6rem;
     }
 
     .mode-card {
@@ -1098,31 +1406,60 @@ body {
     }
 
     .designs-grid {
-        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+        grid-template-columns: 1fr !important;
         gap: 0.75rem;
     }
 
     .design-card {
-        padding: 1rem 0.75rem;
+        padding: 0;
     }
 
     .design-image {
-        height: 100px;
-        font-size: 3rem;
+        height: auto;
+    }
+
+    .design-image img {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
     }
 
     .design-name {
         font-size: 0.85rem;
+        margin: 0.75rem 0.75rem 0.5rem 0.75rem;
+    }
+
+    .design-counter {
+        margin-bottom: 0.75rem;
+        padding: 0 0.75rem;
     }
 
     .counter-btn {
-        width: 30px;
-        height: 30px;
-        font-size: 1rem;
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+        min-width: 40px;
     }
 
     .order-form {
         padding: 1.5rem;
+    }
+
+    .payment-section {
+        padding: 1.25rem;
+        margin-top: 1.25rem;
+    }
+
+    .payment-title {
+        font-size: 1.2rem;
+    }
+
+    .payment-description {
+        font-size: 0.9rem;
+    }
+
+    .qr-image {
+        max-width: 180px;
     }
 
     .order-summary {
@@ -1154,6 +1491,50 @@ body {
         padding: 0.9rem;
         font-size: 0.95rem;
         min-height: 90px;
+    }
+
+    .payment-section {
+        padding: 1.5rem;
+        margin-top: 1.5rem;
+    }
+
+    .payment-title {
+        font-size: 1.3rem;
+    }
+
+    .payment-description {
+        font-size: 0.95rem;
+    }
+
+    .qr-image {
+        max-width: 200px;
+    }
+
+    .delivery-section {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+    }
+
+    .delivery-title {
+        font-size: 1.2rem;
+    }
+
+    .delivery-info {
+        font-size: 0.95rem;
+    }
+
+    .delivery-time {
+        font-size: 0.95rem;
+        padding: 0.9rem;
+    }
+
+    .delivery-map {
+        height: 250px;
+    }
+
+    .map-button {
+        font-size: 0.95rem;
+        padding: 0.65rem 1.25rem;
     }
 
     .warning-message {

@@ -1,0 +1,12 @@
+{
+  "name": "chocobombas-k-boom",
+  "version": "1.0.0",
+  "description": "Sitio web para pedidos de Chocobombas K-boom",
+  "scripts": {
+    "compress-images": "node compress-images.js"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.0"
+  },
+  "private": true
+}
