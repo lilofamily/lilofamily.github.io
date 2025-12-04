@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chocobombas K-boom - Deliciosas chocobombas navideñas. Combos especiales y diseños únicos.">
+    <title>Chocobombas K-boom | Chocobombas Navideñas</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <h1 class="logo">🎄 Chocobombas K-boom</h1>
+            <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+                <span class="theme-icon">🌙</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <!-- Step 1: Package Selection -->
+        <div class="step active" id="step1" data-step="1">
+            <div class="step-content">
+                <h2 class="step-title">¿Qué paquetes te gustaría pedir?</h2>
+                <p class="step-subtitle">Puedes seleccionar uno o más paquetes</p>
+                
+                <div class="packages-grid">
+                    <div class="package-card" data-package="1" data-price="10" data-quantity="1">
+                        <div class="package-checkbox">
+                            <input type="checkbox" id="pkg1" data-package="1">
+                            <label for="pkg1"></label>
+                        </div>
+                        <div class="package-info">
+                            <h3>Paquete Individual</h3>
+                            <p class="package-quantity">1 Chocobomba</p>
+                            <p class="package-price">10 Bs.</p>
+                        </div>
+                    </div>
+
+                    <div class="package-card featured" data-package="4" data-price="35" data-quantity="4">
+                        <div class="package-badge">Popular</div>
+                        <div class="package-checkbox">
+                            <input type="checkbox" id="pkg4" data-package="4">
+                            <label for="pkg4"></label>
+                        </div>
+                        <div class="package-info">
+                            <h3>Paquete Familiar</h3>
+                            <p class="package-quantity">4 Chocobombas</p>
+                            <p class="package-price">35 Bs.</p>
+                        </div>
+                    </div>
+
+                    <div class="package-card" data-package="8" data-price="70" data-quantity="8">
+                        <div class="package-checkbox">
+                            <input type="checkbox" id="pkg8" data-package="8">
+                            <label for="pkg8"></label>
+                        </div>
+                        <div class="package-info">
+                            <h3>Paquete Grande</h3>
+                            <p class="package-quantity">8 Chocobombas</p>
+                            <p class="package-bonus">+ 1 Jengibre 🎁</p>
+                            <p class="package-price">70 Bs.</p>
+                        </div>
+                    </div>
+
+                    <div class="package-card featured" data-package="12" data-price="105" data-quantity="12">
+                        <div class="package-badge">Mejor Valor</div>
+                        <div class="package-checkbox">
+                            <input type="checkbox" id="pkg12" data-package="12">
+                            <label for="pkg12"></label>
+                        </div>
+                        <div class="package-info">
+                            <h3>Paquete Extra Grande</h3>
+                            <p class="package-quantity">12 Chocobombas</p>
+                            <p class="package-bonus">+ 2 Jengibre 🎁</p>
+                            <p class="package-price">105 Bs.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button type="button" class="btn-next" id="btnNext1">Siguiente →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2: Selection Mode -->
+        <div class="step" id="step2" data-step="2">
+            <div class="step-content">
+                <h2 class="step-title">¿Cómo quieres tus chocobombas?</h2>
+                <p class="step-subtitle">Elige surtido o diseños específicos</p>
+                
+                <div class="mode-selection">
+                    <div class="mode-card" data-mode="surtido">
+                        <div class="mode-icon">🎲</div>
+                        <h3>Surtido</h3>
+                        <p>Diseños variados al azar</p>
+                    </div>
+                    <div class="mode-card" data-mode="especifico">
+                        <div class="mode-icon">🎨</div>
+                        <h3>Diseños Específicos</h3>
+                        <p>Elige tus diseños favoritos</p>
+                    </div>
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn-back" id="btnBack2">← Atrás</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3: Design Selection -->
+        <div class="step" id="step3" data-step="3">
+            <div class="step-content">
+                <h2 class="step-title">Selecciona tus diseños</h2>
+                <p class="step-subtitle">
+                    Elige <span id="remainingCount">0</span> diseños más
+                </p>
+                
+                <div class="designs-grid" id="designsGrid">
+                    <!-- Designs will be generated by JavaScript -->
+                </div>
+
+                <div class="step-actions">
+                    <button class="btn-back" id="btnBack3">← Atrás</button>
+                    <button class="btn-next" id="btnNext3">Continuar →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4: Final Form -->
+        <div class="step" id="step4" data-step="4">
+            <div class="step-content">
+                <h2 class="step-title">Confirma tu pedido</h2>
+                <p class="step-subtitle">Completa tus datos para finalizar</p>
+                
+                <div class="order-summary" id="orderSummary">
+                    <!-- Summary will be generated by JavaScript -->
+                </div>
+
+                <form class="order-form" id="orderForm">
+                    <div class="form-group">
+                        <label for="firstName">Nombre *</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Apellido *</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Número de Teléfono *</label>
+                        <input type="tel" id="phone" name="phone" required placeholder="Ej: 60139013">
+                    </div>
+                </form>
+
+                <div class="step-actions">
+                    <button class="btn-back" id="btnBack4">← Atrás</button>
+                    <button class="btn-submit" id="btnSubmit" type="submit" form="orderForm">
+                        💬 Realizar Pedido
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
