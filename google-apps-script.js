@@ -34,8 +34,18 @@ function doPost(e) {
         'Monto Depositado',
         'Monto Restante',
         'Total',
-        'Observaciones'
+        'Observaciones',
+        'Confirmado',
+        'Fecha Entrega',
+        'Hora Entrega',
+        'Entregado'
       ]);
+      
+      // Formatear encabezados
+      const headerRange = sheet.getRange(1, 1, 1, 16);
+      headerRange.setFontWeight('bold');
+      headerRange.setBackground('#4285f4');
+      headerRange.setFontColor('#ffffff');
     }
     
     // Parsear los datos recibidos
@@ -43,8 +53,9 @@ function doPost(e) {
     
     // Preparar los datos para insertar
     // Usar saltos de línea para que se vea mejor en la hoja
+    const currentDate = new Date();
     const row = [
-      new Date(), // Fecha y Hora
+      currentDate, // Fecha y Hora
       data.fullName || '',
       data.phone || '',
       data.regularPackages || '', // Ya viene con saltos de línea desde script.js
@@ -55,14 +66,18 @@ function doPost(e) {
       data.depositAmount || 0,
       data.remainingAmount || 0,
       data.totalPrice || 0,
-      data.observations || ''
+      data.observations || '',
+      false, // Confirmado - checkbox (false por defecto)
+      currentDate, // Fecha Entrega - fecha de hoy
+      currentDate, // Hora Entrega - hora actual (se formateará después)
+      'En elaboración' // Entregado - valor por defecto
     ];
     
     // Agregar la fila a la hoja
     const lastRow = sheet.appendRow(row);
     
     // Configurar el formato de las celdas para que respeten los saltos de línea
-    const range = sheet.getRange(lastRow, 1, 1, 12);
+    const range = sheet.getRange(lastRow, 1, 1, 16);
     range.setWrap(true); // Permitir ajuste de texto
     
     // Ajustar altura de fila para mostrar múltiples líneas
@@ -73,6 +88,31 @@ function doPost(e) {
     const maxLines = Math.max(regularPackagesLines, designsLines, jengibrePackagesLines, 1);
     const rowHeight = cellHeight + (maxLines - 1) * 20;
     sheet.setRowHeight(lastRow, rowHeight);
+    
+    // Configurar columna "Confirmado" (columna 13) - Checkbox
+    const confirmadoCell = sheet.getRange(lastRow, 13);
+    confirmadoCell.insertCheckboxes();
+    confirmadoCell.setValue(false); // Por defecto sin marcar
+    
+    // Configurar columna "Fecha Entrega" (columna 14) - Campo de fecha
+    const fechaEntregaCell = sheet.getRange(lastRow, 14);
+    fechaEntregaCell.setValue(currentDate);
+    fechaEntregaCell.setNumberFormat('dd/mm/yyyy'); // Formato de fecha
+    
+    // Configurar columna "Hora Entrega" (columna 15) - Campo de hora
+    const horaEntregaCell = sheet.getRange(lastRow, 15);
+    horaEntregaCell.setValue(currentDate);
+    horaEntregaCell.setNumberFormat('hh:mm'); // Formato de hora (24 horas)
+    // Alternativa para formato 12 horas: 'hh:mm AM/PM'
+    
+    // Configurar columna "Entregado" (columna 16) - Dropdown con opciones
+    const entregadoCell = sheet.getRange(lastRow, 16);
+    const validationRule = SpreadsheetApp.newDataValidation()
+      .requireValueInList(['SI', 'No', 'En elaboración'], true)
+      .setAllowInvalid(false)
+      .build();
+    entregadoCell.setDataValidation(validationRule);
+    entregadoCell.setValue('En elaboración'); // Valor por defecto
     
     // Retornar respuesta exitosa
     return ContentService

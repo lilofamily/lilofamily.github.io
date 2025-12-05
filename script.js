@@ -52,7 +52,7 @@ function updateThemeIcon(theme, themeIcon) {
 // Google Sheets Configuration
 // IMPORTANTE: Reemplaza esta URL con la URL de tu Google Apps Script Web App
 // Obtén la URL después de desplegar tu script (ver instrucciones en google-apps-script.js)
-const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyt9P776IU_u2BvJFJmcWqpISF2w3_EKFmsvioWHaKvezWPKkjUdKJXpat4bxEA0g/exec'; // Ejemplo: 'https://script.google.com/macros/s/AKfycby.../exec'
+const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyLWpkGxupip4RKDMmKkm6m_NbPZFRziZpGP1CLGeyRsJ1sRBYAgFdtQ9_2cij8lzM/exec'; // Ejemplo: 'https://script.google.com/macros/s/AKfycby.../exec'
 
 // Application State
 const state = {
@@ -162,6 +162,16 @@ function showStep(stepNumber) {
     if (stepNumber === 2 && !hasRegularPackages()) {
         console.log('No regular packages selected, skipping to step 4');
         stepNumber = 4;
+    }
+    
+    // Update browser history to prevent ERR_FILE_NOT_FOUND on back button
+    if (window.history && window.history.pushState) {
+        try {
+            window.history.pushState({ step: stepNumber }, '', window.location.href);
+        } catch (e) {
+            // Silently fail if pushState is not available
+            console.log('History API not available');
+        }
     }
     
     // Hide all steps
@@ -1282,6 +1292,38 @@ function initializeWelcome() {
     }
 }
 
+// Handle browser back/forward buttons to prevent ERR_FILE_NOT_FOUND
+function handleBrowserNavigation() {
+    // Initialize history state on first load using replaceState to avoid adding to history
+    if (window.history && window.history.replaceState) {
+        try {
+            window.history.replaceState({ step: 0 }, '', window.location.href);
+        } catch (e) {
+            console.log('History API not available');
+        }
+    }
+    
+    // Handle browser back/forward buttons
+    window.addEventListener('popstate', function(event) {
+        // If there's a step in the state, show it
+        if (event.state && event.state.step !== undefined) {
+            showStep(event.state.step);
+        } else {
+            // If no state (user trying to go back beyond app), prevent navigation
+            // Use replaceState to avoid adding to history stack
+            if (window.history && window.history.replaceState) {
+                try {
+                    window.history.replaceState({ step: state.currentStep }, '', window.location.href);
+                } catch (e) {
+                    console.log('History API not available');
+                }
+            }
+            // Stay on current step
+            showStep(state.currentStep);
+        }
+    });
+}
+
 // Initialize on page load
 function initApp() {
     console.log('=== INITIALIZING APP ===');
@@ -1293,6 +1335,7 @@ function initApp() {
     initializeStep2();
     initializeStep3();
     initializeStep4();
+    handleBrowserNavigation(); // Handle browser navigation
     updateProgressBar();
     console.log('=== ALL STEPS INITIALIZED ===');
 }
