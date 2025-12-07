@@ -52,7 +52,7 @@ function updateThemeIcon(theme, themeIcon) {
 // Google Sheets Configuration
 // IMPORTANTE: Reemplaza esta URL con la URL de tu Google Apps Script Web App
 // Obtén la URL después de desplegar tu script (ver instrucciones en google-apps-script.js)
-const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyLWpkGxupip4RKDMmKkm6m_NbPZFRziZpGP1CLGeyRsJ1sRBYAgFdtQ9_2cij8lzM/exec'; // Ejemplo: 'https://script.google.com/macros/s/AKfycby.../exec'
+const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzkXcyNjToRXmO4MkYZjDigI_IYwonPfTtUYfYXrU6YxSbie5ZrgFTcXUnhCElyncU/exec'; // Ejemplo: 'https://script.google.com/macros/s/AKfycby.../exec'
 
 // Application State
 const state = {
