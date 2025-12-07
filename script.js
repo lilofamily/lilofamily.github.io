@@ -1253,20 +1253,58 @@ async function sendOrderToGoogleSheets() {
     
     try {
         const orderData = prepareOrderDataForSheets();
+        console.log('Enviando datos a Google Sheets:', orderData);
         
-        const response = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
-            method: 'POST',
-            mode: 'no-cors', // Google Apps Script requiere no-cors
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(orderData)
-        });
-        
-        // Con no-cors no podemos leer la respuesta, pero asumimos éxito
-        console.log('Pedido enviado a Google Sheets');
+        // Intentar primero sin no-cors para poder ver errores
+        try {
+            const response = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData)
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Respuesta de Google Sheets:', result);
+                if (result.success) {
+                    console.log('✅ Pedido registrado correctamente en Google Sheets');
+                } else {
+                    console.error('❌ Error en Google Sheets:', result.error);
+                }
+            } else {
+                console.error('❌ Error HTTP:', response.status, response.statusText);
+                // Si falla por CORS, intentar con no-cors como fallback
+                await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                console.log('Pedido enviado con modo no-cors (no se puede verificar respuesta)');
+            }
+        } catch (fetchError) {
+            // Si hay error de CORS, intentar con no-cors
+            if (fetchError.name === 'TypeError' || fetchError.message.includes('CORS')) {
+                console.log('Error CORS detectado, intentando con modo no-cors...');
+                await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                console.log('Pedido enviado con modo no-cors (no se puede verificar respuesta)');
+            } else {
+                throw fetchError;
+            }
+        }
     } catch (error) {
-        console.error('Error al enviar pedido a Google Sheets:', error);
+        console.error('❌ Error al enviar pedido a Google Sheets:', error);
         // No mostramos error al usuario para no interrumpir el flujo
     }
 }

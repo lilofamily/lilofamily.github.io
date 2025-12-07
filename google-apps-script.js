@@ -74,7 +74,10 @@ function doPost(e) {
     ];
     
     // Agregar la fila a la hoja
-    const lastRow = sheet.appendRow(row);
+    sheet.appendRow(row);
+    
+    // Obtener el número de la última fila después de agregar
+    const lastRow = sheet.getLastRow();
     
     // Configurar el formato de las celdas para que respeten los saltos de línea
     const range = sheet.getRange(lastRow, 1, 1, 16);
