@@ -772,29 +772,25 @@ div.package-card.featured {
 
 /* Mobile responsive for step3 footer inline */
 @media (max-width: 768px) {
+    /* General styles for step3 footer - will be overridden by #step3 specific styles */
     .step3-footer-inline {
         display: flex !important;
         flex-direction: column;
         gap: 0.5rem;
-        order: 3;
         width: 100%;
-        margin-top: 0.5rem;
         flex: none !important; /* Remove flex: 1 in mobile */
-        padding: 0.5rem 0;
     }
     
-    .step-actions {
-        flex-wrap: wrap;
-    }
-    
-    .step-actions .btn-back {
-        order: 1;
-        flex: 1;
-    }
-    
-    .step-actions .btn-next {
+    /* Specific styles for step3 footer inside step-actions */
+    #step3 .step-actions .step3-footer-inline {
+        display: flex !important;
+        flex-direction: column;
+        gap: 0.5rem;
         order: 2;
-        flex: 1;
+        width: 100%;
+        margin-top: 0;
+        flex: none !important;
+        padding: 0.75rem 0;
     }
     
     .remaining-info {
@@ -802,6 +798,7 @@ div.package-card.featured {
         font-size: 0.9rem;
         justify-content: center;
         align-items: center;
+        width: 100%;
     }
     
     .remaining-count {
@@ -822,11 +819,6 @@ div.package-card.featured {
     
     .checkbox-label {
         font-size: 0.95rem;
-    }
-    
-    /* Increase padding for step 3 content to accommodate footer */
-    #step3 .step-content {
-        padding-bottom: 180px !important; /* More space for footer in mobile */
     }
 }
 
@@ -1492,11 +1484,36 @@ div.package-card.featured {
     
     /* Ensure step3 footer is visible in mobile */
     #step3 .step-actions {
-        flex-wrap: wrap;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        gap: 0.75rem;
+    }
+    
+    #step3 .step-actions .btn-back {
+        order: 1;
+        width: 100%;
+        flex: none;
+    }
+    
+    #step3 .step-actions .step3-footer-inline {
+        order: 2;
+        width: 100%;
+        flex: none;
+        display: flex !important;
+        flex-direction: column;
+        gap: 0.5rem;
+        padding: 0.75rem 0;
+        margin: 0;
+    }
+    
+    #step3 .step-actions .btn-next {
+        order: 3;
+        width: 100%;
+        flex: none;
     }
     
     #step3 .step-content {
-        padding-bottom: 180px !important; /* Extra space for footer in step 3 */
+        padding-bottom: 200px !important; /* Extra space for footer in step 3 */
     }
 
     .btn-next, .btn-back, .btn-submit {
