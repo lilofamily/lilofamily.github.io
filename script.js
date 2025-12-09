@@ -1366,6 +1366,10 @@ function initializeStep3() {
         if (!state.selectedDesignsByPackage[currentPackageId]) {
             state.selectedDesignsByPackage[currentPackageId] = {};
         }
+        // Initialize surtidoRemainingByPackage for this package if not exists
+        if (!state.surtidoRemainingByPackage[currentPackageId]) {
+            state.surtidoRemainingByPackage[currentPackageId] = 0;
+        }
 
         function calculateTotalQuantity() {
             // Return quantity for current package type
