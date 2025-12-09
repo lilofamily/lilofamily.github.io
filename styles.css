@@ -773,11 +773,14 @@ div.package-card.featured {
 /* Mobile responsive for step3 footer inline */
 @media (max-width: 768px) {
     .step3-footer-inline {
+        display: flex !important;
         flex-direction: column;
         gap: 0.5rem;
         order: 3;
         width: 100%;
         margin-top: 0.5rem;
+        flex: none !important; /* Remove flex: 1 in mobile */
+        padding: 0.5rem 0;
     }
     
     .step-actions {
@@ -795,7 +798,10 @@ div.package-card.featured {
     }
     
     .remaining-info {
+        display: flex !important;
         font-size: 0.9rem;
+        justify-content: center;
+        align-items: center;
     }
     
     .remaining-count {
@@ -803,8 +809,10 @@ div.package-card.featured {
     }
     
     .checkbox-remaining-surtido {
+        display: flex !important;
         width: 100%;
         justify-content: center;
+        align-items: center;
     }
     
     .checkbox-remaining-surtido input[type="checkbox"] {
@@ -814,6 +822,11 @@ div.package-card.featured {
     
     .checkbox-label {
         font-size: 0.95rem;
+    }
+    
+    /* Increase padding for step 3 content to accommodate footer */
+    #step3 .step-content {
+        padding-bottom: 180px !important; /* More space for footer in mobile */
     }
 }
 
@@ -1475,6 +1488,15 @@ div.package-card.featured {
 
     .step-content {
         padding-bottom: 120px; /* More space for mobile buttons */
+    }
+    
+    /* Ensure step3 footer is visible in mobile */
+    #step3 .step-actions {
+        flex-wrap: wrap;
+    }
+    
+    #step3 .step-content {
+        padding-bottom: 180px !important; /* Extra space for footer in step 3 */
     }
 
     .btn-next, .btn-back, .btn-submit {
