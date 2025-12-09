@@ -1195,7 +1195,7 @@ function initializeStep4() {
             if (!state.customerInfo.fullName) {
                 missingFields.push('Nombre y Apellido');
             }
-            if (!state.customerInfo.depositAmount || state.customerInfo.depositAmount <= 0) {
+            if (state.customerInfo.depositAmount === undefined || state.customerInfo.depositAmount === null || state.customerInfo.depositAmount === '' || isNaN(state.customerInfo.depositAmount) || state.customerInfo.depositAmount < 0) {
                 missingFields.push('Monto depositado');
             }
             
@@ -1219,7 +1219,7 @@ function initializeStep4() {
             if (!state.customerInfo.phone) {
                 missingFields.push('Número de Teléfono');
             }
-            if (!state.customerInfo.depositAmount || state.customerInfo.depositAmount <= 0) {
+            if (state.customerInfo.depositAmount === undefined || state.customerInfo.depositAmount === null || state.customerInfo.depositAmount === '' || isNaN(state.customerInfo.depositAmount) || state.customerInfo.depositAmount < 0) {
                 missingFields.push('Monto depositado');
             }
             
