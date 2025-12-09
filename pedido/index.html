@@ -183,22 +183,6 @@
                             <button class="counter-btn" data-action="increase" data-package="12">+</button>
                         </div>
                     </div>
-
-                    <!-- Paquete Personalizado (solo modo personal) -->
-                    <div class="package-card" data-package="custom" data-price="0" data-quantity="0">
-                        <div class="package-image">
-                            <img src="/images/packs/pack-xN.png" alt="Paquete Personalizado">
-                        </div>
-                        <div class="package-checkbox">
-                            <input type="checkbox" id="pkgcustom" data-package="custom">
-                            <label for="pkgcustom"></label>
-                        </div>
-                        <div class="package-info">
-                            <h3>Paquete Personalizado</h3>
-                            <p class="package-quantity">Precio acordado</p>
-                            <p class="package-price">Personalizado</p>
-                        </div>
-                    </div>
                 </div>
 
                 <h3 class="section-title">Chocobombas de Jengibre</h3>
@@ -286,43 +270,6 @@
 
                 <div class="step-actions">
                     <button type="button" class="btn-next" id="btnNext1">Siguiente →</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- Step 1.5: Custom Package Configuration -->
-        <div class="step" id="step1_5" data-step="1.5">
-            <div class="step-content">
-                <h2 class="step-title">Configura tu Paquete Personalizado</h2>
-                <p class="step-subtitle">Completa la información del paquete acordado</p>
-                
-                <form class="custom-package-form" id="customPackageForm">
-                    <div class="form-group">
-                        <label for="customQuantity">Cantidad de Chocobombas *</label>
-                        <input type="number" id="customQuantity" name="customQuantity" required min="1" step="1" placeholder="Ej: 10">
-                        <small class="form-help">Ingresa la cantidad total de chocobombas del pedido</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="customUnitPrice">Precio Unitario Acordado (Bs.) (Opcional)</label>
-                        <input type="number" id="customUnitPrice" name="customUnitPrice" min="0" step="0.01" placeholder="Ej: 8.50">
-                        <small class="form-help">Precio por cada chocobomba acordado con el cliente</small>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="customTotalPrice">Monto Final Acordado (Bs.) (Opcional)</label>
-                        <input type="number" id="customTotalPrice" name="customTotalPrice" min="0" step="0.01" placeholder="Ej: 85.00">
-                        <small class="form-help">Precio total acordado con el cliente</small>
-                    </div>
-                    
-                    <div class="form-note">
-                        <p><strong>Nota:</strong> Debes completar al menos uno de los dos campos de precio (Precio Unitario o Monto Final).</p>
-                    </div>
-                </form>
-
-                <div class="step-actions">
-                    <button type="button" class="btn-back" id="btnBack1_5">← Atrás</button>
-                    <button type="button" class="btn-next" id="btnNext1_5">Siguiente →</button>
                 </div>
             </div>
         </div>

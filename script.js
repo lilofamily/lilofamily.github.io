@@ -73,11 +73,6 @@ const state = {
     jengibrePackages: {}, // {packageId: count} - DEPRECATED: j6 now uses jengibrePackagesCount
     jengibrePackagesCount: {}, // {packageId: count} - cantidad de paquetes de jengibre seleccionados (j1, j2, j4, j6)
     regularPackagesCount: {}, // {packageId: count} - cantidad de paquetes regulares seleccionados (1, 4, 8, 12)
-    customPackage: { // Paquete personalizado
-        quantity: 0,
-        unitPrice: null,
-        totalPrice: null
-    },
     customerInfo: {
         fullName: '',
         phone: '',
@@ -96,7 +91,6 @@ const packages = {
     j2: { quantity: 2, price: 25, name: 'Paquete Pareja de Jengibre', bonus: null, type: 'jengibre' },
     j4: { quantity: 4, price: 50, name: 'Paquete Familiar de Jengibre', bonus: null, type: 'jengibre' },
     j6: { quantity: 6, price: 75, name: 'Paquete Extra Grande de Jengibre', bonus: null, type: 'jengibre' },
-    custom: { quantity: 0, price: 0, name: 'Paquete personalizado', bonus: null, type: 'custom', isCustom: true }
 };
 
 // Helper functions to identify package types
@@ -105,7 +99,7 @@ function isJengibrePackage(packageId) {
 }
 
 function hasRegularPackages() {
-    return state.selectedPackages.some(pkg => !isJengibrePackage(pkg.packageId) || pkg.packageId === 'custom');
+    return state.selectedPackages.some(pkg => !isJengibrePackage(pkg.packageId));
 }
 
 function hasJengibrePackages() {
@@ -119,7 +113,7 @@ function hasOnlyJengibrePackages() {
 
 function getRegularPackagesQuantity() {
     return state.selectedPackages
-        .filter(pkg => !isJengibrePackage(pkg.packageId) || pkg.packageId === 'custom')
+        .filter(pkg => !isJengibrePackage(pkg.packageId))
         .reduce((sum, pkg) => sum + pkg.quantity, 0);
 }
 
@@ -130,9 +124,10 @@ function getJengibrePackagesQuantity() {
 }
 
 // Get unique regular package types that need design selection
+// Includes custom packages as they also need design selection
 function getUniqueRegularPackageTypes() {
     const regularPackages = state.selectedPackages.filter(pkg => 
-        !isJengibrePackage(pkg.packageId) && pkg.packageId !== 'custom'
+        !isJengibrePackage(pkg.packageId)
     );
     const uniqueTypes = [...new Set(regularPackages.map(pkg => pkg.packageId))];
     return uniqueTypes;
@@ -163,6 +158,11 @@ function initializePackageDesignQueue() {
         if (!state.selectionModeByPackage[packageId]) {
             state.selectionModeByPackage[packageId] = null;
         }
+    });
+    console.log('Package design queue initialized:', {
+        queue: state.packageDesignSelectionQueue,
+        selectedDesignsByPackage: state.selectedDesignsByPackage,
+        selectionModeByPackage: state.selectionModeByPackage
     });
 }
 
@@ -244,12 +244,7 @@ function showStep(stepNumber) {
     });
     
     // Show current step
-    let stepId;
-    if (stepNumber === 1.5) {
-        stepId = 'step1_5';
-    } else {
-        stepId = `step${stepNumber}`;
-    }
+    const stepId = `step${stepNumber}`;
     console.log('Looking for element with id:', stepId);
     const currentStepElement = document.getElementById(stepId);
     console.log('Step element found:', currentStepElement);
@@ -296,9 +291,6 @@ function showStep(stepNumber) {
                     window.resetStep1UI();
                 }
             }, 100);
-        }
-        if (stepNumber === 1.5 && typeof window.initializeStep1_5 === 'function') {
-            setTimeout(() => window.initializeStep1_5(), 100);
         }
         if (stepNumber === 2 && typeof window.checkStep2 === 'function') {
             setTimeout(() => {
@@ -535,15 +527,6 @@ function initializeStep1() {
         return;
     }
     
-    // Show/hide custom package card based on personal mode
-    const customPackageCard = document.querySelector('[data-package="custom"]');
-    if (customPackageCard) {
-        if (isPersonalMode) {
-            customPackageCard.style.display = 'block';
-        } else {
-            customPackageCard.style.display = 'none';
-        }
-    }
     
     // j6 now uses the same counter system as j1, j2, j4
     
@@ -558,13 +541,8 @@ function initializeStep1() {
     // Function to handle package selection (checkboxes for regular and j1, j2, j4)
     function handlePackageChange(checkbox) {
         const packageIdAttr = checkbox.getAttribute('data-package');
-        // Handle both numeric IDs (regular packages) and string IDs (j1, j2, j4, custom)
-        let packageId;
-        if (packageIdAttr === 'custom') {
-            packageId = 'custom';
-        } else {
-            packageId = packageIdAttr.startsWith('j') ? packageIdAttr : parseInt(packageIdAttr);
-        }
+        // Handle both numeric IDs (regular packages) and string IDs (j1, j2, j4)
+        const packageId = packageIdAttr.startsWith('j') ? packageIdAttr : parseInt(packageIdAttr);
         if (!packageId || !packages[packageId]) return;
         
         // j6 now uses the same system as j1, j2, j4
@@ -573,26 +551,6 @@ function initializeStep1() {
         const card = checkbox.closest('.package-card');
 
         if (checkbox.checked) {
-            // Special handling for custom package - just mark as selected, don't navigate yet
-            if (packageId === 'custom') {
-                if (card) card.classList.add('selected');
-                // Add to selectedPackages but with placeholder data (will be configured in step 1.5)
-                if (!state.selectedPackages.some(p => p.packageId === packageId)) {
-                    state.selectedPackages.push({
-                        packageId: packageId,
-                        quantity: 0, // Will be set in step 1.5
-                        price: 0, // Will be set in step 1.5
-                        name: packageData.name,
-                        bonus: packageData.bonus,
-                        isCustom: true
-                    });
-                }
-                // Don't navigate yet, wait for "Siguiente" button
-                updateJengibrePackagesInState();
-                updateRegularPackagesInState();
-                updateButtonState();
-                return;
-            }
             
             // For regular packages (1, 4, 8, 12), show counter and initialize to 1
             if (typeof packageId === 'number' && [1, 4, 8, 12].includes(packageId)) {
@@ -638,10 +596,6 @@ function initializeStep1() {
         } else {
             // Remove from array
             state.selectedPackages = state.selectedPackages.filter(p => p.packageId !== packageId);
-            // Also remove custom package data if unchecking custom
-            if (packageId === 'custom') {
-                state.customPackage = { quantity: 0, unitPrice: null, totalPrice: null };
-            }
             // For regular packages, hide counter, reset count to 1, and reset price
             if (typeof packageId === 'number' && [1, 4, 8, 12].includes(packageId)) {
                 delete state.regularPackagesCount[packageId];
@@ -1027,14 +981,6 @@ function initializeStep1() {
             return;
         }
         
-        // Check if custom package is selected but not configured
-        const customPackageSelected = state.selectedPackages.some(p => p.packageId === 'custom');
-        if (customPackageSelected && (!state.customPackage.quantity || state.customPackage.quantity === 0)) {
-            // Custom package selected but not configured, navigate to configuration step
-            showStep(1.5);
-            return;
-        }
-        
         // If only jengibre packages selected, skip to final step
         if (hasOnlyJengibrePackages()) {
             state.selectionMode = null; // No design selection needed
@@ -1079,103 +1025,6 @@ function initializeStep1() {
 }
 
 // Step 2: Selection Mode
-// Initialize Step 1.5: Custom Package Configuration
-function initializeStep1_5() {
-    console.log('Initializing step 1.5: Custom Package Configuration');
-    
-    // Only allow in personal mode
-    if (!isPersonalMode) {
-        console.log('Step 1.5 is only available in personal mode');
-        return;
-    }
-    
-    const btnNext1_5 = document.getElementById('btnNext1_5');
-    const btnBack1_5 = document.getElementById('btnBack1_5');
-    const customPackageForm = document.getElementById('customPackageForm');
-    
-    if (!btnNext1_5 || !btnBack1_5 || !customPackageForm) {
-        console.error('Required elements not found for step 1.5');
-        return;
-    }
-    
-    // Pre-fill form if custom package data exists
-    const customQuantityInput = document.getElementById('customQuantity');
-    const customUnitPriceInput = document.getElementById('customUnitPrice');
-    const customTotalPriceInput = document.getElementById('customTotalPrice');
-    
-    if (state.customPackage.quantity > 0) {
-        if (customQuantityInput) customQuantityInput.value = state.customPackage.quantity;
-        if (customUnitPriceInput) customUnitPriceInput.value = state.customPackage.unitPrice || '';
-        if (customTotalPriceInput) customTotalPriceInput.value = state.customPackage.totalPrice || '';
-    }
-    
-    // Back button handler
-    btnBack1_5.addEventListener('click', () => {
-        showStep(1);
-    });
-    
-    // Next button handler
-    btnNext1_5.addEventListener('click', () => {
-        // Validate form
-        const quantity = parseInt(customQuantityInput.value) || 0;
-        const unitPrice = parseFloat(customUnitPriceInput.value) || null;
-        const totalPrice = parseFloat(customTotalPriceInput.value) || null;
-        
-        // Validation: quantity is required and must be > 0
-        if (!quantity || quantity <= 0) {
-            showDialog('⚠️ Campo incompleto', 'Por favor, ingresa la cantidad de chocobombas (debe ser mayor a 0)');
-            return;
-        }
-        
-        // Validation: at least one price field must be filled
-        if (!unitPrice && !totalPrice) {
-            showDialog('⚠️ Campos incompletos', 'Por favor, completa al menos uno de los dos campos de precio:\n\n• Precio Unitario Acordado\n• Monto Final Acordado');
-            return;
-        }
-        
-        // Calculate final price
-        let finalPrice = totalPrice;
-        if (!finalPrice && unitPrice) {
-            finalPrice = unitPrice * quantity;
-        }
-        
-        // Save custom package data
-        state.customPackage = {
-            quantity: quantity,
-            unitPrice: unitPrice,
-            totalPrice: finalPrice
-        };
-        
-        // Add custom package to selectedPackages
-        const existingCustomIndex = state.selectedPackages.findIndex(p => p.packageId === 'custom');
-        const customPackageEntry = {
-            packageId: 'custom',
-            quantity: quantity,
-            price: finalPrice,
-            name: 'Paquete Personalizado',
-            bonus: null,
-            isCustom: true,
-            unitPrice: unitPrice,
-            totalPrice: finalPrice
-        };
-        
-        if (existingCustomIndex >= 0) {
-            state.selectedPackages[existingCustomIndex] = customPackageEntry;
-        } else {
-            state.selectedPackages.push(customPackageEntry);
-        }
-        
-        console.log('Custom package configured:', state.customPackage);
-        console.log('Selected packages:', state.selectedPackages);
-        
-        // Navigate to design selection (step 2)
-        showStep(2);
-    });
-}
-
-// Make function available globally
-window.initializeStep1_5 = initializeStep1_5;
-
 function initializeStep2() {
     const modeCards = document.querySelectorAll('.mode-card');
     const btnBack2 = document.getElementById('btnBack2');
@@ -1778,6 +1627,13 @@ function initializeStep4() {
     const orderForm = document.getElementById('orderForm');
     const orderSummary = document.getElementById('orderSummary');
 
+    // State for price editing mode (only in personal mode) - persistent across updates
+    let priceEditingMode = false;
+    
+    // Store references to packages for price editing
+    let currentRegularPackages = [];
+    let currentJengibreGroups = {};
+
     // Helper function to get package image
     // Usar rutas absolutas desde la raíz para que funcionen desde cualquier ubicación
     function getPackageImage(packageId) {
@@ -1790,7 +1646,6 @@ function initializeStep4() {
             j2: '/images/packs/pack-jengibres-x2.png',
             j4: '/images/packs/pack-jengibres-x4.png',
             j6: '/images/packs/pack-jengibres-x6.png',
-            custom: '/images/packs/pack-xN.png'
         };
         return imageMap[packageId] || '';
     }
@@ -1870,6 +1725,31 @@ function initializeStep4() {
             }
             totalPrice += pkg.price;
         });
+        
+        // Store for price editing
+        currentRegularPackages = regularPackages;
+        
+        // Add price editing controls for personal mode
+        if (isPersonalMode) {
+            summaryHTML += `
+                <div style="margin-bottom: 1.5rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 10px;">
+                    <div>
+                        <h4 style="margin: 0; color: var(--text-primary);">Edición de Precios</h4>
+                        <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem; color: var(--text-secondary);">Habilita la edición para modificar precios acordados</p>
+                    </div>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button id="btnTogglePriceEdit" class="btn-secondary" style="padding: 0.75rem 1.5rem; border-radius: 8px; border: 2px solid var(--accent-green); background: ${priceEditingMode ? 'var(--accent-green)' : 'transparent'}; color: ${priceEditingMode ? 'white' : 'var(--accent-green)'}; font-weight: 600; cursor: pointer;">
+                            ${priceEditingMode ? '✏️ Modo Edición' : '💰 Recalcular Precio'}
+                        </button>
+                        ${priceEditingMode ? `
+                            <button id="btnSavePrices" class="btn-primary" style="padding: 0.75rem 1.5rem; border-radius: 8px; background: var(--accent-green); color: white; font-weight: 600; cursor: pointer; border: none;">
+                                💾 Guardar y Recalcular
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        }
 
         // Show regular packages first
         if (regularPackages.length > 0) {
@@ -1899,7 +1779,18 @@ function initializeStep4() {
                                     </div>
                                 </div>
                                 <div style="display: flex; align-items: center; gap: 1rem;">
-                                    <p style="font-weight: 600; color: var(--accent-green); margin: 0;">${pkg.price} Bs.</p>
+                                    ${isPersonalMode && priceEditingMode ? `
+                                        <input type="number" 
+                                               id="price-edit-${pkg.originalIndex}" 
+                                               value="${pkg.price}" 
+                                               min="0" 
+                                               step="0.01" 
+                                               style="width: 100px; padding: 0.5rem; border: 2px solid var(--accent-green); border-radius: 6px; font-weight: 600; text-align: center;"
+                                               data-package-index="${pkg.originalIndex}">
+                                        <span style="font-weight: 600; color: var(--accent-green);">Bs.</span>
+                                    ` : `
+                                        <p style="font-weight: 600; color: var(--accent-green); margin: 0;">${pkg.price} Bs.</p>
+                                    `}
                                     <button class="remove-item-btn" onclick="removePackageFromOrder(${pkg.originalIndex})" title="Eliminar producto" aria-label="Eliminar ${pkg.name}">
                                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                             <path d="M3 6H5H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -1916,99 +1807,58 @@ function initializeStep4() {
                     // Show designs for this package type immediately after
                     const surtidoRemaining = state.surtidoRemainingByPackage[packageId] || 0;
                     
+                    // Determine the selection mode for this package
+                    let packageMode = null;
                     if (uniqueTypes.length === 1) {
                         // Single package type: use global selectionMode
-                        if (state.selectionMode === 'especifico') {
-                            const designsForPackage = state.selectedDesignsByPackage[packageId] || {};
-                            if (Object.keys(designsForPackage).length > 0) {
-                                summaryHTML += `<div class="summary-item" style="margin-top: 0.5rem; padding-left: 1rem;"><h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Diseños:</h4></div>`;
-                                Object.entries(designsForPackage).forEach(([designId, quantity]) => {
-                                    if (quantity > 0) {
-                                        const design = designs[parseInt(designId)];
-                                        summaryHTML += `
-                                            <div class="summary-item summary-item-with-image" style="padding-left: 1rem;">
-                                                <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
-                                                    <img src="${design.image}" alt="${design.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 2px solid var(--border-color);">
-                                                    <p style="margin: 0;">${design.name}</p>
-                                                </div>
-                                                <div>
-                                                    <p style="font-weight: 600; margin: 0;">x${quantity}</p>
-                                                </div>
-                                            </div>
-                                        `;
-                                    }
-                                });
-                            }
-                            // Show surtido remaining if any (always show below selected designs)
-                            if (surtidoRemaining > 0) {
-                                summaryHTML += `
-                                    <div class="summary-item summary-item-with-image" style="margin-top: 0.5rem; padding-left: 1rem;">
-                                        <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
-                                            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%); border-radius: 8px; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🎲</div>
-                                            <p style="margin: 0;">Surtido</p>
-                                        </div>
-                                        <div>
-                                            <p style="font-weight: 600; margin: 0;">x${surtidoRemaining}</p>
-                                        </div>
-                                    </div>
-                                `;
-                            }
-                        } else if (state.selectionMode === 'surtido') {
-                            summaryHTML += `
-                                <div class="summary-item" style="margin-top: 0.5rem; padding-left: 1rem;">
-                                    <p><strong>Tipo:</strong> Surtido (diseños variados)</p>
-                                </div>
-                            `;
-                        }
+                        packageMode = state.selectionMode;
                     } else {
-                        // Multiple package types: show designs for this specific package type
-                        const packageMode = state.selectionModeByPackage[packageId];
-                        const package = state.selectedPackages.find(p => p.packageId === packageId);
-                        if (package && packageMode) {
-                            const packageCount = getPackageCountForType(packageId);
-                            if (packageMode === 'especifico') {
-                                const designsForPackage = state.selectedDesignsByPackage[packageId] || {};
-                                if (Object.keys(designsForPackage).length > 0) {
-                                    summaryHTML += `<div class="summary-item" style="margin-top: 0.5rem; padding-left: 1rem;"><h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Diseños:</h4></div>`;
-                                    Object.entries(designsForPackage).forEach(([designId, quantity]) => {
-                                        if (quantity > 0) {
-                                            const design = designs[parseInt(designId)];
-                                            summaryHTML += `
-                                                <div class="summary-item summary-item-with-image" style="padding-left: 1rem;">
-                                                    <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
-                                                        <img src="${design.image}" alt="${design.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 2px solid var(--border-color);">
-                                                        <p style="margin: 0;">${design.name}</p>
-                                                    </div>
-                                                    <div>
-                                                        <p style="font-weight: 600; margin: 0;">x${quantity}</p>
-                                                    </div>
-                                                </div>
-                                            `;
-                                        }
-                                    });
-                                }
-                                // Show surtido remaining if any (always show below selected designs)
-                                if (surtidoRemaining > 0) {
+                        // Multiple package types: use package-specific mode
+                        packageMode = state.selectionModeByPackage[packageId];
+                    }
+                    
+                    // Show designs based on the mode
+                    if (packageMode === 'especifico') {
+                        const designsForPackage = state.selectedDesignsByPackage[packageId] || {};
+                        if (Object.keys(designsForPackage).length > 0) {
+                            summaryHTML += `<div class="summary-item" style="margin-top: 0.5rem; padding-left: 1rem;"><h4 style="font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem;">Diseños:</h4></div>`;
+                            Object.entries(designsForPackage).forEach(([designId, quantity]) => {
+                                if (quantity > 0) {
+                                    const design = designs[parseInt(designId)];
                                     summaryHTML += `
-                                        <div class="summary-item summary-item-with-image" style="margin-top: 0.5rem; padding-left: 1rem;">
+                                        <div class="summary-item summary-item-with-image" style="padding-left: 1rem;">
                                             <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
-                                                <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%); border-radius: 8px; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🎲</div>
-                                                <p style="margin: 0;">Surtido</p>
+                                                <img src="${design.image}" alt="${design.name}" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px; border: 2px solid var(--border-color);">
+                                                <p style="margin: 0;">${design.name}</p>
                                             </div>
                                             <div>
-                                                <p style="font-weight: 600; margin: 0;">x${surtidoRemaining}</p>
+                                                <p style="font-weight: 600; margin: 0;">x${quantity}</p>
                                             </div>
                                         </div>
                                     `;
                                 }
-                            } else if (packageMode === 'surtido') {
-                                summaryHTML += `
-                                    <div class="summary-item" style="margin-top: 0.5rem; padding-left: 1rem;">
-                                        <p><strong>Tipo:</strong> Surtido (diseños variados)</p>
-                                    </div>
-                                `;
-                            }
+                            });
                         }
+                        // Show surtido remaining if any (always show below selected designs)
+                        if (surtidoRemaining > 0) {
+                            summaryHTML += `
+                                <div class="summary-item summary-item-with-image" style="margin-top: 0.5rem; padding-left: 1rem;">
+                                    <div style="display: flex; align-items: center; gap: 1rem; flex: 1;">
+                                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #f0f0f0 0%, #e0e0e0 100%); border-radius: 8px; border: 2px solid var(--border-color); display: flex; align-items: center; justify-content: center; font-size: 1.5rem;">🎲</div>
+                                        <p style="margin: 0;">Surtido</p>
+                                    </div>
+                                    <div>
+                                        <p style="font-weight: 600; margin: 0;">x${surtidoRemaining}</p>
+                                    </div>
+                                </div>
+                            `;
+                        }
+                    } else if (packageMode === 'surtido') {
+                        summaryHTML += `
+                            <div class="summary-item" style="margin-top: 0.5rem; padding-left: 1rem;">
+                                <p><strong>Tipo:</strong> Surtido (diseños variados)</p>
+                            </div>
+                        `;
                     }
                 }
             });
@@ -2022,6 +1872,7 @@ function initializeStep4() {
             
             // Group jengibre packages by packageId
             const jengibreGroups = {};
+            currentJengibreGroups = {}; // Reset
             jengibrePackages.forEach(pkg => {
                 if (!jengibreGroups[pkg.packageId]) {
                     jengibreGroups[pkg.packageId] = {
@@ -2031,11 +1882,13 @@ function initializeStep4() {
                         price: 0,
                         packageCount: 0,
                         unitPrice: pkg.price,
-                        unitQuantity: pkg.quantity
+                        unitQuantity: pkg.quantity,
+                        originalIndices: [] // Store indices for price editing
                     };
                 }
                 jengibreGroups[pkg.packageId].quantity += pkg.quantity;
                 jengibreGroups[pkg.packageId].price += pkg.price;
+                jengibreGroups[pkg.packageId].originalIndices.push(pkg.originalIndex);
                 if (pkg.packageCount) {
                     jengibreGroups[pkg.packageId].packageCount += pkg.packageCount;
                 } else {
@@ -2047,6 +1900,9 @@ function initializeStep4() {
                     }
                 }
             });
+            
+            // Store for price editing
+            currentJengibreGroups = jengibreGroups;
             
             // Display grouped packages
             Object.values(jengibreGroups).forEach(group => {
@@ -2067,7 +1923,18 @@ function initializeStep4() {
                             </div>
                         </div>
                         <div style="display: flex; align-items: center; gap: 1rem;">
-                            <p style="font-weight: 600; color: var(--accent-green); margin: 0;">${group.price} Bs.</p>
+                            ${isPersonalMode && priceEditingMode ? `
+                                <input type="number" 
+                                       id="price-edit-jengibre-${group.packageId}" 
+                                       value="${group.price}" 
+                                       min="0" 
+                                       step="0.01" 
+                                       style="width: 100px; padding: 0.5rem; border: 2px solid var(--accent-green); border-radius: 6px; font-weight: 600; text-align: center;"
+                                       data-package-id="${group.packageId}">
+                                <span style="font-weight: 600; color: var(--accent-green);">Bs.</span>
+                            ` : `
+                                <p style="font-weight: 600; color: var(--accent-green); margin: 0;">${group.price} Bs.</p>
+                            `}
                             <button class="remove-item-btn" onclick="removeJengibrePackageFromOrder('${group.packageId}')" title="Eliminar producto" aria-label="Eliminar ${group.name}">
                                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path d="M3 6H5H21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -2086,11 +1953,86 @@ function initializeStep4() {
         summaryHTML += `
             <div class="summary-total">
                 <h3>Total</h3>
-                <h3 style="color: var(--accent-green);">${totalPrice} Bs.</h3>
+                <h3 id="orderTotalPrice" style="color: var(--accent-green);">${totalPrice} Bs.</h3>
             </div>
         `;
 
         orderSummary.innerHTML = summaryHTML;
+        
+        // Add event listeners for price editing (only in personal mode)
+        if (isPersonalMode) {
+            const btnTogglePriceEdit = document.getElementById('btnTogglePriceEdit');
+            const btnSavePrices = document.getElementById('btnSavePrices');
+            
+            if (btnTogglePriceEdit) {
+                // Remove old listeners by cloning
+                const newBtn = btnTogglePriceEdit.cloneNode(true);
+                btnTogglePriceEdit.parentNode.replaceChild(newBtn, btnTogglePriceEdit);
+                
+                newBtn.addEventListener('click', () => {
+                    priceEditingMode = !priceEditingMode;
+                    updateOrderSummary(); // Re-render with new mode
+                });
+            }
+            
+            if (btnSavePrices) {
+                // Remove old listeners by cloning
+                const newSaveBtn = btnSavePrices.cloneNode(true);
+                btnSavePrices.parentNode.replaceChild(newSaveBtn, btnSavePrices);
+                
+                newSaveBtn.addEventListener('click', () => {
+                    // Update prices from input fields
+                    let newTotal = 0;
+                    
+                    // Update regular packages
+                    currentRegularPackages.forEach(pkg => {
+                        const priceInput = document.getElementById(`price-edit-${pkg.originalIndex}`);
+                        if (priceInput) {
+                            const newPrice = parseFloat(priceInput.value) || 0;
+                            if (state.selectedPackages[pkg.originalIndex]) {
+                                state.selectedPackages[pkg.originalIndex].price = newPrice;
+                            }
+                            newTotal += newPrice;
+                        } else {
+                            newTotal += pkg.price;
+                        }
+                    });
+                    
+                    // Update jengibre packages
+                    Object.values(currentJengibreGroups).forEach(group => {
+                        const priceInput = document.getElementById(`price-edit-jengibre-${group.packageId}`);
+                        if (priceInput) {
+                            const newPrice = parseFloat(priceInput.value) || 0;
+                            // Update all packages with this packageId proportionally
+                            if (group.originalIndices && group.originalIndices.length > 0) {
+                                const pricePerPackage = newPrice / group.originalIndices.length;
+                                group.originalIndices.forEach(idx => {
+                                    if (state.selectedPackages[idx]) {
+                                        state.selectedPackages[idx].price = pricePerPackage;
+                                    }
+                                });
+                            }
+                            newTotal += newPrice;
+                        } else {
+                            newTotal += group.price;
+                        }
+                    });
+                    
+                    // Disable editing mode and recalculate
+                    priceEditingMode = false;
+                    // Recalculate total and update display
+                    const finalTotal = state.selectedPackages.reduce((sum, pkg) => sum + pkg.price, 0);
+                    updateOrderSummary();
+                    // Update total display immediately
+                    setTimeout(() => {
+                        const totalEl = document.getElementById('orderTotalPrice');
+                        if (totalEl) {
+                            totalEl.textContent = `${finalTotal} Bs.`;
+                        }
+                    }, 100);
+                });
+            }
+        }
     }
 
     // Make updateOrderSummary available globally for showStep
@@ -3036,7 +2978,6 @@ function initApp() {
     initializeDialog();
     initializeWelcome();
     initializeStep1();
-    initializeStep1_5();
     initializeStep2();
     initializeStep3();
     initializeStep4();
