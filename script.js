@@ -52,10 +52,12 @@ function updateThemeIcon(theme, themeIcon) {
 // Google Sheets Configuration
 // IMPORTANTE: Reemplaza esta URL con la URL de tu Google Apps Script Web App
 // Obtén la URL después de desplegar tu script (ver instrucciones en google-apps-script.js)
-const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzkXcyNjToRXmO4MkYZjDigI_IYwonPfTtUYfYXrU6YxSbie5ZrgFTcXUnhCElyncU/exec'; // Ejemplo: 'https://script.google.com/macros/s/AKfycby.../exec'
+const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzx-AaKlJ4LpNEDHKjs92OcbtY0L0_plptEJEDdcGyu0yKeMz2Z17CfsI4S4plqlyk/exec';
 
-// Detectar si estamos en modo personal (/pedido)
-const isPersonalMode = window.location.pathname.includes('/pedido');
+// Detectar si estamos en modo personal (/pedido o pedido.html)
+const isPersonalMode = window.location.pathname.includes('/pedido') || 
+                       window.location.pathname.includes('pedido.html') ||
+                       window.location.href.includes('pedido.html');
 
 // Application State
 const state = {
@@ -115,37 +117,38 @@ function getJengibrePackagesQuantity() {
 }
 
 // Design Names and Images (30 designs)
+// Usar rutas absolutas desde la raíz para que funcionen desde cualquier ubicación
 const designs = [
-    { name: 'Muñeco de Nieve 1', image: 'images/chocos/choco_01.webp' },
-    { name: 'Oso Polar', image: 'images/chocos/choco_02.webp' },
-    { name: 'Choco Paceño', image: 'images/chocos/choco_03.webp' },
-    { name: 'Choco Acebo', image: 'images/chocos/choco_04.webp' },
-    { name: 'Choco Chispas', image: 'images/chocos/choco_05.webp' },
-    { name: 'Grinch Enamorado', image: 'images/chocos/choco_06.webp' },
-    { name: 'Papanoel', image: 'images/chocos/choco_07.webp' },
-    { name: 'Nieve Rojiza', image: 'images/chocos/choco_08.webp' },
-    { name: 'Choco Cacao', image: 'images/chocos/choco_09.webp' },
-    { name: 'Blanca Navidad', image: 'images/chocos/choco_10.webp' },
-    { name: 'Copo de Nieve', image: 'images/chocos/choco_11.webp' },
-    { name: 'Árbol de Navidad', image: 'images/chocos/choco_12.webp' },
-    { name: 'Choco Dorado', image: 'images/chocos/choco_13.webp' },
-    { name: 'Choco Estrellado', image: 'images/chocos/choco_14.webp' },
-    { name: 'Chispas Grinch', image: 'images/chocos/choco_15.webp' },
-    { name: 'Muñeco de Nieve 2', image: 'images/chocos/choco_16.webp' },
-    { name: 'Choco Colorado', image: 'images/chocos/choco_17.webp' },
-    { name: 'Choco GitHub', image: 'images/chocos/choco_18.webp' },
-    { name: 'Choco Android', image: 'images/chocos/choco_19.webp' },
-    { name: 'ChoKotlin', image: 'images/chocos/choco_20.webp' },
-    { name: 'Choco Flutter', image: 'images/chocos/choco_21.webp' },
-    { name: 'Choco Swift', image: 'images/chocos/choco_22.webp' },
-    { name: 'Choco Python', image: 'images/chocos/choco_23.webp' },
-    { name: 'Paceño Yaaaa!', image: 'images/chocos/choco_24.webp' },
-    { name: 'Choco Galindo', image: 'images/chocos/choco_25.webp' },
-    { name: 'Choco Vice', image: 'images/chocos/choco_26.webp' },
-    { name: 'Paceño Utha!', image: 'images/chocos/choco_27.webp' },
-    { name: 'Choco Bolivar.', image: 'images/chocos/choco_28.webp' },
-    { name: 'Choco Tigre.', image: 'images/chocos/choco_29.webp' },
-    { name: 'Choco Bolivia.', image: 'images/chocos/choco_30.webp' }
+    { name: 'Muñeco de Nieve 1', image: '/images/chocos/choco_01.webp' },
+    { name: 'Oso Polar', image: '/images/chocos/choco_02.webp' },
+    { name: 'Choco Paceño', image: '/images/chocos/choco_03.webp' },
+    { name: 'Choco Acebo', image: '/images/chocos/choco_04.webp' },
+    { name: 'Choco Chispas', image: '/images/chocos/choco_05.webp' },
+    { name: 'Grinch Enamorado', image: '/images/chocos/choco_06.webp' },
+    { name: 'Papanoel', image: '/images/chocos/choco_07.webp' },
+    { name: 'Nieve Rojiza', image: '/images/chocos/choco_08.webp' },
+    { name: 'Choco Cacao', image: '/images/chocos/choco_09.webp' },
+    { name: 'Blanca Navidad', image: '/images/chocos/choco_10.webp' },
+    { name: 'Copo de Nieve', image: '/images/chocos/choco_11.webp' },
+    { name: 'Árbol de Navidad', image: '/images/chocos/choco_12.webp' },
+    { name: 'Choco Dorado', image: '/images/chocos/choco_13.webp' },
+    { name: 'Choco Estrellado', image: '/images/chocos/choco_14.webp' },
+    { name: 'Chispas Grinch', image: '/images/chocos/choco_15.webp' },
+    { name: 'Muñeco de Nieve 2', image: '/images/chocos/choco_16.webp' },
+    { name: 'Choco Colorado', image: '/images/chocos/choco_17.webp' },
+    { name: 'Choco GitHub', image: '/images/chocos/choco_18.webp' },
+    { name: 'Choco Android', image: '/images/chocos/choco_19.webp' },
+    { name: 'ChoKotlin', image: '/images/chocos/choco_20.webp' },
+    { name: 'Choco Flutter', image: '/images/chocos/choco_21.webp' },
+    { name: 'Choco Swift', image: '/images/chocos/choco_22.webp' },
+    { name: 'Choco Python', image: '/images/chocos/choco_23.webp' },
+    { name: 'Paceño Yaaaa!', image: '/images/chocos/choco_24.webp' },
+    { name: 'Choco Galindo', image: '/images/chocos/choco_25.webp' },
+    { name: 'Choco Vice', image: '/images/chocos/choco_26.webp' },
+    { name: 'Paceño Utha!', image: '/images/chocos/choco_27.webp' },
+    { name: 'Choco Bolivar.', image: '/images/chocos/choco_28.webp' },
+    { name: 'Choco Tigre.', image: '/images/chocos/choco_29.webp' },
+    { name: 'Choco Bolivia.', image: '/images/chocos/choco_30.webp' }
 ];
 
 // WhatsApp Number
@@ -274,6 +277,7 @@ function showDialog(title, message) {
     const dialogTitle = document.getElementById('dialogTitle');
     const dialogMessage = document.getElementById('dialogMessage');
     const dialogIcon = document.querySelector('.dialog-icon');
+    const dialogBtn = document.getElementById('dialogBtn');
     
     if (overlay && dialogTitle && dialogMessage) {
         // Extraer emoji del título si existe
@@ -296,11 +300,62 @@ function showDialog(title, message) {
             dialogIcon.textContent = icon;
         }
         
+        // Mostrar botón de cerrar
+        if (dialogBtn) {
+            dialogBtn.style.display = 'block';
+        }
+        
         overlay.classList.add('active');
         
         // Prevent body scroll when dialog is open
         document.body.style.overflow = 'hidden';
     }
+}
+
+// Función para mostrar diálogo de progreso
+function showProgressDialog(message = 'Procesando tu pedido...') {
+    const overlay = document.getElementById('dialogOverlay');
+    const dialogTitle = document.getElementById('dialogTitle');
+    const dialogMessage = document.getElementById('dialogMessage');
+    const dialogIcon = document.querySelector('.dialog-icon');
+    const dialogBtn = document.getElementById('dialogBtn');
+    
+    if (overlay && dialogTitle && dialogMessage) {
+        dialogTitle.textContent = '⏳ Procesando';
+        dialogMessage.innerHTML = `
+            <div style="text-align: center;">
+                <div style="margin-bottom: 15px;">
+                    <div class="spinner" style="border: 4px solid #f3f3f3; border-top: 4px solid #c41e3a; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto;"></div>
+                </div>
+                <p style="margin: 0;">${message}</p>
+            </div>
+        `;
+        
+        if (dialogIcon) {
+            dialogIcon.textContent = '⏳';
+        }
+        
+        // Ocultar botón de cerrar durante el progreso
+        if (dialogBtn) {
+            dialogBtn.style.display = 'none';
+        }
+        
+        overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+// Agregar estilo para el spinner si no existe
+if (!document.getElementById('spinnerStyle')) {
+    const style = document.createElement('style');
+    style.id = 'spinnerStyle';
+    style.textContent = `
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    `;
+    document.head.appendChild(style);
 }
 
 function hideDialog() {
@@ -788,16 +843,17 @@ function initializeStep4() {
     const orderSummary = document.getElementById('orderSummary');
 
     // Helper function to get package image
+    // Usar rutas absolutas desde la raíz para que funcionen desde cualquier ubicación
     function getPackageImage(packageId) {
         const imageMap = {
-            1: 'images/packs/pack-x1.png',
-            4: 'images/packs/pack-x4.png',
-            8: 'images/packs/pack-x8.png',
-            12: 'images/packs/pack-x12.png',
-            j1: 'images/packs/pack-jengibres-x1.png',
-            j2: 'images/packs/pack-jengibres-x2.png',
-            j4: 'images/packs/pack-jengibres-x4.png',
-            j6: 'images/packs/pack-jengibres-x6.png'
+            1: '/images/packs/pack-x1.png',
+            4: '/images/packs/pack-x4.png',
+            8: '/images/packs/pack-x8.png',
+            12: '/images/packs/pack-x12.png',
+            j1: '/images/packs/pack-jengibres-x1.png',
+            j2: '/images/packs/pack-jengibres-x2.png',
+            j4: '/images/packs/pack-jengibres-x4.png',
+            j6: '/images/packs/pack-jengibres-x6.png'
         };
         return imageMap[packageId] || '';
     }
@@ -1061,10 +1117,17 @@ function initializeStep4() {
         // Ocultar campos que no se necesitan en modo personal
         const phoneField = document.getElementById('phone');
         const phoneLabel = phoneField ? phoneField.closest('.form-group') : null;
+        if (phoneField) {
+            phoneField.removeAttribute('required'); // Remover required para evitar error de validación
+            phoneField.value = 'PRIVADO'; // Establecer valor por defecto para pedidos personales
+        }
         if (phoneLabel) phoneLabel.style.display = 'none';
         
         const observationsField = document.getElementById('observations');
         const observationsLabel = observationsField ? observationsField.closest('.form-group') : null;
+        if (observationsField) {
+            observationsField.removeAttribute('required'); // Por si acaso tiene required
+        }
         if (observationsLabel) observationsLabel.style.display = 'none';
         
         // Ocultar sección de QR
@@ -1102,28 +1165,74 @@ function initializeStep4() {
         window.applyPersonalModeStep4();
     }
 
+    // Deshabilitar validación HTML nativa para manejar todo con JavaScript
+    if (orderForm) {
+        orderForm.setAttribute('novalidate', 'novalidate');
+    }
+    
     orderForm.addEventListener('submit', (e) => {
         e.preventDefault();
+        console.log('Formulario enviado. Modo personal:', isPersonalMode);
         
         state.customerInfo.fullName = document.getElementById('fullName').value.trim();
-        state.customerInfo.phone = isPersonalMode ? '' : document.getElementById('phone').value.trim();
+        // En modo personal, usar "PRIVADO" como teléfono; en modo público, obtener del campo
+        state.customerInfo.phone = isPersonalMode ? 'PRIVADO' : document.getElementById('phone').value.trim();
         state.customerInfo.observations = isPersonalMode ? '' : document.getElementById('observations').value.trim();
         state.customerInfo.depositAmount = parseFloat(document.getElementById('depositAmount').value) || 0;
 
+        console.log('Datos capturados:', {
+            fullName: state.customerInfo.fullName,
+            depositAmount: state.customerInfo.depositAmount,
+            isPersonalMode: isPersonalMode
+        });
+
         if (isPersonalMode) {
             // Modo personal: solo validar nombre y monto depositado
-            if (state.customerInfo.fullName && state.customerInfo.depositAmount > 0) {
-                sendPersonalOrder();
-            } else {
-                showDialog('Atención', 'Por favor, completa todos los campos obligatorios, incluyendo el monto depositado');
+            console.log('Validando modo personal...');
+            
+            // Validación específica y amigable
+            const missingFields = [];
+            if (!state.customerInfo.fullName) {
+                missingFields.push('Nombre y Apellido');
             }
+            if (!state.customerInfo.depositAmount || state.customerInfo.depositAmount <= 0) {
+                missingFields.push('Monto depositado');
+            }
+            
+            if (missingFields.length > 0) {
+                const message = missingFields.length === 1 
+                    ? `Por favor, completa el campo: ${missingFields[0]}`
+                    : `Por favor, completa los siguientes campos:\n\n• ${missingFields.join('\n• ')}`;
+                showDialog('⚠️ Campos incompletos', message);
+                return;
+            }
+            
+            console.log('Datos válidos, enviando pedido personal...');
+            showProgressDialog('Guardando tu pedido en Google Sheets...');
+            sendPersonalOrder();
         } else {
             // Modo público: validar todos los campos y enviar a WhatsApp
-            if (state.customerInfo.fullName && state.customerInfo.phone && state.customerInfo.depositAmount > 0) {
-                sendToWhatsApp();
-            } else {
-                showDialog('Atención', 'Por favor, completa todos los campos obligatorios, incluyendo el monto depositado');
+            const missingFields = [];
+            if (!state.customerInfo.fullName) {
+                missingFields.push('Nombre y Apellido');
             }
+            if (!state.customerInfo.phone) {
+                missingFields.push('Número de Teléfono');
+            }
+            if (!state.customerInfo.depositAmount || state.customerInfo.depositAmount <= 0) {
+                missingFields.push('Monto depositado');
+            }
+            
+            if (missingFields.length > 0) {
+                const message = missingFields.length === 1 
+                    ? `Por favor, completa el campo: ${missingFields[0]}`
+                    : `Por favor, completa los siguientes campos:\n\n• ${missingFields.join('\n• ')}`;
+                showDialog('⚠️ Campos incompletos', message);
+                return;
+            }
+            
+            showProgressDialog('Guardando tu pedido y preparando WhatsApp...');
+            sendToWhatsApp();
         }
     });
 
@@ -1367,6 +1476,8 @@ async function sendOrderToGoogleSheets() {
                     body: JSON.stringify(orderData)
                 });
                 console.log('Pedido enviado con modo no-cors (no se puede verificar respuesta)');
+                // Cerrar diálogo de progreso cuando se usa no-cors (se asume éxito)
+                hideDialog();
             }
         } catch (fetchError) {
             // Si hay error de CORS, intentar con no-cors
@@ -1393,8 +1504,13 @@ async function sendOrderToGoogleSheets() {
 
 // Función para enviar pedido personal (solo a Google Sheets)
 async function sendPersonalOrder() {
+    console.log('=== sendPersonalOrder() llamado ===');
+    console.log('isPersonalMode:', isPersonalMode);
+    console.log('window.location.pathname:', window.location.pathname);
+    console.log('window.location.href:', window.location.href);
+    
     try {
-        // Mostrar indicador de carga
+        // Mostrar indicador de carga en el botón
         const btnSubmit = document.getElementById('btnSubmit');
         const originalText = btnSubmit ? btnSubmit.textContent : '';
         if (btnSubmit) {
@@ -1402,9 +1518,18 @@ async function sendPersonalOrder() {
             btnSubmit.textContent = '⏳ Guardando...';
         }
         
+        // El diálogo de progreso ya está mostrado desde el submit handler
+        
         // Enviar a Google Sheets
         const orderData = prepareOrderDataForSheets();
-        console.log('Enviando pedido personal a Google Sheets:', orderData);
+        console.log('=== Datos preparados para Google Sheets ===');
+        console.log('orderData:', JSON.stringify(orderData, null, 2));
+        console.log('URL de Google Sheets:', GOOGLE_SHEETS_WEB_APP_URL);
+        
+        // Validar que tenemos datos antes de enviar
+        if (!orderData || !orderData.fullName) {
+            throw new Error('No se pudieron preparar los datos del pedido correctamente');
+        }
         
         // Intentar primero sin no-cors para poder ver errores
         try {
@@ -1420,19 +1545,35 @@ async function sendPersonalOrder() {
                 const result = await response.json();
                 console.log('Respuesta de Google Sheets:', result);
                 if (result.success) {
+                    // Cerrar diálogo de progreso y mostrar éxito
+                    hideDialog();
                     showDialog('✅ Éxito', 'Pedido registrado correctamente en Google Sheets');
                     // Resetear formulario después de 2 segundos
                     setTimeout(() => {
+                        hideDialog(); // Cerrar el diálogo de éxito
                         if (btnSubmit) {
                             btnSubmit.disabled = false;
-                            btnSubmit.textContent = originalText;
+                            btnSubmit.textContent = originalText || '💾 Realizar Pedido';
                         }
                         // Resetear formulario
                         document.getElementById('orderForm').reset();
-                        // Volver al paso 1
-                        showStep(1);
+                        // Resetear estado de la aplicación
+                        state.selectedPackages = [];
+                        state.selectionMode = null;
+                        state.selectedDesigns = {};
+                        state.jengibrePackages = {};
+                        state.customerInfo = {
+                            fullName: '',
+                            phone: '',
+                            observations: '',
+                            depositAmount: 0
+                        };
+                        // Volver a la página principal (step 0)
+                        showStep(0);
                     }, 2000);
                 } else {
+                    // Cerrar diálogo de progreso y mostrar error
+                    hideDialog();
                     showDialog('❌ Error', 'Error al registrar el pedido: ' + (result.error || 'Error desconocido'));
                     if (btnSubmit) {
                         btnSubmit.disabled = false;
@@ -1455,22 +1596,46 @@ async function sendPersonalOrder() {
                     body: JSON.stringify(orderData)
                 });
                 // Con no-cors no podemos verificar, asumimos éxito
+                // Cerrar diálogo de progreso y mostrar éxito
+                hideDialog();
                 showDialog('✅ Éxito', 'Pedido registrado correctamente en Google Sheets');
                 setTimeout(() => {
+                    hideDialog(); // Cerrar el diálogo de éxito
                     if (btnSubmit) {
                         btnSubmit.disabled = false;
-                        btnSubmit.textContent = originalText;
+                        btnSubmit.textContent = originalText || '💾 Realizar Pedido';
                     }
+                    // Resetear formulario
                     document.getElementById('orderForm').reset();
-                    showStep(1);
+                    // Resetear estado de la aplicación
+                    state.selectedPackages = [];
+                    state.selectionMode = null;
+                    state.selectedDesigns = {};
+                    state.jengibrePackages = {};
+                    state.customerInfo = {
+                        fullName: '',
+                        phone: '',
+                        observations: '',
+                        depositAmount: 0
+                    };
+                    // Volver a la página principal (step 0)
+                    showStep(0);
                 }, 2000);
             } else {
+                console.error('Error no manejado:', fetchError);
                 throw fetchError;
             }
         }
     } catch (error) {
         console.error('❌ Error al enviar pedido personal:', error);
-        showDialog('❌ Error', 'Error al registrar el pedido. Por favor, intenta nuevamente.');
+        console.error('Detalles del error:', {
+            name: error.name,
+            message: error.message,
+            stack: error.stack
+        });
+        // Cerrar diálogo de progreso y mostrar error
+        hideDialog();
+        showDialog('❌ Error', 'Error al registrar el pedido: ' + (error.message || 'Error desconocido. Por favor, intenta nuevamente.'));
         const btnSubmit = document.getElementById('btnSubmit');
         if (btnSubmit) {
             btnSubmit.disabled = false;
@@ -1479,15 +1644,49 @@ async function sendPersonalOrder() {
     }
 }
 
-function sendToWhatsApp() {
-    const message = generateWhatsAppMessage();
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
-    
-    // Send to Google Sheets before opening WhatsApp
-    sendOrderToGoogleSheets();
-    
-    // Open WhatsApp
-    window.open(whatsappUrl, '_blank');
+async function sendToWhatsApp() {
+    try {
+        const message = generateWhatsAppMessage();
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
+        
+        // Send to Google Sheets before opening WhatsApp
+        await sendOrderToGoogleSheets();
+        
+        // Cerrar diálogo de progreso
+        hideDialog();
+        
+        // Open WhatsApp
+        window.open(whatsappUrl, '_blank');
+        
+        // Resetear el estado y volver al inicio después de un breve delay
+        setTimeout(() => {
+            // Resetear formulario
+            const orderForm = document.getElementById('orderForm');
+            if (orderForm) {
+                orderForm.reset();
+            }
+            
+            // Resetear estado de la aplicación
+            state.selectedPackages = [];
+            state.selectionMode = null;
+            state.selectedDesigns = {};
+            state.jengibrePackages = {};
+            state.customerInfo = {
+                fullName: '',
+                phone: '',
+                observations: '',
+                depositAmount: 0
+            };
+            
+            // Volver a la página principal (step 0)
+            showStep(0);
+        }, 500); // Pequeño delay para asegurar que WhatsApp se abra primero
+    } catch (error) {
+        // Cerrar diálogo de progreso en caso de error
+        hideDialog();
+        showDialog('❌ Error', 'Hubo un problema al procesar tu pedido. Por favor, intenta nuevamente.');
+        console.error('Error en sendToWhatsApp:', error);
+    }
 }
 
 // Initialize Welcome Screen
