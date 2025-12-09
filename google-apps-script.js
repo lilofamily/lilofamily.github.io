@@ -32,8 +32,14 @@ function doPost(e) {
     // Obtener la hoja activa (o cambiar 'Sheet1' por el nombre de tu hoja)
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     
-    // Si la hoja está vacía, agregar encabezados
-    if (sheet.getLastRow() === 0) {
+    // Verificar si la hoja está vacía o si falta la columna "Jengibres de Regalo"
+    const firstCheckRow = sheet.getLastRow();
+    const lastColumn = sheet.getLastColumn();
+    const headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
+    const jengibresRegaloIndex = headers.indexOf('Jengibres de Regalo');
+    
+    if (firstCheckRow === 0) {
+      // Si la hoja está vacía, agregar todos los encabezados
       sheet.appendRow([
         'Fecha y Hora',
         'Nombre Completo',
@@ -41,6 +47,7 @@ function doPost(e) {
         'Paquetes Regulares',
         'Cantidad Regular',
         'Diseños Seleccionados',
+        'Jengibres de Regalo',
         'Paquetes Jengibre',
         'Cantidad Jengibre',
         'Monto Depositado',
@@ -54,10 +61,32 @@ function doPost(e) {
       ]);
       
       // Formatear encabezados
-      const headerRange = sheet.getRange(1, 1, 1, 16);
+      const headerRange = sheet.getRange(1, 1, 1, 17);
       headerRange.setFontWeight('bold');
       headerRange.setBackground('#4285f4');
       headerRange.setFontColor('#ffffff');
+    } else if (jengibresRegaloIndex === -1) {
+      // Si la hoja tiene datos pero falta la columna "Jengibres de Regalo", agregarla
+      // Buscar la posición después de "Diseños Seleccionados"
+      const disenosIndex = headers.indexOf('Diseños Seleccionados');
+      if (disenosIndex !== -1) {
+        // Insertar la columna después de "Diseños Seleccionados" (columna 7)
+        sheet.insertColumnAfter(disenosIndex + 1);
+        // Agregar el encabezado
+        sheet.getRange(1, disenosIndex + 2).setValue('Jengibres de Regalo');
+        // Formatear el nuevo encabezado
+        const newHeaderCell = sheet.getRange(1, disenosIndex + 2);
+        newHeaderCell.setFontWeight('bold');
+        newHeaderCell.setBackground('#4285f4');
+        newHeaderCell.setFontColor('#ffffff');
+        
+        // Agregar valores por defecto para todas las filas existentes
+        const dataRows = sheet.getLastRow() - 1; // Excluir la fila de encabezados
+        if (dataRows > 0) {
+          const newColumnRange = sheet.getRange(2, disenosIndex + 2, dataRows, 1);
+          newColumnRange.setValue('Ninguno');
+        }
+      }
     }
     
     // Parsear los datos recibidos
@@ -83,6 +112,7 @@ function doPost(e) {
       data.regularPackages || '', // Ya viene con saltos de línea desde script.js
       data.regularQuantity || 0,
       data.designs || '', // Ya viene con saltos de línea desde script.js
+      data.bonusJengibres || 'Ninguno', // Jengibres de Regalo
       data.jengibrePackages || '', // Ya viene con saltos de línea desde script.js
       data.jengibreQuantity || 0,
       data.depositAmount || 0,
@@ -112,7 +142,7 @@ function doPost(e) {
     const lastRow = newRowNumber;
     
     // Configurar el formato de las celdas para que respeten los saltos de línea
-    const range = sheet.getRange(lastRow, 1, 1, 16);
+    const range = sheet.getRange(lastRow, 1, 1, 17);
     range.setWrap(true); // Permitir ajuste de texto
     
     // Ajustar altura de fila para mostrar múltiples líneas
@@ -124,24 +154,24 @@ function doPost(e) {
     const rowHeight = cellHeight + (maxLines - 1) * 20;
     sheet.setRowHeight(lastRow, rowHeight);
     
-    // Configurar columna "Confirmado" (columna 13) - Checkbox
-    const confirmadoCell = sheet.getRange(lastRow, 13);
+    // Configurar columna "Confirmado" (columna 14) - Checkbox
+    const confirmadoCell = sheet.getRange(lastRow, 14);
     confirmadoCell.insertCheckboxes();
     confirmadoCell.setValue(false); // Por defecto sin marcar
     
-    // Configurar columna "Fecha Entrega" (columna 14) - Campo de fecha
-    const fechaEntregaCell = sheet.getRange(lastRow, 14);
+    // Configurar columna "Fecha Entrega" (columna 15) - Campo de fecha
+    const fechaEntregaCell = sheet.getRange(lastRow, 15);
     fechaEntregaCell.setValue(currentDate);
     fechaEntregaCell.setNumberFormat('dd/mm/yyyy'); // Formato de fecha
     
-    // Configurar columna "Hora Entrega" (columna 15) - Campo de hora
-    const horaEntregaCell = sheet.getRange(lastRow, 15);
+    // Configurar columna "Hora Entrega" (columna 16) - Campo de hora
+    const horaEntregaCell = sheet.getRange(lastRow, 16);
     horaEntregaCell.setValue(currentDate);
     horaEntregaCell.setNumberFormat('hh:mm'); // Formato de hora (24 horas)
     // Alternativa para formato 12 horas: 'hh:mm AM/PM'
     
-    // Configurar columna "Entregado" (columna 16) - Dropdown con opciones
-    const entregadoCell = sheet.getRange(lastRow, 16);
+    // Configurar columna "Entregado" (columna 17) - Dropdown con opciones
+    const entregadoCell = sheet.getRange(lastRow, 17);
     const validationRule = SpreadsheetApp.newDataValidation()
       .requireValueInList(['SI', 'No', 'En elaboración'], true)
       .setAllowInvalid(false)
@@ -234,6 +264,11 @@ function sendNotificationEmail(data, rowNumber) {
     emailBody += '<pre style="background: #f5f5f5; padding: 10px; border-radius: 5px;">' + (data.designs || 'N/A') + '</pre>';
   }
   
+  if (data && data.bonusJengibres && data.bonusJengibres !== 'Ninguno') {
+    emailBody += '<h4>Jengibres de Regalo:</h4>';
+    emailBody += '<p style="color: #daa520; font-weight: bold; font-size: 1.1em;">🎁 ' + (data.bonusJengibres || 'N/A') + '</p>';
+  }
+
   if (data && data.jengibrePackages && data.jengibrePackages !== 'Ninguno') {
     emailBody += '<h4>Chocobombas de Jengibre:</h4>';
     emailBody += '<pre style="background: #f5f5f5; padding: 10px; border-radius: 5px;">' + (data.jengibrePackages || 'N/A') + '</pre>';

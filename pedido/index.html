@@ -113,7 +113,12 @@
                         <div class="package-info">
                             <h3>Paquete Individual</h3>
                             <p class="package-quantity">1 Chocobomba</p>
-                            <p class="package-price">10 Bs.</p>
+                            <p class="package-price-dynamic">10 Bs.</p>
+                        </div>
+                        <div class="package-counter" style="display: none;">
+                            <button class="counter-btn" data-action="decrease" data-package="1">-</button>
+                            <span class="counter-value" data-package="1">1</span>
+                            <button class="counter-btn" data-action="increase" data-package="1">+</button>
                         </div>
                     </div>
 
@@ -121,7 +126,6 @@
                         <div class="package-image">
                             <img src="../images/packs/pack-x4.png" alt="Paquete Familiar">
                         </div>
-                        <div class="package-badge">Popular</div>
                         <div class="package-checkbox">
                             <input type="checkbox" id="pkg4" data-package="4">
                             <label for="pkg4"></label>
@@ -129,7 +133,12 @@
                         <div class="package-info">
                             <h3>Paquete Familiar</h3>
                             <p class="package-quantity">4 Chocobombas</p>
-                            <p class="package-price">35 Bs.</p>
+                            <p class="package-price-dynamic">35 Bs.</p>
+                        </div>
+                        <div class="package-counter" style="display: none;">
+                            <button class="counter-btn" data-action="decrease" data-package="4">-</button>
+                            <span class="counter-value" data-package="4">1</span>
+                            <button class="counter-btn" data-action="increase" data-package="4">+</button>
                         </div>
                     </div>
 
@@ -144,8 +153,13 @@
                         <div class="package-info">
                             <h3>Paquete Grande</h3>
                             <p class="package-quantity">8 Chocobombas</p>
-                            <p class="package-bonus">+ 1 Jengibre 🎁</p>
-                            <p class="package-price">70 Bs.</p>
+                            <p class="package-bonus">+ 1 Chocobomba Jengibre de Regalo 🎁</p>
+                            <p class="package-price-dynamic">70 Bs.</p>
+                        </div>
+                        <div class="package-counter" style="display: none;">
+                            <button class="counter-btn" data-action="decrease" data-package="8">-</button>
+                            <span class="counter-value" data-package="8">1</span>
+                            <button class="counter-btn" data-action="increase" data-package="8">+</button>
                         </div>
                     </div>
 
@@ -153,7 +167,6 @@
                         <div class="package-image">
                             <img src="../images/packs/pack-x12.png" alt="Paquete Extra Grande">
                         </div>
-                        <div class="package-badge">Mejor Valor</div>
                         <div class="package-checkbox">
                             <input type="checkbox" id="pkg12" data-package="12">
                             <label for="pkg12"></label>
@@ -161,8 +174,29 @@
                         <div class="package-info">
                             <h3>Paquete Extra Grande</h3>
                             <p class="package-quantity">12 Chocobombas</p>
-                            <p class="package-bonus">+ 2 Jengibre 🎁</p>
-                            <p class="package-price">105 Bs.</p>
+                            <p class="package-bonus">+ 2 Chocobombas Jengibre de Regalo 🎁</p>
+                            <p class="package-price-dynamic">105 Bs.</p>
+                        </div>
+                        <div class="package-counter" style="display: none;">
+                            <button class="counter-btn" data-action="decrease" data-package="12">-</button>
+                            <span class="counter-value" data-package="12">1</span>
+                            <button class="counter-btn" data-action="increase" data-package="12">+</button>
+                        </div>
+                    </div>
+
+                    <!-- Paquete Personalizado (solo modo personal) -->
+                    <div class="package-card" data-package="custom" data-price="0" data-quantity="0">
+                        <div class="package-image">
+                            <img src="/images/packs/pack-xN.png" alt="Paquete Personalizado">
+                        </div>
+                        <div class="package-checkbox">
+                            <input type="checkbox" id="pkgcustom" data-package="custom">
+                            <label for="pkgcustom"></label>
+                        </div>
+                        <div class="package-info">
+                            <h3>Paquete Personalizado</h3>
+                            <p class="package-quantity">Precio acordado</p>
+                            <p class="package-price">Personalizado</p>
                         </div>
                     </div>
                 </div>
@@ -180,7 +214,12 @@
                         <div class="package-info">
                             <h3>Paquete Individual de Jengibre</h3>
                             <p class="package-quantity">1 Chocobomba de Jengibre</p>
-                            <p class="package-price">15 Bs.</p>
+                            <p class="package-price-dynamic">15 Bs.</p>
+                        </div>
+                        <div class="package-counter" style="display: none;">
+                            <button class="counter-btn" data-action="decrease" data-package="j1">-</button>
+                            <span class="counter-value" data-package="j1">1</span>
+                            <button class="counter-btn" data-action="increase" data-package="j1">+</button>
                         </div>
                     </div>
 
@@ -195,7 +234,12 @@
                         <div class="package-info">
                             <h3>Paquete Pareja de Jengibre</h3>
                             <p class="package-quantity">2 Chocobombas de Jengibre</p>
-                            <p class="package-price">25 Bs.</p>
+                            <p class="package-price-dynamic">25 Bs.</p>
+                        </div>
+                        <div class="package-counter" style="display: none;">
+                            <button class="counter-btn" data-action="decrease" data-package="j2">-</button>
+                            <span class="counter-value" data-package="j2">1</span>
+                            <button class="counter-btn" data-action="increase" data-package="j2">+</button>
                         </div>
                     </div>
 
@@ -210,23 +254,31 @@
                         <div class="package-info">
                             <h3>Paquete Familiar de Jengibre</h3>
                             <p class="package-quantity">4 Chocobombas de Jengibre</p>
-                            <p class="package-price">50 Bs.</p>
+                            <p class="package-price-dynamic">50 Bs.</p>
+                        </div>
+                        <div class="package-counter" style="display: none;">
+                            <button class="counter-btn" data-action="decrease" data-package="j4">-</button>
+                            <span class="counter-value" data-package="j4">1</span>
+                            <button class="counter-btn" data-action="increase" data-package="j4">+</button>
                         </div>
                     </div>
 
-                    <div class="package-card jengibre-package featured" data-package="j6" data-price="75" data-quantity="6" data-unit-price="75" data-unit-quantity="6">
+                    <div class="package-card jengibre-package featured" data-package="j6" data-price="75" data-quantity="6">
                         <div class="package-image">
                             <img src="../images/packs/pack-jengibres-x6.png" alt="Paquete Extra Grande de Jengibre">
                         </div>
-                        <div class="package-badge">Mejor Valor</div>
+                        <div class="package-checkbox">
+                            <input type="checkbox" id="pkgj6" data-package="j6">
+                            <label for="pkgj6"></label>
+                        </div>
                         <div class="package-info">
                             <h3>Paquete Extra Grande de Jengibre</h3>
-                            <p class="package-quantity-dynamic">6 Chocobombas de Jengibre</p>
+                            <p class="package-quantity">6 Chocobombas de Jengibre</p>
                             <p class="package-price-dynamic">75 Bs.</p>
                         </div>
-                        <div class="package-counter">
+                        <div class="package-counter" style="display: none;">
                             <button class="counter-btn" data-action="decrease" data-package="j6">-</button>
-                            <span class="counter-value" data-package="j6">0</span>
+                            <span class="counter-value" data-package="j6">1</span>
                             <button class="counter-btn" data-action="increase" data-package="j6">+</button>
                         </div>
                     </div>
@@ -234,6 +286,43 @@
 
                 <div class="step-actions">
                     <button type="button" class="btn-next" id="btnNext1">Siguiente →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 1.5: Custom Package Configuration -->
+        <div class="step" id="step1_5" data-step="1.5">
+            <div class="step-content">
+                <h2 class="step-title">Configura tu Paquete Personalizado</h2>
+                <p class="step-subtitle">Completa la información del paquete acordado</p>
+                
+                <form class="custom-package-form" id="customPackageForm">
+                    <div class="form-group">
+                        <label for="customQuantity">Cantidad de Chocobombas *</label>
+                        <input type="number" id="customQuantity" name="customQuantity" required min="1" step="1" placeholder="Ej: 10">
+                        <small class="form-help">Ingresa la cantidad total de chocobombas del pedido</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customUnitPrice">Precio Unitario Acordado (Bs.) (Opcional)</label>
+                        <input type="number" id="customUnitPrice" name="customUnitPrice" min="0" step="0.01" placeholder="Ej: 8.50">
+                        <small class="form-help">Precio por cada chocobomba acordado con el cliente</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customTotalPrice">Monto Final Acordado (Bs.) (Opcional)</label>
+                        <input type="number" id="customTotalPrice" name="customTotalPrice" min="0" step="0.01" placeholder="Ej: 85.00">
+                        <small class="form-help">Precio total acordado con el cliente</small>
+                    </div>
+                    
+                    <div class="form-note">
+                        <p><strong>Nota:</strong> Debes completar al menos uno de los dos campos de precio (Precio Unitario o Monto Final).</p>
+                    </div>
+                </form>
+
+                <div class="step-actions">
+                    <button type="button" class="btn-back" id="btnBack1_5">← Atrás</button>
+                    <button type="button" class="btn-next" id="btnNext1_5">Siguiente →</button>
                 </div>
             </div>
         </div>
@@ -277,6 +366,19 @@
 
                 <div class="step-actions">
                     <button class="btn-back" id="btnBack3">← Atrás</button>
+                    
+                    <!-- Footer para restantes (centrado) -->
+                    <div class="step3-footer-inline" id="step3Footer">
+                        <div class="remaining-info">
+                            <span class="remaining-label">Restantes:</span>
+                            <span class="remaining-count" id="remainingTotalCount">0</span>
+                        </div>
+                        <label class="checkbox-remaining-surtido">
+                            <input type="checkbox" id="checkboxRemainingSurtido">
+                            <span class="checkbox-label">Restante Surtido</span>
+                        </label>
+                    </div>
+                    
                     <button class="btn-next" id="btnNext3">Continuar →</button>
                 </div>
             </div>

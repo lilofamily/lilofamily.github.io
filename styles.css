@@ -276,6 +276,12 @@ body {
     margin-bottom: 1rem;
     color: var(--accent-red);
     text-align: center;
+    line-height: 1.4;
+}
+
+.step-title span {
+    display: block;
+    text-align: center;
 }
 
 .step-subtitle {
@@ -334,10 +340,26 @@ body {
     overflow: hidden;
 }
 
+/* Featured cards should NOT have gold border by default, only when selected */
+.package-card.featured {
+    border: 3px solid var(--border-color) !important;
+    border-color: var(--border-color) !important;
+}
+
+/* Override any potential gold border on featured cards */
+div.package-card.featured {
+    border: 3px solid var(--border-color) !important;
+    border-color: var(--border-color) !important;
+}
+
 .package-card:hover {
     transform: translateY(-5px);
     box-shadow: 0 8px 25px var(--shadow-hover);
     border-color: var(--accent-red);
+}
+
+.package-card.featured:hover {
+    border-color: var(--accent-red) !important;
 }
 
 .package-card.selected {
@@ -346,8 +368,9 @@ body {
     box-shadow: 0 4px 20px rgba(218, 165, 32, 0.3);
 }
 
-.package-card.featured {
-    border-color: var(--accent-gold);
+/* Featured cards should only show gold border when selected */
+.package-card.featured.selected {
+    border-color: var(--accent-gold) !important;
 }
 
 .package-badge {
@@ -635,6 +658,7 @@ body {
 .step-actions {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     gap: 1rem;
     position: fixed;
     bottom: 0;
@@ -688,6 +712,109 @@ body {
 
 .btn-submit {
     background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+}
+
+/* Step 3 Footer inline for remaining chocobombas (inside step-actions) */
+.step3-footer-inline {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+}
+
+.remaining-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.remaining-label {
+    font-size: 1rem;
+}
+
+.remaining-count {
+    font-size: 1.2rem;
+    color: var(--accent-red);
+    font-weight: 700;
+}
+
+/* Checkbox for remaining surtido */
+.checkbox-remaining-surtido {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+.checkbox-remaining-surtido input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    accent-color: var(--accent-green);
+}
+
+.checkbox-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+/* Add padding to step 3 content to prevent footer overlap */
+#step3 .step-content {
+    padding-bottom: 100px;
+}
+
+/* Mobile responsive for step3 footer inline */
+@media (max-width: 768px) {
+    .step3-footer-inline {
+        flex-direction: column;
+        gap: 0.5rem;
+        order: 3;
+        width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    .step-actions {
+        flex-wrap: wrap;
+    }
+    
+    .step-actions .btn-back {
+        order: 1;
+        flex: 1;
+    }
+    
+    .step-actions .btn-next {
+        order: 2;
+        flex: 1;
+    }
+    
+    .remaining-info {
+        font-size: 0.9rem;
+    }
+    
+    .remaining-count {
+        font-size: 1.1rem;
+    }
+    
+    .checkbox-remaining-surtido {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .checkbox-remaining-surtido input[type="checkbox"] {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .checkbox-label {
+        font-size: 0.95rem;
+    }
 }
 
 .btn-submit:hover:not(:disabled) {
