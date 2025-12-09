@@ -54,6 +54,9 @@ function updateThemeIcon(theme, themeIcon) {
 // Obtén la URL después de desplegar tu script (ver instrucciones en google-apps-script.js)
 const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzkXcyNjToRXmO4MkYZjDigI_IYwonPfTtUYfYXrU6YxSbie5ZrgFTcXUnhCElyncU/exec'; // Ejemplo: 'https://script.google.com/macros/s/AKfycby.../exec'
 
+// Detectar si estamos en modo personal (/pedido)
+const isPersonalMode = window.location.pathname.includes('/pedido');
+
 // Application State
 const state = {
     currentStep: 0, // Start at welcome screen
@@ -237,6 +240,10 @@ function showStep(stepNumber) {
         if (stepNumber === 4 && typeof window.updateOrderSummaryStep4 === 'function') {
             setTimeout(() => {
                 window.updateOrderSummaryStep4();
+                // Aplicar cambios del modo personal si es necesario
+                if (isPersonalMode && typeof window.applyPersonalModeStep4 === 'function') {
+                    window.applyPersonalModeStep4();
+                }
                 // Ensure scroll is at top after content is updated
                 window.scrollTo({
                     top: 0,
@@ -266,10 +273,29 @@ function showDialog(title, message) {
     const overlay = document.getElementById('dialogOverlay');
     const dialogTitle = document.getElementById('dialogTitle');
     const dialogMessage = document.getElementById('dialogMessage');
+    const dialogIcon = document.querySelector('.dialog-icon');
     
     if (overlay && dialogTitle && dialogMessage) {
-        dialogTitle.textContent = title;
+        // Extraer emoji del título si existe
+        let cleanTitle = title;
+        let icon = '⚠️';
+        
+        if (title.includes('✅') || title.includes('Éxito')) {
+            icon = '✅';
+            cleanTitle = title.replace('✅', '').replace('Éxito', 'Éxito').trim();
+        } else if (title.includes('❌') || title.includes('Error')) {
+            icon = '❌';
+            cleanTitle = title.replace('❌', '').replace('Error', 'Error').trim();
+        }
+        
+        dialogTitle.textContent = cleanTitle;
         dialogMessage.textContent = message;
+        
+        // Cambiar ícono según el tipo de mensaje
+        if (dialogIcon) {
+            dialogIcon.textContent = icon;
+        }
+        
         overlay.classList.add('active');
         
         // Prevent body scroll when dialog is open
@@ -1030,18 +1056,74 @@ function initializeStep4() {
         }
     });
 
+    // Función para aplicar cambios del modo personal en el paso 4 (disponible globalmente)
+    window.applyPersonalModeStep4 = function() {
+        // Ocultar campos que no se necesitan en modo personal
+        const phoneField = document.getElementById('phone');
+        const phoneLabel = phoneField ? phoneField.closest('.form-group') : null;
+        if (phoneLabel) phoneLabel.style.display = 'none';
+        
+        const observationsField = document.getElementById('observations');
+        const observationsLabel = observationsField ? observationsField.closest('.form-group') : null;
+        if (observationsLabel) observationsLabel.style.display = 'none';
+        
+        // Ocultar sección de QR
+        const paymentSection = document.querySelector('.payment-section');
+        if (paymentSection) {
+            const qrContainer = paymentSection.querySelector('.qr-container');
+            const paymentTitle = paymentSection.querySelector('.payment-title');
+            const paymentDescription = paymentSection.querySelector('.payment-description');
+            if (qrContainer) qrContainer.style.display = 'none';
+            if (paymentTitle) paymentTitle.style.display = 'none';
+            if (paymentDescription) paymentDescription.style.display = 'none';
+        }
+        
+        // Ocultar sección de punto de entrega
+        const deliverySection = document.querySelector('.delivery-section');
+        if (deliverySection) {
+            deliverySection.style.display = 'none';
+        }
+        
+        // Cambiar texto del botón
+        const btnSubmit = document.getElementById('btnSubmit');
+        if (btnSubmit) {
+            btnSubmit.textContent = '💾 Realizar Pedido';
+        }
+        
+        // Ocultar mensaje de advertencia
+        const warningMessage = document.querySelector('.warning-message');
+        if (warningMessage) {
+            warningMessage.style.display = 'none';
+        }
+    };
+    
+    // Aplicar cambios del modo personal al inicializar
+    if (isPersonalMode) {
+        window.applyPersonalModeStep4();
+    }
+
     orderForm.addEventListener('submit', (e) => {
         e.preventDefault();
         
         state.customerInfo.fullName = document.getElementById('fullName').value.trim();
-        state.customerInfo.phone = document.getElementById('phone').value.trim();
-        state.customerInfo.observations = document.getElementById('observations').value.trim();
+        state.customerInfo.phone = isPersonalMode ? '' : document.getElementById('phone').value.trim();
+        state.customerInfo.observations = isPersonalMode ? '' : document.getElementById('observations').value.trim();
         state.customerInfo.depositAmount = parseFloat(document.getElementById('depositAmount').value) || 0;
 
-        if (state.customerInfo.fullName && state.customerInfo.phone && state.customerInfo.depositAmount > 0) {
-            sendToWhatsApp();
+        if (isPersonalMode) {
+            // Modo personal: solo validar nombre y monto depositado
+            if (state.customerInfo.fullName && state.customerInfo.depositAmount > 0) {
+                sendPersonalOrder();
+            } else {
+                showDialog('Atención', 'Por favor, completa todos los campos obligatorios, incluyendo el monto depositado');
+            }
         } else {
-            showDialog('Atención', 'Por favor, completa todos los campos obligatorios, incluyendo el monto depositado');
+            // Modo público: validar todos los campos y enviar a WhatsApp
+            if (state.customerInfo.fullName && state.customerInfo.phone && state.customerInfo.depositAmount > 0) {
+                sendToWhatsApp();
+            } else {
+                showDialog('Atención', 'Por favor, completa todos los campos obligatorios, incluyendo el monto depositado');
+            }
         }
     });
 
@@ -1309,6 +1391,94 @@ async function sendOrderToGoogleSheets() {
     }
 }
 
+// Función para enviar pedido personal (solo a Google Sheets)
+async function sendPersonalOrder() {
+    try {
+        // Mostrar indicador de carga
+        const btnSubmit = document.getElementById('btnSubmit');
+        const originalText = btnSubmit ? btnSubmit.textContent : '';
+        if (btnSubmit) {
+            btnSubmit.disabled = true;
+            btnSubmit.textContent = '⏳ Guardando...';
+        }
+        
+        // Enviar a Google Sheets
+        const orderData = prepareOrderDataForSheets();
+        console.log('Enviando pedido personal a Google Sheets:', orderData);
+        
+        // Intentar primero sin no-cors para poder ver errores
+        try {
+            const response = await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(orderData)
+            });
+            
+            if (response.ok) {
+                const result = await response.json();
+                console.log('Respuesta de Google Sheets:', result);
+                if (result.success) {
+                    showDialog('✅ Éxito', 'Pedido registrado correctamente en Google Sheets');
+                    // Resetear formulario después de 2 segundos
+                    setTimeout(() => {
+                        if (btnSubmit) {
+                            btnSubmit.disabled = false;
+                            btnSubmit.textContent = originalText;
+                        }
+                        // Resetear formulario
+                        document.getElementById('orderForm').reset();
+                        // Volver al paso 1
+                        showStep(1);
+                    }, 2000);
+                } else {
+                    showDialog('❌ Error', 'Error al registrar el pedido: ' + (result.error || 'Error desconocido'));
+                    if (btnSubmit) {
+                        btnSubmit.disabled = false;
+                        btnSubmit.textContent = originalText;
+                    }
+                }
+            } else {
+                throw new Error(`Error HTTP: ${response.status} ${response.statusText}`);
+            }
+        } catch (fetchError) {
+            // Si hay error de CORS, intentar con no-cors
+            if (fetchError.name === 'TypeError' || fetchError.message.includes('CORS')) {
+                console.log('Error CORS detectado, intentando con modo no-cors...');
+                await fetch(GOOGLE_SHEETS_WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(orderData)
+                });
+                // Con no-cors no podemos verificar, asumimos éxito
+                showDialog('✅ Éxito', 'Pedido registrado correctamente en Google Sheets');
+                setTimeout(() => {
+                    if (btnSubmit) {
+                        btnSubmit.disabled = false;
+                        btnSubmit.textContent = originalText;
+                    }
+                    document.getElementById('orderForm').reset();
+                    showStep(1);
+                }, 2000);
+            } else {
+                throw fetchError;
+            }
+        }
+    } catch (error) {
+        console.error('❌ Error al enviar pedido personal:', error);
+        showDialog('❌ Error', 'Error al registrar el pedido. Por favor, intenta nuevamente.');
+        const btnSubmit = document.getElementById('btnSubmit');
+        if (btnSubmit) {
+            btnSubmit.disabled = false;
+            btnSubmit.textContent = '💾 Realizar Pedido';
+        }
+    }
+}
+
 function sendToWhatsApp() {
     const message = generateWhatsAppMessage();
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
@@ -1322,6 +1492,22 @@ function sendToWhatsApp() {
 
 // Initialize Welcome Screen
 function initializeWelcome() {
+    // Si estamos en modo personal, modificar la página de bienvenida
+    if (isPersonalMode) {
+        const welcomeSubtitle = document.querySelector('#step0 .welcome-subtitle');
+        const welcomeFeatures = document.querySelector('#step0 .welcome-features');
+        
+        // Cambiar el subtítulo a "Pedidos personales"
+        if (welcomeSubtitle) {
+            welcomeSubtitle.textContent = 'Pedidos personales';
+        }
+        
+        // Ocultar los cards de características
+        if (welcomeFeatures) {
+            welcomeFeatures.style.display = 'none';
+        }
+    }
+    
     const btnStart = document.getElementById('btnStart');
     if (btnStart) {
         btnStart.addEventListener('click', () => {

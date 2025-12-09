@@ -73,11 +73,21 @@ function doPost(e) {
       'En elaboración' // Entregado - valor por defecto
     ];
     
-    // Agregar la fila a la hoja
-    sheet.appendRow(row);
+    // Obtener la última fila con datos antes de agregar
+    const lastRowBefore = sheet.getLastRow();
     
-    // Obtener el número de la última fila después de agregar
-    const lastRow = sheet.getLastRow();
+    // Calcular el número de la nueva fila (después de la última fila con datos)
+    const newRowNumber = lastRowBefore + 1;
+    
+    // Insertar una nueva fila después de la última fila con datos
+    sheet.insertRowAfter(lastRowBefore);
+    
+    // Establecer los valores en la nueva fila
+    const newRowRange = sheet.getRange(newRowNumber, 1, 1, row.length);
+    newRowRange.setValues([row]);
+    
+    // Usar la nueva fila para el resto de las operaciones
+    const lastRow = newRowNumber;
     
     // Configurar el formato de las celdas para que respeten los saltos de línea
     const range = sheet.getRange(lastRow, 1, 1, 16);
