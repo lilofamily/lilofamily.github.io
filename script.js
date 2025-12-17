@@ -2273,6 +2273,13 @@ function initializeStep4() {
         if (step4Element) {
             console.log('Step 4 tiene clase active:', step4Element.classList.contains('active'));
             console.log('Step 4 display:', window.getComputedStyle(step4Element).display);
+            console.log('Step 4 innerHTML length:', step4Element.innerHTML ? step4Element.innerHTML.length : 0);
+            // Buscar todos los form-group dentro del step4 para ver qué hay
+            const allFormGroups = step4Element.querySelectorAll('.form-group');
+            console.log('Total de form-group encontrados en step4:', allFormGroups.length);
+            allFormGroups.forEach((fg, index) => {
+                console.log(`Form-group ${index}:`, fg.id || 'sin id', fg.className);
+            });
         }
         
         // Buscar los elementos dentro del step 4 (más específico)
@@ -2280,23 +2287,44 @@ function initializeStep4() {
         let deliveryTimeGroup = null;
         
         if (step4Element) {
-            deliveryDateGroup = step4Element.querySelector('#deliveryDateGroup');
-            deliveryTimeGroup = step4Element.querySelector('#deliveryTimeGroup');
+            // Intentar múltiples métodos de búsqueda
+            deliveryDateGroup = step4Element.querySelector('#deliveryDateGroup') || 
+                               step4Element.querySelector('[id="deliveryDateGroup"]') ||
+                               step4Element.getElementById ? step4Element.getElementById('deliveryDateGroup') : null;
+            deliveryTimeGroup = step4Element.querySelector('#deliveryTimeGroup') || 
+                              step4Element.querySelector('[id="deliveryTimeGroup"]') ||
+                              step4Element.getElementById ? step4Element.getElementById('deliveryTimeGroup') : null;
+            
+            console.log('Búsqueda dentro de step4:');
+            console.log('  deliveryDateGroup:', !!deliveryDateGroup);
+            console.log('  deliveryTimeGroup:', !!deliveryTimeGroup);
         }
         
         // Si no se encuentran dentro del step 4, intentar buscar globalmente
         if (!deliveryDateGroup) {
+            console.log('Buscando deliveryDateGroup globalmente...');
             deliveryDateGroup = document.getElementById('deliveryDateGroup');
+            console.log('  deliveryDateGroup global:', !!deliveryDateGroup);
         }
         if (!deliveryTimeGroup) {
+            console.log('Buscando deliveryTimeGroup globalmente...');
             deliveryTimeGroup = document.getElementById('deliveryTimeGroup');
+            console.log('  deliveryTimeGroup global:', !!deliveryTimeGroup);
         }
+        
+        // También buscar por querySelectorAll para ver si existen en algún lugar
+        const allDeliveryDateGroups = document.querySelectorAll('#deliveryDateGroup');
+        const allDeliveryTimeGroups = document.querySelectorAll('#deliveryTimeGroup');
+        console.log('Total de #deliveryDateGroup en todo el documento:', allDeliveryDateGroups.length);
+        console.log('Total de #deliveryTimeGroup en todo el documento:', allDeliveryTimeGroups.length);
         
         const deliveryDateInput = document.getElementById('deliveryDate');
         const deliveryTimeInput = document.getElementById('deliveryTime');
         
         console.log('deliveryDateGroup encontrado:', !!deliveryDateGroup);
         console.log('deliveryTimeGroup encontrado:', !!deliveryTimeGroup);
+        console.log('deliveryDateInput encontrado:', !!deliveryDateInput);
+        console.log('deliveryTimeInput encontrado:', !!deliveryTimeInput);
         
         if (deliveryDateGroup) {
             console.log('✅ Mostrando deliveryDateGroup');
