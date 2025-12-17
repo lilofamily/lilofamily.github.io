@@ -1017,6 +1017,19 @@ div.package-card.featured {
     color-scheme: dark;
 }
 
+/* Asegurar que los campos de fecha y hora sean visibles en modo privado */
+#deliveryDateGroup,
+#deliveryTimeGroup {
+    display: none;
+}
+
+#deliveryDateGroup.show,
+#deliveryTimeGroup.show {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
 .form-group textarea {
     width: 100%;
     padding: 1rem;

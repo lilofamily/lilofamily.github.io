@@ -2220,9 +2220,11 @@ function initializeStep4() {
         const deliveryTimeInput = document.getElementById('deliveryTime');
         
         if (deliveryDateGroup) {
+            deliveryDateGroup.classList.add('show');
             deliveryDateGroup.style.display = 'block';
         }
         if (deliveryTimeGroup) {
+            deliveryTimeGroup.classList.add('show');
             deliveryTimeGroup.style.display = 'block';
         }
         
