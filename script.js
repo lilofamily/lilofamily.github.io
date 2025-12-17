@@ -313,24 +313,56 @@ function showStep(stepNumber) {
                 setTimeout(() => {
                     if (isPersonalMode && typeof window.applyPersonalModeStep4 === 'function') {
                         console.log('🔧 Ejecutando applyPersonalModeStep4 en modo personal (desde showStep)');
-                        window.applyPersonalModeStep4();
+                        // Verificar que el step 4 esté visible antes de buscar los elementos
+                        const step4Element = document.getElementById('step4');
+                        if (step4Element && step4Element.classList.contains('active')) {
+                            console.log('✅ Step 4 está activo, ejecutando applyPersonalModeStep4');
+                            window.applyPersonalModeStep4();
+                        } else {
+                            console.log('⚠️ Step 4 aún no está activo, reintentando en 100ms...');
+                            setTimeout(() => {
+                                if (typeof window.applyPersonalModeStep4 === 'function') {
+                                    window.applyPersonalModeStep4();
+                                }
+                            }, 100);
+                        }
                     }
                     // Verificación adicional: forzar visibilidad de campos si están ocultos
                     if (isPersonalMode) {
-                        const dateGroup = document.getElementById('deliveryDateGroup');
-                        const timeGroup = document.getElementById('deliveryTimeGroup');
-                        if (dateGroup && window.getComputedStyle(dateGroup).display === 'none') {
-                            console.log('⚠️ deliveryDateGroup aún está oculto, forzando visibilidad');
+                        // Buscar dentro del step 4 activo primero
+                        const step4Element = document.getElementById('step4');
+                        let dateGroup = null;
+                        let timeGroup = null;
+                        
+                        if (step4Element) {
+                            dateGroup = step4Element.querySelector('#deliveryDateGroup');
+                            timeGroup = step4Element.querySelector('#deliveryTimeGroup');
+                        }
+                        
+                        // Si no se encuentran, buscar globalmente
+                        if (!dateGroup) dateGroup = document.getElementById('deliveryDateGroup');
+                        if (!timeGroup) timeGroup = document.getElementById('deliveryTimeGroup');
+                        
+                        if (dateGroup) {
+                            console.log('✅ deliveryDateGroup encontrado en verificación adicional, forzando visibilidad');
                             dateGroup.classList.add('show');
                             dateGroup.style.setProperty('display', 'block', 'important');
+                            dateGroup.style.setProperty('visibility', 'visible', 'important');
+                            dateGroup.style.setProperty('opacity', '1', 'important');
+                        } else {
+                            console.error('❌ deliveryDateGroup NO encontrado en verificación adicional');
                         }
-                        if (timeGroup && window.getComputedStyle(timeGroup).display === 'none') {
-                            console.log('⚠️ deliveryTimeGroup aún está oculto, forzando visibilidad');
+                        if (timeGroup) {
+                            console.log('✅ deliveryTimeGroup encontrado en verificación adicional, forzando visibilidad');
                             timeGroup.classList.add('show');
                             timeGroup.style.setProperty('display', 'block', 'important');
+                            timeGroup.style.setProperty('visibility', 'visible', 'important');
+                            timeGroup.style.setProperty('opacity', '1', 'important');
+                        } else {
+                            console.error('❌ deliveryTimeGroup NO encontrado en verificación adicional');
                         }
                     }
-                }, 200);
+                }, 300); // Aumentado a 300ms para dar más tiempo
                 // Ensure scroll is at top after content is updated
                 window.scrollTo({
                     top: 0,
@@ -2234,8 +2266,32 @@ function initializeStep4() {
         
         // Mostrar campos de fecha y hora para modo privado
         console.log('🔍 Buscando campos de fecha y hora...');
-        const deliveryDateGroup = document.getElementById('deliveryDateGroup');
-        const deliveryTimeGroup = document.getElementById('deliveryTimeGroup');
+        
+        // Primero verificar que el step 4 esté activo y visible
+        const step4Element = document.getElementById('step4');
+        console.log('Step 4 encontrado:', !!step4Element);
+        if (step4Element) {
+            console.log('Step 4 tiene clase active:', step4Element.classList.contains('active'));
+            console.log('Step 4 display:', window.getComputedStyle(step4Element).display);
+        }
+        
+        // Buscar los elementos dentro del step 4 (más específico)
+        let deliveryDateGroup = null;
+        let deliveryTimeGroup = null;
+        
+        if (step4Element) {
+            deliveryDateGroup = step4Element.querySelector('#deliveryDateGroup');
+            deliveryTimeGroup = step4Element.querySelector('#deliveryTimeGroup');
+        }
+        
+        // Si no se encuentran dentro del step 4, intentar buscar globalmente
+        if (!deliveryDateGroup) {
+            deliveryDateGroup = document.getElementById('deliveryDateGroup');
+        }
+        if (!deliveryTimeGroup) {
+            deliveryTimeGroup = document.getElementById('deliveryTimeGroup');
+        }
+        
         const deliveryDateInput = document.getElementById('deliveryDate');
         const deliveryTimeInput = document.getElementById('deliveryTime');
         
@@ -2325,20 +2381,9 @@ function initializeStep4() {
         }
     };
     
-    // Aplicar cambios del modo personal al inicializar
-    // Usar setTimeout para asegurar que el DOM esté listo
-    setTimeout(() => {
-        if (isPersonalMode) {
-            console.log('🔧 Modo personal detectado, aplicando cambios en step 4');
-            if (typeof window.applyPersonalModeStep4 === 'function') {
-                window.applyPersonalModeStep4();
-            } else {
-                console.error('❌ applyPersonalModeStep4 no está definida');
-            }
-        } else {
-            console.log('ℹ️ Modo público, no se aplican cambios de modo personal');
-        }
-    }, 200);
+    // NO ejecutar applyPersonalModeStep4 aquí porque el step 4 puede no estar visible todavía
+    // Se ejecutará cuando showStep(4) sea llamado y el step 4 esté activo
+    console.log('ℹ️ initializeStep4 completado. applyPersonalModeStep4 se ejecutará cuando showStep(4) sea llamado');
 
     // Deshabilitar validación HTML nativa para manejar todo con JavaScript
     if (orderForm) {
