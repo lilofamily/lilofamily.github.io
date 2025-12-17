@@ -1028,6 +1028,23 @@ div.package-card.featured {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+}
+
+/* Asegurar visibilidad en mobile también */
+@media (max-width: 768px) {
+    #deliveryDateGroup.show,
+    #deliveryTimeGroup.show {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        height: auto !important;
+        min-height: auto !important;
+        max-height: none !important;
+        margin-bottom: 1.25rem !important;
+    }
 }
 
 .form-group textarea {

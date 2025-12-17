@@ -309,9 +309,28 @@ function showStep(stepNumber) {
             setTimeout(() => {
                 window.updateOrderSummaryStep4();
                 // Aplicar cambios del modo personal si es necesario
-                if (isPersonalMode && typeof window.applyPersonalModeStep4 === 'function') {
-                    window.applyPersonalModeStep4();
-                }
+                // Usar setTimeout para asegurar que el DOM esté completamente renderizado
+                setTimeout(() => {
+                    if (isPersonalMode && typeof window.applyPersonalModeStep4 === 'function') {
+                        console.log('🔧 Ejecutando applyPersonalModeStep4 en modo personal (desde showStep)');
+                        window.applyPersonalModeStep4();
+                    }
+                    // Verificación adicional: forzar visibilidad de campos si están ocultos
+                    if (isPersonalMode) {
+                        const dateGroup = document.getElementById('deliveryDateGroup');
+                        const timeGroup = document.getElementById('deliveryTimeGroup');
+                        if (dateGroup && window.getComputedStyle(dateGroup).display === 'none') {
+                            console.log('⚠️ deliveryDateGroup aún está oculto, forzando visibilidad');
+                            dateGroup.classList.add('show');
+                            dateGroup.style.setProperty('display', 'block', 'important');
+                        }
+                        if (timeGroup && window.getComputedStyle(timeGroup).display === 'none') {
+                            console.log('⚠️ deliveryTimeGroup aún está oculto, forzando visibilidad');
+                            timeGroup.classList.add('show');
+                            timeGroup.style.setProperty('display', 'block', 'important');
+                        }
+                    }
+                }, 200);
                 // Ensure scroll is at top after content is updated
                 window.scrollTo({
                     top: 0,
@@ -2214,12 +2233,17 @@ function initializeStep4() {
         if (observationsLabel) observationsLabel.style.display = 'none';
         
         // Mostrar campos de fecha y hora para modo privado
+        console.log('🔍 Buscando campos de fecha y hora...');
         const deliveryDateGroup = document.getElementById('deliveryDateGroup');
         const deliveryTimeGroup = document.getElementById('deliveryTimeGroup');
         const deliveryDateInput = document.getElementById('deliveryDate');
         const deliveryTimeInput = document.getElementById('deliveryTime');
         
+        console.log('deliveryDateGroup encontrado:', !!deliveryDateGroup);
+        console.log('deliveryTimeGroup encontrado:', !!deliveryTimeGroup);
+        
         if (deliveryDateGroup) {
+            console.log('✅ Mostrando deliveryDateGroup');
             // Remover cualquier estilo inline que pueda estar ocultando el elemento
             deliveryDateGroup.removeAttribute('style');
             deliveryDateGroup.classList.add('show');
@@ -2227,8 +2251,16 @@ function initializeStep4() {
             deliveryDateGroup.style.setProperty('display', 'block', 'important');
             deliveryDateGroup.style.setProperty('visibility', 'visible', 'important');
             deliveryDateGroup.style.setProperty('opacity', '1', 'important');
+            deliveryDateGroup.style.setProperty('height', 'auto', 'important');
+            deliveryDateGroup.style.setProperty('min-height', 'auto', 'important');
+            console.log('deliveryDateGroup display:', window.getComputedStyle(deliveryDateGroup).display);
+            console.log('deliveryDateGroup visibility:', window.getComputedStyle(deliveryDateGroup).visibility);
+        } else {
+            console.error('❌ deliveryDateGroup NO encontrado en el DOM');
         }
+        
         if (deliveryTimeGroup) {
+            console.log('✅ Mostrando deliveryTimeGroup');
             // Remover cualquier estilo inline que pueda estar ocultando el elemento
             deliveryTimeGroup.removeAttribute('style');
             deliveryTimeGroup.classList.add('show');
@@ -2236,6 +2268,12 @@ function initializeStep4() {
             deliveryTimeGroup.style.setProperty('display', 'block', 'important');
             deliveryTimeGroup.style.setProperty('visibility', 'visible', 'important');
             deliveryTimeGroup.style.setProperty('opacity', '1', 'important');
+            deliveryTimeGroup.style.setProperty('height', 'auto', 'important');
+            deliveryTimeGroup.style.setProperty('min-height', 'auto', 'important');
+            console.log('deliveryTimeGroup display:', window.getComputedStyle(deliveryTimeGroup).display);
+            console.log('deliveryTimeGroup visibility:', window.getComputedStyle(deliveryTimeGroup).visibility);
+        } else {
+            console.error('❌ deliveryTimeGroup NO encontrado en el DOM');
         }
         
         // Configurar datepicker: establecer fecha mínima como hoy
@@ -2290,9 +2328,19 @@ function initializeStep4() {
     };
     
     // Aplicar cambios del modo personal al inicializar
-    if (isPersonalMode) {
-        window.applyPersonalModeStep4();
-    }
+    // Usar setTimeout para asegurar que el DOM esté listo
+    setTimeout(() => {
+        if (isPersonalMode) {
+            console.log('🔧 Modo personal detectado, aplicando cambios en step 4');
+            if (typeof window.applyPersonalModeStep4 === 'function') {
+                window.applyPersonalModeStep4();
+            } else {
+                console.error('❌ applyPersonalModeStep4 no está definida');
+            }
+        } else {
+            console.log('ℹ️ Modo público, no se aplican cambios de modo personal');
+        }
+    }, 200);
 
     // Deshabilitar validación HTML nativa para manejar todo con JavaScript
     if (orderForm) {
