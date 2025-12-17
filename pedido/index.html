@@ -444,6 +444,19 @@
     </div>
 
     <script src="/script.js"></script>
+    <style>
+        /* Estilos inline para forzar visibilidad de campos fecha/hora en esta página */
+        /* Estos estilos tienen la máxima prioridad y se aplican directamente en el HTML */
+        #deliveryDateGroup,
+        #deliveryTimeGroup {
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            height: auto !important;
+            min-height: auto !important;
+            max-height: none !important;
+        }
+    </style>
     <script>
         // Script inline para asegurar que los campos se muestren en modo personal
         // Se ejecuta inmediatamente y de forma continua
@@ -463,21 +476,31 @@
                     console.log('deliveryTimeGroup encontrado:', !!deliveryTimeGroup);
                     
                     if (deliveryDateGroup) {
+                        // NO remover style, solo asegurar que tenga los estilos correctos
                         deliveryDateGroup.classList.add('show');
                         deliveryDateGroup.style.setProperty('display', 'block', 'important');
                         deliveryDateGroup.style.setProperty('visibility', 'visible', 'important');
                         deliveryDateGroup.style.setProperty('opacity', '1', 'important');
+                        deliveryDateGroup.style.setProperty('height', 'auto', 'important');
+                        deliveryDateGroup.style.setProperty('min-height', 'auto', 'important');
                         console.log('✅ deliveryDateGroup mostrado. Display:', window.getComputedStyle(deliveryDateGroup).display);
+                        console.log('✅ deliveryDateGroup visibility:', window.getComputedStyle(deliveryDateGroup).visibility);
+                        console.log('✅ deliveryDateGroup opacity:', window.getComputedStyle(deliveryDateGroup).opacity);
                     } else {
                         console.error('❌ deliveryDateGroup NO encontrado');
                     }
                     
                     if (deliveryTimeGroup) {
+                        // NO remover style, solo asegurar que tenga los estilos correctos
                         deliveryTimeGroup.classList.add('show');
                         deliveryTimeGroup.style.setProperty('display', 'block', 'important');
                         deliveryTimeGroup.style.setProperty('visibility', 'visible', 'important');
                         deliveryTimeGroup.style.setProperty('opacity', '1', 'important');
+                        deliveryTimeGroup.style.setProperty('height', 'auto', 'important');
+                        deliveryTimeGroup.style.setProperty('min-height', 'auto', 'important');
                         console.log('✅ deliveryTimeGroup mostrado. Display:', window.getComputedStyle(deliveryTimeGroup).display);
+                        console.log('✅ deliveryTimeGroup visibility:', window.getComputedStyle(deliveryTimeGroup).visibility);
+                        console.log('✅ deliveryTimeGroup opacity:', window.getComputedStyle(deliveryTimeGroup).opacity);
                     } else {
                         console.error('❌ deliveryTimeGroup NO encontrado');
                     }
@@ -511,13 +534,17 @@
                 if (document.body) {
                     observer.observe(document.body, {
                         childList: true,
-                        subtree: true
+                        subtree: true,
+                        attributes: true,
+                        attributeFilter: ['style', 'class']
                     });
                 } else {
                     document.addEventListener('DOMContentLoaded', function() {
                         observer.observe(document.body, {
                             childList: true,
-                            subtree: true
+                            subtree: true,
+                            attributes: true,
+                            attributeFilter: ['style', 'class']
                         });
                     });
                 }
