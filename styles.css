@@ -1018,11 +1018,13 @@ div.package-card.featured {
 }
 
 /* Asegurar que los campos de fecha y hora sean visibles en modo privado */
+/* Por defecto ocultos en la página pública, pero visibles en pedido/index.html */
 #deliveryDateGroup,
 #deliveryTimeGroup {
     display: none;
 }
 
+/* Cuando tienen la clase show, siempre mostrarlos */
 #deliveryDateGroup.show,
 #deliveryTimeGroup.show {
     display: block !important;

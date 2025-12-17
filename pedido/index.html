@@ -355,12 +355,12 @@
                         <textarea id="observations" name="observations" rows="4" placeholder="Escribe aquí cualquier comentario, pregunta o observación sobre tu pedido..."></textarea>
                     </div>
                     
-                    <!-- Campos de fecha y hora para modo privado (ocultos por defecto) -->
-                    <div class="form-group" id="deliveryDateGroup">
+                    <!-- Campos de fecha y hora para modo privado (siempre visibles en esta página) -->
+                    <div class="form-group" id="deliveryDateGroup" style="display: block !important; visibility: visible !important;">
                         <label for="deliveryDate">Fecha de Entrega *</label>
                         <input type="date" id="deliveryDate" name="deliveryDate" required min="" style="font-size: 1rem; padding: 0.9rem; width: 100%; border: 2px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
                     </div>
-                    <div class="form-group" id="deliveryTimeGroup">
+                    <div class="form-group" id="deliveryTimeGroup" style="display: block !important; visibility: visible !important;">
                         <label for="deliveryTime">Hora de Entrega *</label>
                         <input type="time" id="deliveryTime" name="deliveryTime" required style="font-size: 1rem; padding: 0.9rem; width: 100%; border: 2px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
                     </div>
@@ -443,7 +443,87 @@
         </div>
     </div>
 
-    <script src="../script.js"></script>
+    <script src="/script.js"></script>
+    <script>
+        // Script inline para asegurar que los campos se muestren en modo personal
+        // Se ejecuta inmediatamente y de forma continua
+        (function() {
+            function showDeliveryFields() {
+                const isPersonalMode = window.location.pathname.includes('/pedido') || 
+                                       window.location.pathname.includes('pedido.html') ||
+                                       window.location.href.includes('pedido.html');
+                
+                console.log('🔍 showDeliveryFields ejecutado. isPersonalMode:', isPersonalMode);
+                
+                if (isPersonalMode) {
+                    const deliveryDateGroup = document.getElementById('deliveryDateGroup');
+                    const deliveryTimeGroup = document.getElementById('deliveryTimeGroup');
+                    
+                    console.log('deliveryDateGroup encontrado:', !!deliveryDateGroup);
+                    console.log('deliveryTimeGroup encontrado:', !!deliveryTimeGroup);
+                    
+                    if (deliveryDateGroup) {
+                        deliveryDateGroup.classList.add('show');
+                        deliveryDateGroup.style.setProperty('display', 'block', 'important');
+                        deliveryDateGroup.style.setProperty('visibility', 'visible', 'important');
+                        deliveryDateGroup.style.setProperty('opacity', '1', 'important');
+                        console.log('✅ deliveryDateGroup mostrado. Display:', window.getComputedStyle(deliveryDateGroup).display);
+                    } else {
+                        console.error('❌ deliveryDateGroup NO encontrado');
+                    }
+                    
+                    if (deliveryTimeGroup) {
+                        deliveryTimeGroup.classList.add('show');
+                        deliveryTimeGroup.style.setProperty('display', 'block', 'important');
+                        deliveryTimeGroup.style.setProperty('visibility', 'visible', 'important');
+                        deliveryTimeGroup.style.setProperty('opacity', '1', 'important');
+                        console.log('✅ deliveryTimeGroup mostrado. Display:', window.getComputedStyle(deliveryTimeGroup).display);
+                    } else {
+                        console.error('❌ deliveryTimeGroup NO encontrado');
+                    }
+                }
+            }
+            
+            // Ejecutar inmediatamente
+            showDeliveryFields();
+            
+            // Ejecutar cuando el DOM esté listo
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', showDeliveryFields);
+            } else {
+                showDeliveryFields();
+            }
+            
+            // Ejecutar múltiples veces para asegurar
+            setTimeout(showDeliveryFields, 50);
+            setTimeout(showDeliveryFields, 100);
+            setTimeout(showDeliveryFields, 300);
+            setTimeout(showDeliveryFields, 500);
+            setTimeout(showDeliveryFields, 1000);
+            setTimeout(showDeliveryFields, 2000);
+            
+            // Observar cambios en el DOM (por si se navega dinámicamente)
+            if (typeof MutationObserver !== 'undefined') {
+                const observer = new MutationObserver(function(mutations) {
+                    showDeliveryFields();
+                });
+                
+                if (document.body) {
+                    observer.observe(document.body, {
+                        childList: true,
+                        subtree: true
+                    });
+                } else {
+                    document.addEventListener('DOMContentLoaded', function() {
+                        observer.observe(document.body, {
+                            childList: true,
+                            subtree: true
+                        });
+                    });
+                }
+            }
+        })();
+    </script>
 </body>
 </html>
 
