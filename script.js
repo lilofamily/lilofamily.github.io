@@ -2220,12 +2220,22 @@ function initializeStep4() {
         const deliveryTimeInput = document.getElementById('deliveryTime');
         
         if (deliveryDateGroup) {
+            // Remover cualquier estilo inline que pueda estar ocultando el elemento
+            deliveryDateGroup.removeAttribute('style');
             deliveryDateGroup.classList.add('show');
-            deliveryDateGroup.style.display = 'block';
+            // Forzar visibilidad con múltiples métodos
+            deliveryDateGroup.style.setProperty('display', 'block', 'important');
+            deliveryDateGroup.style.setProperty('visibility', 'visible', 'important');
+            deliveryDateGroup.style.setProperty('opacity', '1', 'important');
         }
         if (deliveryTimeGroup) {
+            // Remover cualquier estilo inline que pueda estar ocultando el elemento
+            deliveryTimeGroup.removeAttribute('style');
             deliveryTimeGroup.classList.add('show');
-            deliveryTimeGroup.style.display = 'block';
+            // Forzar visibilidad con múltiples métodos
+            deliveryTimeGroup.style.setProperty('display', 'block', 'important');
+            deliveryTimeGroup.style.setProperty('visibility', 'visible', 'important');
+            deliveryTimeGroup.style.setProperty('opacity', '1', 'important');
         }
         
         // Configurar datepicker: establecer fecha mínima como hoy
