@@ -52,7 +52,7 @@ function updateThemeIcon(theme, themeIcon) {
 // Google Sheets Configuration
 // IMPORTANTE: Reemplaza esta URL con la URL de tu Google Apps Script Web App
 // Obtén la URL después de desplegar tu script (ver instrucciones en google-apps-script.js)
-const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxiBKZ17ptJ8abcfxXZWWwfOI-oOQxs1YL6rWUrRPU3nuyk2gLmh08ctZn5OD2zPgk/exec';
+const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxT7lPaOzacrIBPOQUcjDHwDOhFk0iJOmaTsZtetpY4krP-4E5db-Xs7juL8oU-JNk/exec';
 
 // Detectar si estamos en modo personal (/pedido o pedido.html)
 const isPersonalMode = window.location.pathname.includes('/pedido') || 
@@ -73,12 +73,14 @@ const state = {
     jengibrePackages: {}, // {packageId: count} - DEPRECATED: j6 now uses jengibrePackagesCount
     jengibrePackagesCount: {}, // {packageId: count} - cantidad de paquetes de jengibre seleccionados (j1, j2, j4, j6)
     regularPackagesCount: {}, // {packageId: count} - cantidad de paquetes regulares seleccionados (1, 4, 8, 12)
-    customerInfo: {
-        fullName: '',
-        phone: '',
-        observations: '',
-        depositAmount: 0
-    }
+        customerInfo: {
+            fullName: '',
+            phone: '',
+            observations: '',
+            depositAmount: 0,
+            deliveryDate: '',
+            deliveryTime: ''
+        }
 };
 
 // Package Data
@@ -2211,6 +2213,40 @@ function initializeStep4() {
         }
         if (observationsLabel) observationsLabel.style.display = 'none';
         
+        // Mostrar campos de fecha y hora para modo privado
+        const deliveryDateGroup = document.getElementById('deliveryDateGroup');
+        const deliveryTimeGroup = document.getElementById('deliveryTimeGroup');
+        const deliveryDateInput = document.getElementById('deliveryDate');
+        const deliveryTimeInput = document.getElementById('deliveryTime');
+        
+        if (deliveryDateGroup) {
+            deliveryDateGroup.style.display = 'block';
+        }
+        if (deliveryTimeGroup) {
+            deliveryTimeGroup.style.display = 'block';
+        }
+        
+        // Configurar datepicker: establecer fecha mínima como hoy
+        if (deliveryDateInput) {
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const minDate = `${year}-${month}-${day}`;
+            deliveryDateInput.setAttribute('min', minDate);
+            
+            // En mobile, asegurar que el input tenga el tamaño correcto para el picker
+            deliveryDateInput.style.fontSize = '1rem';
+            deliveryDateInput.style.padding = '0.9rem';
+        }
+        
+        // Configurar timepicker para mobile
+        if (deliveryTimeInput) {
+            // En mobile, asegurar que el input tenga el tamaño correcto para el picker
+            deliveryTimeInput.style.fontSize = '1rem';
+            deliveryTimeInput.style.padding = '0.9rem';
+        }
+        
         // Ocultar sección de QR
         const paymentSection = document.querySelector('.payment-section');
         if (paymentSection) {
@@ -2260,6 +2296,14 @@ function initializeStep4() {
         state.customerInfo.phone = isPersonalMode ? 'PRIVADO' : document.getElementById('phone').value.trim();
         state.customerInfo.observations = isPersonalMode ? '' : document.getElementById('observations').value.trim();
         state.customerInfo.depositAmount = parseFloat(document.getElementById('depositAmount').value) || 0;
+        // Capturar fecha y hora solo en modo privado
+        if (isPersonalMode) {
+            state.customerInfo.deliveryDate = document.getElementById('deliveryDate') ? document.getElementById('deliveryDate').value : '';
+            state.customerInfo.deliveryTime = document.getElementById('deliveryTime') ? document.getElementById('deliveryTime').value : '';
+        } else {
+            state.customerInfo.deliveryDate = '';
+            state.customerInfo.deliveryTime = '';
+        }
 
         console.log('Datos capturados:', {
             fullName: state.customerInfo.fullName,
@@ -2268,7 +2312,7 @@ function initializeStep4() {
         });
 
         if (isPersonalMode) {
-            // Modo personal: solo validar nombre y monto depositado
+            // Modo personal: validar nombre, monto depositado, fecha y hora
             console.log('Validando modo personal...');
             
             // Validación específica y amigable
@@ -2278,6 +2322,12 @@ function initializeStep4() {
             }
             if (state.customerInfo.depositAmount === undefined || state.customerInfo.depositAmount === null || state.customerInfo.depositAmount === '' || isNaN(state.customerInfo.depositAmount) || state.customerInfo.depositAmount < 0) {
                 missingFields.push('Monto depositado');
+            }
+            if (!state.customerInfo.deliveryDate) {
+                missingFields.push('Fecha de Entrega');
+            }
+            if (!state.customerInfo.deliveryTime) {
+                missingFields.push('Hora de Entrega');
             }
             
             if (missingFields.length > 0) {
@@ -2657,7 +2707,9 @@ function prepareOrderDataForSheets() {
         depositAmount: depositAmount,
         remainingAmount: remainingAmount,
         totalPrice: totalPrice,
-        observations: state.customerInfo.observations || ''
+        observations: state.customerInfo.observations || '',
+        deliveryDate: state.customerInfo.deliveryDate || '',
+        deliveryTime: state.customerInfo.deliveryTime || ''
     };
 }
 
@@ -2793,7 +2845,9 @@ async function sendPersonalOrder() {
                             fullName: '',
                             phone: '',
                             observations: '',
-                            depositAmount: 0
+                            depositAmount: 0,
+                            deliveryDate: '',
+                            deliveryTime: ''
                         };
                         // Volver a la página principal (step 0)
                         showStep(0);

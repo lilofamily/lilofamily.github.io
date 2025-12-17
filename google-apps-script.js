@@ -32,62 +32,7 @@ function doPost(e) {
     // Obtener la hoja activa (o cambiar 'Sheet1' por el nombre de tu hoja)
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
     
-    // Verificar si la hoja está vacía o si falta la columna "Jengibres de Regalo"
-    const firstCheckRow = sheet.getLastRow();
-    const lastColumn = sheet.getLastColumn();
-    const headers = sheet.getRange(1, 1, 1, lastColumn).getValues()[0];
-    const jengibresRegaloIndex = headers.indexOf('Jengibres de Regalo');
-    
-    if (firstCheckRow === 0) {
-      // Si la hoja está vacía, agregar todos los encabezados
-      sheet.appendRow([
-        'Fecha y Hora',
-        'Nombre Completo',
-        'Teléfono',
-        'Paquetes Regulares',
-        'Cantidad Regular',
-        'Diseños Seleccionados',
-        'Jengibres de Regalo',
-        'Paquetes Jengibre',
-        'Cantidad Jengibre',
-        'Monto Depositado',
-        'Monto Restante',
-        'Total',
-        'Observaciones',
-        'Confirmado',
-        'Fecha Entrega',
-        'Hora Entrega',
-        'Entregado'
-      ]);
-      
-      // Formatear encabezados
-      const headerRange = sheet.getRange(1, 1, 1, 17);
-      headerRange.setFontWeight('bold');
-      headerRange.setBackground('#4285f4');
-      headerRange.setFontColor('#ffffff');
-    } else if (jengibresRegaloIndex === -1) {
-      // Si la hoja tiene datos pero falta la columna "Jengibres de Regalo", agregarla
-      // Buscar la posición después de "Diseños Seleccionados"
-      const disenosIndex = headers.indexOf('Diseños Seleccionados');
-      if (disenosIndex !== -1) {
-        // Insertar la columna después de "Diseños Seleccionados" (columna 7)
-        sheet.insertColumnAfter(disenosIndex + 1);
-        // Agregar el encabezado
-        sheet.getRange(1, disenosIndex + 2).setValue('Jengibres de Regalo');
-        // Formatear el nuevo encabezado
-        const newHeaderCell = sheet.getRange(1, disenosIndex + 2);
-        newHeaderCell.setFontWeight('bold');
-        newHeaderCell.setBackground('#4285f4');
-        newHeaderCell.setFontColor('#ffffff');
-        
-        // Agregar valores por defecto para todas las filas existentes
-        const dataRows = sheet.getLastRow() - 1; // Excluir la fila de encabezados
-        if (dataRows > 0) {
-          const newColumnRange = sheet.getRange(2, disenosIndex + 2, dataRows, 1);
-          newColumnRange.setValue('Ninguno');
-        }
-      }
-    }
+    // No crear columnas - asumir que ya existen en el orden correcto
     
     // Parsear los datos recibidos
     let data;
@@ -105,24 +50,81 @@ function doPost(e) {
     // Preparar los datos para insertar
     // Usar saltos de línea para que se vea mejor en la hoja
     const currentDate = new Date();
+    
+    // Procesar fecha de entrega (si viene del formulario, usarla; si no, usar fecha actual)
+    let deliveryDateValue = currentDate;
+    if (data.deliveryDate) {
+      // data.deliveryDate viene en formato YYYY-MM-DD
+      const deliveryDateParts = data.deliveryDate.split('-');
+      if (deliveryDateParts.length === 3) {
+        deliveryDateValue = new Date(
+          parseInt(deliveryDateParts[0]), // año
+          parseInt(deliveryDateParts[1]) - 1, // mes (0-indexed)
+          parseInt(deliveryDateParts[2]) // día
+        );
+      }
+    }
+    
+    // Procesar hora de entrega (si viene del formulario, combinarla con la fecha; si no, usar hora actual)
+    let deliveryTimeValue = currentDate;
+    if (data.deliveryTime && data.deliveryDate) {
+      // data.deliveryTime viene en formato HH:MM
+      const timeParts = data.deliveryTime.split(':');
+      if (timeParts.length === 2) {
+        deliveryTimeValue = new Date(deliveryDateValue);
+        deliveryTimeValue.setHours(parseInt(timeParts[0]));
+        deliveryTimeValue.setMinutes(parseInt(timeParts[1]));
+        deliveryTimeValue.setSeconds(0);
+        deliveryTimeValue.setMilliseconds(0);
+      }
+    } else if (data.deliveryTime) {
+      // Si solo viene la hora, usar la fecha actual
+      const timeParts = data.deliveryTime.split(':');
+      if (timeParts.length === 2) {
+        deliveryTimeValue = new Date(currentDate);
+        deliveryTimeValue.setHours(parseInt(timeParts[0]));
+        deliveryTimeValue.setMinutes(parseInt(timeParts[1]));
+        deliveryTimeValue.setSeconds(0);
+        deliveryTimeValue.setMilliseconds(0);
+      }
+    }
+    
+    // Orden exacto de columnas según el Google Sheet:
+    // 1. Fecha y Hora
+    // 2. Monto Cancelado
+    // 3. Monto Restante
+    // 4. Total
+    // 5. Fecha Entrega
+    // 6. Hora Entrega
+    // 7. Entregado
+    // 8. Nombre Completo
+    // 9. Teléfono
+    // 10. Paquetes Regulares
+    // 11. Cantidad Regular
+    // 12. Diseños Seleccionados
+    // 13. Jengibres de Regalo
+    // 14. Paquetes Jengibre
+    // 15. Cantidad Jengibre
+    // 16. Observaciones
+    // 17. Confirmado
     const row = [
-      currentDate, // Fecha y Hora
-      data.fullName || '',
-      data.phone || '',
-      data.regularPackages || '', // Ya viene con saltos de línea desde script.js
-      data.regularQuantity || 0,
-      data.designs || '', // Ya viene con saltos de línea desde script.js
-      data.bonusJengibres || 'Ninguno', // Jengibres de Regalo
-      data.jengibrePackages || '', // Ya viene con saltos de línea desde script.js
-      data.jengibreQuantity || 0,
-      data.depositAmount || 0,
-      data.remainingAmount || 0,
-      data.totalPrice || 0,
-      data.observations || '',
-      false, // Confirmado - checkbox (false por defecto)
-      currentDate, // Fecha Entrega - fecha de hoy
-      currentDate, // Hora Entrega - hora actual (se formateará después)
-      'En elaboración' // Entregado - valor por defecto
+      currentDate, // 1. Fecha y Hora
+      data.depositAmount || 0, // 2. Monto Cancelado
+      data.remainingAmount || 0, // 3. Monto Restante
+      data.totalPrice || 0, // 4. Total
+      deliveryDateValue, // 5. Fecha Entrega
+      deliveryTimeValue, // 6. Hora Entrega
+      'En elaboración', // 7. Entregado
+      data.fullName || '', // 8. Nombre Completo
+      data.phone || '', // 9. Teléfono
+      data.regularPackages || '', // 10. Paquetes Regulares
+      data.regularQuantity || 0, // 11. Cantidad Regular
+      data.designs || '', // 12. Diseños Seleccionados
+      data.bonusJengibres || 'Ninguno', // 13. Jengibres de Regalo
+      data.jengibrePackages || '', // 14. Paquetes Jengibre
+      data.jengibreQuantity || 0, // 15. Cantidad Jengibre
+      data.observations || '', // 16. Observaciones
+      false // 17. Confirmado
     ];
     
     // Obtener la última fila con datos antes de agregar
@@ -135,6 +137,8 @@ function doPost(e) {
     sheet.insertRowAfter(lastRowBefore);
     
     // Establecer los valores en la nueva fila
+    // IMPORTANTE: El orden del array debe coincidir exactamente con el orden de las columnas en el Google Sheet
+    console.log('Insertando fila con', row.length, 'columnas en el orden especificado');
     const newRowRange = sheet.getRange(newRowNumber, 1, 1, row.length);
     newRowRange.setValues([row]);
     
@@ -154,30 +158,61 @@ function doPost(e) {
     const rowHeight = cellHeight + (maxLines - 1) * 20;
     sheet.setRowHeight(lastRow, rowHeight);
     
-    // Configurar columna "Confirmado" (columna 14) - Checkbox
-    const confirmadoCell = sheet.getRange(lastRow, 14);
-    confirmadoCell.insertCheckboxes();
-    confirmadoCell.setValue(false); // Por defecto sin marcar
-    
-    // Configurar columna "Fecha Entrega" (columna 15) - Campo de fecha
-    const fechaEntregaCell = sheet.getRange(lastRow, 15);
-    fechaEntregaCell.setValue(currentDate);
+    // Configurar columna "Fecha Entrega" (columna 5) - Campo de fecha
+    const fechaEntregaCell = sheet.getRange(lastRow, 5);
+    fechaEntregaCell.setValue(deliveryDateValue);
     fechaEntregaCell.setNumberFormat('dd/mm/yyyy'); // Formato de fecha
     
-    // Configurar columna "Hora Entrega" (columna 16) - Campo de hora
-    const horaEntregaCell = sheet.getRange(lastRow, 16);
-    horaEntregaCell.setValue(currentDate);
+    // Configurar columna "Hora Entrega" (columna 6) - Campo de hora
+    const horaEntregaCell = sheet.getRange(lastRow, 6);
+    horaEntregaCell.setValue(deliveryTimeValue);
     horaEntregaCell.setNumberFormat('hh:mm'); // Formato de hora (24 horas)
     // Alternativa para formato 12 horas: 'hh:mm AM/PM'
     
-    // Configurar columna "Entregado" (columna 17) - Dropdown con opciones
-    const entregadoCell = sheet.getRange(lastRow, 17);
+    // Configurar columna "Entregado" (columna 7) - Dropdown con opciones
+    const entregadoCell = sheet.getRange(lastRow, 7);
     const validationRule = SpreadsheetApp.newDataValidation()
       .requireValueInList(['SI', 'No', 'En elaboración'], true)
       .setAllowInvalid(false)
       .build();
     entregadoCell.setDataValidation(validationRule);
     entregadoCell.setValue('En elaboración'); // Valor por defecto
+    
+    // Configurar columna "Confirmado" (columna 17) - Checkbox
+    const confirmadoCell = sheet.getRange(lastRow, 17);
+    confirmadoCell.insertCheckboxes();
+    confirmadoCell.setValue(false); // Por defecto sin marcar
+    
+    // Ordenar automáticamente por "Fecha y Hora" (columna 1) - más antiguos arriba, más recientes abajo
+    try {
+      const lastDataRow = sheet.getLastRow();
+      console.log('Última fila con datos:', lastDataRow);
+      
+      if (lastDataRow > 1) { // Solo ordenar si hay más de una fila (encabezado + datos)
+        const numColumns = sheet.getLastColumn();
+        console.log('Número de columnas:', numColumns);
+        
+        // Obtener el rango de datos (excluyendo el encabezado en la fila 1)
+        // Fila 2 hasta la última fila, todas las columnas
+        const numDataRows = lastDataRow - 1; // Excluir la fila de encabezado
+        const dataRange = sheet.getRange(2, 1, numDataRows, numColumns);
+        
+        console.log('Rango a ordenar: fila 2 a', lastDataRow, ', columnas 1 a', numColumns);
+        
+        // Ordenar por la columna 1 (Fecha y Hora) en orden ascendente (más antiguos primero)
+        // El parámetro column es relativo al rango, no absoluto de la hoja
+        // Usar la sintaxis con objeto para mayor compatibilidad
+        dataRange.sort([{column: 1, ascending: true}]);
+        
+        console.log('✅ Datos ordenados automáticamente por Fecha y Hora (más antiguos arriba)');
+      } else {
+        console.log('No hay suficientes filas para ordenar (solo encabezado)');
+      }
+    } catch (sortError) {
+      console.error('⚠️ Error al ordenar datos:', sortError.toString());
+      console.error('Stack trace:', sortError.stack);
+      // No lanzar el error para que el pedido se guarde igual
+    }
     
     // Enviar notificación por email
     try {
@@ -277,7 +312,7 @@ function sendNotificationEmail(data, rowNumber) {
   
   emailBody += '<h3 style="color: #4285f4;">💰 Información de Pago</h3>';
   emailBody += '<ul>';
-  emailBody += '<li><strong>Monto Depositado:</strong> ' + (data && data.depositAmount ? data.depositAmount : 0) + ' Bs.</li>';
+  emailBody += '<li><strong>Monto Cancelado:</strong> ' + (data && data.depositAmount ? data.depositAmount : 0) + ' Bs.</li>';
   emailBody += '<li><strong>Monto Restante:</strong> ' + (data && data.remainingAmount ? data.remainingAmount : 0) + ' Bs.</li>';
   emailBody += '<li><strong>Total del Pedido:</strong> <span style="color: #c41e3a; font-size: 1.2em; font-weight: bold;">' + (data && data.totalPrice ? data.totalPrice : 0) + ' Bs.</span></li>';
   emailBody += '</ul>';

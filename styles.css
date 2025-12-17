@@ -962,6 +962,61 @@ div.package-card.featured {
     color: var(--text-secondary);
 }
 
+/* Estilos específicos para inputs de fecha y hora */
+.form-group input[type="date"],
+.form-group input[type="time"] {
+    color: var(--text-primary);
+    background-color: var(--bg-primary);
+    border: 2px solid var(--border-color);
+}
+
+/* Asegurar que los iconos de fecha y hora sean visibles en dark theme */
+/* Chrome, Safari, Edge */
+.form-group input[type="date"]::-webkit-calendar-picker-indicator,
+.form-group input[type="time"]::-webkit-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 1;
+    filter: brightness(0) invert(0);
+}
+
+/* Para dark theme, invertir los iconos para que sean blancos */
+[data-theme="dark"] .form-group input[type="date"]::-webkit-calendar-picker-indicator,
+[data-theme="dark"] .form-group input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: brightness(0) invert(1);
+    opacity: 1;
+}
+
+/* Asegurar que el texto del input sea visible */
+.form-group input[type="date"]:not(:placeholder-shown),
+.form-group input[type="time"]:not(:placeholder-shown) {
+    color: var(--text-primary);
+}
+
+/* Estilos para Firefox */
+.form-group input[type="date"]::-moz-calendar-picker-indicator,
+.form-group input[type="time"]::-moz-calendar-picker-indicator {
+    cursor: pointer;
+    opacity: 1;
+    filter: brightness(0) invert(0);
+}
+
+[data-theme="dark"] .form-group input[type="date"]::-moz-calendar-picker-indicator,
+[data-theme="dark"] .form-group input[type="time"]::-moz-calendar-picker-indicator {
+    filter: brightness(0) invert(1) !important;
+    opacity: 1 !important;
+}
+
+/* Estilos adicionales para asegurar visibilidad */
+.form-group input[type="date"],
+.form-group input[type="time"] {
+    color-scheme: light;
+}
+
+[data-theme="dark"] .form-group input[type="date"],
+[data-theme="dark"] .form-group input[type="time"] {
+    color-scheme: dark;
+}
+
 .form-group textarea {
     width: 100%;
     padding: 1rem;
@@ -1714,6 +1769,48 @@ div.package-card.featured {
     .form-group input {
         padding: 0.9rem;
         font-size: 0.95rem;
+    }
+    
+    /* Asegurar que los inputs de fecha y hora funcionen bien en mobile */
+    .form-group input[type="date"],
+    .form-group input[type="time"] {
+        font-size: 1rem !important;
+        padding: 0.9rem !important;
+        min-height: 48px; /* Tamaño mínimo táctil recomendado para mobile */
+        -webkit-appearance: none;
+        -moz-appearance: textfield;
+        appearance: none;
+    }
+    
+    /* Asegurar que los iconos sean visibles y táctiles en mobile */
+    .form-group input[type="date"]::-webkit-calendar-picker-indicator,
+    .form-group input[type="time"]::-webkit-calendar-picker-indicator {
+        width: 24px;
+        height: 24px;
+        padding: 4px;
+        cursor: pointer;
+        opacity: 1;
+    }
+    
+    [data-theme="dark"] .form-group input[type="date"]::-webkit-calendar-picker-indicator,
+    [data-theme="dark"] .form-group input[type="time"]::-webkit-calendar-picker-indicator {
+        filter: brightness(0) invert(1) !important;
+        opacity: 1 !important;
+    }
+    
+    .form-group input[type="date"]::-moz-calendar-picker-indicator,
+    .form-group input[type="time"]::-moz-calendar-picker-indicator {
+        width: 24px;
+        height: 24px;
+        padding: 4px;
+        cursor: pointer;
+        opacity: 1;
+    }
+    
+    [data-theme="dark"] .form-group input[type="date"]::-moz-calendar-picker-indicator,
+    [data-theme="dark"] .form-group input[type="time"]::-moz-calendar-picker-indicator {
+        filter: brightness(0) invert(1) !important;
+        opacity: 1 !important;
     }
 
     .form-group textarea {
