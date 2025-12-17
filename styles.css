@@ -1025,7 +1025,9 @@ div.package-card.featured {
     display: none;
 }
 
-/* Cuando tienen la clase show O cuando tienen estilos inline, siempre mostrarlos */
+/* Cuando están dentro del step4 activo Y tienen estilos inline, mostrarlos */
+.step#step4.active #deliveryDateGroup[style*="display: block"],
+.step#step4.active #deliveryTimeGroup[style*="display: block"],
 #deliveryDateGroup.show,
 #deliveryTimeGroup.show,
 #deliveryDateGroup[style*="display: block"],
@@ -1040,6 +1042,8 @@ div.package-card.featured {
 
 /* Asegurar visibilidad en mobile también */
 @media (max-width: 768px) {
+    .step#step4.active #deliveryDateGroup[style*="display: block"],
+    .step#step4.active #deliveryTimeGroup[style*="display: block"],
     #deliveryDateGroup.show,
     #deliveryTimeGroup.show,
     #deliveryDateGroup[style*="display: block"],
