@@ -2244,10 +2244,9 @@ function initializeStep4() {
         
         if (deliveryDateGroup) {
             console.log('✅ Mostrando deliveryDateGroup');
-            // Remover cualquier estilo inline que pueda estar ocultando el elemento
-            deliveryDateGroup.removeAttribute('style');
+            // NO remover el atributo style, solo agregar/actualizar los estilos necesarios
             deliveryDateGroup.classList.add('show');
-            // Forzar visibilidad con múltiples métodos
+            // Forzar visibilidad con múltiples métodos - NO remover style, solo actualizar
             deliveryDateGroup.style.setProperty('display', 'block', 'important');
             deliveryDateGroup.style.setProperty('visibility', 'visible', 'important');
             deliveryDateGroup.style.setProperty('opacity', '1', 'important');
@@ -2261,10 +2260,9 @@ function initializeStep4() {
         
         if (deliveryTimeGroup) {
             console.log('✅ Mostrando deliveryTimeGroup');
-            // Remover cualquier estilo inline que pueda estar ocultando el elemento
-            deliveryTimeGroup.removeAttribute('style');
+            // NO remover el atributo style, solo agregar/actualizar los estilos necesarios
             deliveryTimeGroup.classList.add('show');
-            // Forzar visibilidad con múltiples métodos
+            // Forzar visibilidad con múltiples métodos - NO remover style, solo actualizar
             deliveryTimeGroup.style.setProperty('display', 'block', 'important');
             deliveryTimeGroup.style.setProperty('visibility', 'visible', 'important');
             deliveryTimeGroup.style.setProperty('opacity', '1', 'important');

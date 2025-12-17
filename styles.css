@@ -1018,15 +1018,18 @@ div.package-card.featured {
 }
 
 /* Asegurar que los campos de fecha y hora sean visibles en modo privado */
-/* Por defecto ocultos en la página pública, pero visibles en pedido/index.html */
+/* Por defecto ocultos en la página pública (index.html) */
+/* En pedido/index.html, los campos tienen estilos inline que los muestran */
 #deliveryDateGroup,
 #deliveryTimeGroup {
     display: none;
 }
 
-/* Cuando tienen la clase show, siempre mostrarlos */
+/* Cuando tienen la clase show O cuando tienen estilos inline, siempre mostrarlos */
 #deliveryDateGroup.show,
-#deliveryTimeGroup.show {
+#deliveryTimeGroup.show,
+#deliveryDateGroup[style*="display: block"],
+#deliveryTimeGroup[style*="display: block"] {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;
@@ -1038,7 +1041,9 @@ div.package-card.featured {
 /* Asegurar visibilidad en mobile también */
 @media (max-width: 768px) {
     #deliveryDateGroup.show,
-    #deliveryTimeGroup.show {
+    #deliveryTimeGroup.show,
+    #deliveryDateGroup[style*="display: block"],
+    #deliveryTimeGroup[style*="display: block"] {
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
