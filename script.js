@@ -57,7 +57,15 @@ const GOOGLE_SHEETS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxT7l
 // Detectar si estamos en modo personal (/pedido o pedido.html)
 const isPersonalMode = window.location.pathname.includes('/pedido') || 
                        window.location.pathname.includes('pedido.html') ||
-                       window.location.href.includes('pedido.html');
+                       window.location.href.includes('pedido.html') ||
+                       window.location.pathname === '/pedido/' ||
+                       window.location.pathname.endsWith('/pedido');
+
+// Log para diagnóstico
+console.log('🔍 Detección de modo personal:');
+console.log('  pathname:', window.location.pathname);
+console.log('  href:', window.location.href);
+console.log('  isPersonalMode:', isPersonalMode);
 
 // Application State
 const state = {
