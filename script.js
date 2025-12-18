@@ -2443,7 +2443,7 @@ function initializeStep4() {
         });
 
         if (isPersonalMode) {
-            // Modo personal: validar nombre, monto depositado, fecha y hora
+            // Modo personal: validar solo nombre y monto depositado (fecha y hora son opcionales)
             console.log('Validando modo personal...');
             
             // Validación específica y amigable
@@ -2454,12 +2454,7 @@ function initializeStep4() {
             if (state.customerInfo.depositAmount === undefined || state.customerInfo.depositAmount === null || state.customerInfo.depositAmount === '' || isNaN(state.customerInfo.depositAmount) || state.customerInfo.depositAmount < 0) {
                 missingFields.push('Monto depositado');
             }
-            if (!state.customerInfo.deliveryDate) {
-                missingFields.push('Fecha de Entrega');
-            }
-            if (!state.customerInfo.deliveryTime) {
-                missingFields.push('Hora de Entrega');
-            }
+            // Removida validación de deliveryDate y deliveryTime - campos opcionales
             
             if (missingFields.length > 0) {
                 const message = missingFields.length === 1 
