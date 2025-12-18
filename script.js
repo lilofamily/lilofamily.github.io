@@ -3132,18 +3132,23 @@ async function sendToWhatsApp() {
 
 // Initialize Welcome Screen
 function initializeWelcome() {
-    // Si estamos en modo personal, modificar la página de bienvenida
+    // Si estamos en modo personal, modificar la página de bienvenida y forzar dark theme
     if (isPersonalMode) {
+        // Forzar dark theme en modo personal
+        const html = document.documentElement;
+        html.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark'); // Guardar preferencia
+        
         const welcomeSubtitle = document.querySelector('#step0 .welcome-subtitle');
         const welcomeFeatures = document.querySelector('#step0 .welcome-features');
         
-        // Cambiar el subtítulo a "Pedidos personales"
-        if (welcomeSubtitle) {
+        // Cambiar el subtítulo a "Pedidos personales" (si no está ya en el HTML)
+        if (welcomeSubtitle && welcomeSubtitle.textContent !== 'Pedidos personales') {
             welcomeSubtitle.textContent = 'Pedidos personales';
         }
         
-        // Ocultar los cards de características
-        if (welcomeFeatures) {
+        // Ocultar los cards de características (si no están ya ocultos en el HTML)
+        if (welcomeFeatures && window.getComputedStyle(welcomeFeatures).display !== 'none') {
             welcomeFeatures.style.display = 'none';
         }
     }
