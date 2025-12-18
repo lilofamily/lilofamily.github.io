@@ -2380,27 +2380,46 @@ function initializeStep4() {
         }
         
         // Ocultar sección de QR y punto de entrega (solo para pedidos públicos)
-        const paymentSection = document.querySelector('.payment-section');
+        // Buscar dentro del step 4 para asegurar que encontramos los elementos correctos
+        const step4Element = document.getElementById('step4');
+        const paymentSection = step4Element ? step4Element.querySelector('.payment-section') : document.querySelector('.payment-section');
+        
         if (paymentSection) {
+            console.log('✅ paymentSection encontrado, ocultando elementos...');
+            
             // Ocultar título "Importante"
             const paymentTitle = paymentSection.querySelector('.payment-title');
-            if (paymentTitle) paymentTitle.style.display = 'none';
+            if (paymentTitle) {
+                paymentTitle.style.display = 'none';
+                console.log('✅ paymentTitle ocultado');
+            }
             
             // Ocultar descripción del pago
             const paymentDescription = paymentSection.querySelector('.payment-description');
-            if (paymentDescription) paymentDescription.style.display = 'none';
+            if (paymentDescription) {
+                paymentDescription.style.display = 'none';
+                console.log('✅ paymentDescription ocultado');
+            }
             
             // Ocultar QR
             const qrContainer = paymentSection.querySelector('.qr-container');
-            if (qrContainer) qrContainer.style.display = 'none';
+            if (qrContainer) {
+                qrContainer.style.display = 'none';
+                console.log('✅ qrContainer ocultado');
+            }
             
             // Ocultar toda la sección de punto de entrega
             const deliverySection = paymentSection.querySelector('.delivery-section');
             if (deliverySection) {
                 deliverySection.style.display = 'none';
+                console.log('✅ deliverySection ocultado');
+            } else {
+                console.log('⚠️ deliverySection no encontrado');
             }
             
             // El campo "Monto depositado" se mantiene visible (ya está dentro de payment-section)
+        } else {
+            console.error('❌ paymentSection NO encontrado');
         }
         
         // Cambiar texto del botón
