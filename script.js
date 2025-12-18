@@ -2379,21 +2379,28 @@ function initializeStep4() {
             deliveryTimeInput.style.padding = '0.9rem';
         }
         
-        // Ocultar sección de QR
+        // Ocultar sección de QR y punto de entrega (solo para pedidos públicos)
         const paymentSection = document.querySelector('.payment-section');
         if (paymentSection) {
-            const qrContainer = paymentSection.querySelector('.qr-container');
+            // Ocultar título "Importante"
             const paymentTitle = paymentSection.querySelector('.payment-title');
-            const paymentDescription = paymentSection.querySelector('.payment-description');
-            if (qrContainer) qrContainer.style.display = 'none';
             if (paymentTitle) paymentTitle.style.display = 'none';
+            
+            // Ocultar descripción del pago
+            const paymentDescription = paymentSection.querySelector('.payment-description');
             if (paymentDescription) paymentDescription.style.display = 'none';
-        }
-        
-        // Ocultar sección de punto de entrega
-        const deliverySection = document.querySelector('.delivery-section');
-        if (deliverySection) {
-            deliverySection.style.display = 'none';
+            
+            // Ocultar QR
+            const qrContainer = paymentSection.querySelector('.qr-container');
+            if (qrContainer) qrContainer.style.display = 'none';
+            
+            // Ocultar toda la sección de punto de entrega
+            const deliverySection = paymentSection.querySelector('.delivery-section');
+            if (deliverySection) {
+                deliverySection.style.display = 'none';
+            }
+            
+            // El campo "Monto depositado" se mantiene visible (ya está dentro de payment-section)
         }
         
         // Cambiar texto del botón
