@@ -355,14 +355,14 @@
                         <textarea id="observations" name="observations" rows="4" placeholder="Escribe aquí cualquier comentario, pregunta o observación sobre tu pedido..."></textarea>
                     </div>
                     
-                    <!-- Campos de fecha y hora para modo privado (siempre visibles en esta página) -->
-                    <div class="form-group" id="deliveryDateGroup" style="display: block !important; visibility: visible !important;">
-                        <label for="deliveryDate">Fecha de Entrega *</label>
-                        <input type="date" id="deliveryDate" name="deliveryDate" required min="" style="font-size: 1rem; padding: 0.9rem; width: 100%; border: 2px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
+                    <!-- Campos de fecha y hora para modo privado (opcionales, no se validan) -->
+                    <div class="form-group" id="deliveryDateGroup" style="display: none;">
+                        <label for="deliveryDate">Fecha de Entrega (Opcional)</label>
+                        <input type="date" id="deliveryDate" name="deliveryDate" min="" style="font-size: 1rem; padding: 0.9rem; width: 100%; border: 2px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
                     </div>
-                    <div class="form-group" id="deliveryTimeGroup" style="display: block !important; visibility: visible !important;">
-                        <label for="deliveryTime">Hora de Entrega *</label>
-                        <input type="time" id="deliveryTime" name="deliveryTime" required style="font-size: 1rem; padding: 0.9rem; width: 100%; border: 2px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
+                    <div class="form-group" id="deliveryTimeGroup" style="display: none;">
+                        <label for="deliveryTime">Hora de Entrega (Opcional)</label>
+                        <input type="time" id="deliveryTime" name="deliveryTime" style="font-size: 1rem; padding: 0.9rem; width: 100%; border: 2px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
                     </div>
                     
                     <div class="payment-section">
