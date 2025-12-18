@@ -1025,6 +1025,19 @@ div.package-card.featured {
     display: none;
 }
 
+/* FORZAR visibilidad en pedido/index.html - máxima especificidad */
+html body #deliveryDateGroup[style*="display: block"],
+html body #deliveryTimeGroup[style*="display: block"],
+html body #deliveryDateGroup.show,
+html body #deliveryTimeGroup.show {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    height: auto !important;
+    min-height: auto !important;
+    max-height: none !important;
+}
+
 /* Cuando están dentro del step4 activo Y tienen estilos inline, mostrarlos */
 .step#step4.active #deliveryDateGroup[style*="display: block"],
 .step#step4.active #deliveryTimeGroup[style*="display: block"],
