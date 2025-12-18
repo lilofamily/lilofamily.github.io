@@ -2389,7 +2389,7 @@ function initializeStep4() {
         
         // Ocultar sección de QR y punto de entrega (solo para pedidos públicos)
         // Buscar dentro del step 4 para asegurar que encontramos los elementos correctos
-        const step4Element = document.getElementById('step4');
+        // step4Element ya está declarado arriba en esta función
         const paymentSection = step4Element ? step4Element.querySelector('.payment-section') : document.querySelector('.payment-section');
         
         if (paymentSection) {
