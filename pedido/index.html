@@ -526,9 +526,38 @@
             setTimeout(showDeliveryFields, 2000);
             
             // Observar cambios en el DOM (por si se navega dinámicamente)
+            // Pero limitar para evitar bucles infinitos
             if (typeof MutationObserver !== 'undefined') {
+                let isProcessing = false;
+                let lastExecution = 0;
+                const MIN_INTERVAL = 500; // Mínimo 500ms entre ejecuciones
+                
                 const observer = new MutationObserver(function(mutations) {
-                    showDeliveryFields();
+                    // Evitar ejecuciones muy frecuentes
+                    const now = Date.now();
+                    if (isProcessing || (now - lastExecution) < MIN_INTERVAL) {
+                        return;
+                    }
+                    
+                    // Solo procesar si los elementos aún no están visibles
+                    const deliveryDateGroup = document.getElementById('deliveryDateGroup');
+                    const deliveryTimeGroup = document.getElementById('deliveryTimeGroup');
+                    if (deliveryDateGroup && deliveryTimeGroup) {
+                        const dateDisplay = window.getComputedStyle(deliveryDateGroup).display;
+                        const timeDisplay = window.getComputedStyle(deliveryTimeGroup).display;
+                        if (dateDisplay === 'none' || timeDisplay === 'none') {
+                            isProcessing = true;
+                            lastExecution = now;
+                            showDeliveryFields();
+                            setTimeout(() => { isProcessing = false; }, MIN_INTERVAL);
+                        }
+                    } else {
+                        // Si los elementos no existen, intentar una vez más
+                        isProcessing = true;
+                        lastExecution = now;
+                        showDeliveryFields();
+                        setTimeout(() => { isProcessing = false; }, MIN_INTERVAL);
+                    }
                 });
                 
                 if (document.body) {
